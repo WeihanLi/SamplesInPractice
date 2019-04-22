@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -21,15 +20,14 @@ namespace WeihanLi.Totp
             // valid input parameter
             if (codeSize <= 0 || codeSize > 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(codeSize), codeSize, "");
+                throw new ArgumentOutOfRangeException(nameof(codeSize), codeSize, "length must between 1 and 9");
             }
             _codeSize = codeSize;
         }
 
         private static readonly Encoding Encoding = new UTF8Encoding(false, true);
 
-        public virtual string Compute(string securityToken) =>
-            Compute(Encoding.GetBytes(securityToken));
+        public virtual string Compute(string securityToken) => Compute(Encoding.GetBytes(securityToken));
 
         public virtual string Compute(byte[] securityToken) => Compute(securityToken, GetCurrentTimeStepNumber());
 
@@ -59,7 +57,7 @@ namespace WeihanLi.Totp
                 var stepBytes = BitConverter.GetBytes(counter);
                 if (BitConverter.IsLittleEndian)
                 {
-                    Array.Reverse(stepBytes);
+                    Array.Reverse(stepBytes); // need BigEndian
                 }
                 // See https://tools.ietf.org/html/rfc4226
                 var hashResult = hmac.ComputeHash(stepBytes);
@@ -98,7 +96,7 @@ namespace WeihanLi.Totp
                     continue;
                 }
                 var totp = Compute(securityToken, step + i);
-                if(totp == code)
+                if (totp == code)
                 {
                     return true;
                 }
@@ -107,6 +105,11 @@ namespace WeihanLi.Totp
         }
 
         private static readonly DateTime _unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        /// <summary>
+        /// timestep
+        /// 30s(Recommend)
+        /// </summary>
         private static readonly long _timeStepTicks = TimeSpan.TicksPerSecond * 30;
 
         // More info: https://tools.ietf.org/html/rfc6238#section-4
