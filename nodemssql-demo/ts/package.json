@@ -1,0 +1,30 @@
+{
+  "name": "mpwechat-crawler",
+  "version": "1.0.0",
+  "description": "mpwechat crawler",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "yarn && tsc",
+    "test": "yarn run build && node ./dist/test.js",
+    "start": "yarn run build && node ./dist/index.js",
+    "dev": "nodemon --watch src src/index.ts"
+  },
+  "author": "WeihanLi",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.1.0",
+    "got": "^9.6.0",
+    "log4js": "^4.1.0",
+    "mssql": "^4.2.2",
+    "sleepjs": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/async-lock": "^1.1.1",
+    "@types/config": "^0.0.34",
+    "@types/mssql": "^4.0.13",
+    "@types/node": "^11.13.8",
+    "ts-node": "^8.2.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}

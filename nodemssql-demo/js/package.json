@@ -1,0 +1,16 @@
+{
+  "name": "fangdi-crawler",
+  "version": "1.0.0",
+  "description": "fangdi crawler",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "yarn install",
+    "start": "node index.js"
+  },
+  "author": "WeihanLi",
+  "license": "ISC",
+  "dependencies": {
+    "log4js": "^3.0.6",
+    "mssql": "^4.2.2"
+  }
+}

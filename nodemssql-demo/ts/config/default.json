@@ -1,0 +1,13 @@
+{
+    "connections": {
+        "default": {
+            "user": "sa",
+            "pwd": "Admin888",
+            "server": "127.0.0.1",
+            "database": "testDb",
+            "connectionTimeout": 120000,
+            "requestTimeout": 60000,
+            "encrypt": true
+        }        
+    }
+}
