@@ -25,12 +25,15 @@ namespace ScriptEngine.Test
                 },
             });
 
-            var params1 = new
+            var params1 = new Dictionary<string, object>()
             {
-                x = 1,
-                y = 3
+                { "x", 2 },
+                { "y", 3 }
             };
             Assert.False(await ScriptEngine.EvalAsync(condition, variables, params1));
+
+            var params1_1 = JsonConvert.SerializeObject(params1);
+            Assert.False(await ScriptEngine.EvalAsync(condition, variables, params1_1));
 
             var params2 = new
             {
