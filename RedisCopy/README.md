@@ -30,15 +30,13 @@
 
 redis 连接字符串详细参数可以参考文档：<https://weihanli.github.io/StackExchange.Redis-docs-zh-cn/Configuration.html>
 
-
 ### 执行迁移
 
 修改 redis 配置之后（根据自己要同步数据量的大小设置超时时间），在项目根目录下运行 `dotnet run` 即可，
 
-
 ### Sample Run
 
-![](./images/sample.png)
+![sample](./images/sample.png)
 
 ## More
 
@@ -54,4 +52,4 @@ redis 连接字符串详细参数可以参考文档：<https://weihanli.github.i
 
 - <https://github.com/WeihanLi/SamplesInPractice/tree/master/RedisCopy>
 - <https://weihanli.github.io/StackExchange.Redis-docs-zh-cn/Configuration.html>
-
+- <https://stackexchange.github.io/StackExchange.Redis/Configuration.html>

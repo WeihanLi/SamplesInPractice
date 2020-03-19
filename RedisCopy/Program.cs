@@ -61,7 +61,10 @@ namespace RedisCopy
                     {
                         Console.WriteLine($"sync exception:{e}");
                     }
-                    Console.WriteLine($"-- sync db:{database},{redisKey} end --");
+                    finally
+                    {
+                        Console.WriteLine($"-- sync db:{database},{redisKey} end --");
+                    }
 
                     pageSize++;
                 }
