@@ -25,46 +25,30 @@ namespace AopSample
             var type = _proxyTypes.GetOrAdd(proxyTypeName, name =>
             {
                 //
-                var typeBuilder = _moduleBuilder.DefineType(proxyTypeName, TypeAttributes.Public);
-                //
-                var ctorBuilder = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
+                var typeBuilder = _moduleBuilder.DefineType(proxyTypeName, TypeAttributes.Public, typeof(object), new[] { interfaceType });
+                typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
 
                 var methods = interfaceType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
                 foreach (var method in methods)
                 {
-                    var methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Public, CallingConventions.HasThis,
-                        method.ReturnType, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                    foreach (var aspect in method.GetCustomAttributes<AbstractAspect>())
+                    var methodBuilder = typeBuilder.DefineMethod(method.Name
+                        , MethodAttributes.Public | MethodAttributes.Virtual,
+                        method.CallingConvention,
+                        method.ReturnType,
+                        method.GetParameters()
+                            .Select(p => p.ParameterType)
+                            .ToArray()
+                        );
+                    var ilGenerator = methodBuilder.GetILGenerator();
+                    ilGenerator.EmitWriteLine($"method [{method.Name}] is invoking...");
+                    if (method.ReturnType != typeof(void))
                     {
-                        var ilGenerator = methodBuilder.GetILGenerator();
-                        ilGenerator.EmitWriteLine("testing");
-                        ilGenerator.Emit(new OpCode()
-                        {
-                        });
-
-                        aspect.Invoke(new MethodInvocationContext()
-                        {
-                            MethodInfo = method,
-                        });
                     }
+                    ilGenerator.Emit(OpCodes.Ret);
+                    typeBuilder.DefineMethodOverride(methodBuilder, method);
                 }
 
-                return interfaceType;
-            });
-            return type;
-        }
-
-        public static Type CreateClassProxy(Type classType, params Type[] interfaceType)
-        {
-            var proxyTypeName = $"{ProxyAssemblyName}.{classType.FullName}__{(interfaceType ?? Enumerable.Empty<Type>()).OrderBy(t => t.FullName).StringJoin("__").Replace('.', '_')}";
-            var type = _proxyTypes.GetOrAdd(proxyTypeName, name =>
-            {
-                //
-                var typeBuilder = _moduleBuilder.DefineType(proxyTypeName, TypeAttributes.Public, classType);
-                //
-                var ctorBuilder = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
-
-                return classType;
+                return typeBuilder.CreateType();
             });
             return type;
         }

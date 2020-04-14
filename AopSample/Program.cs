@@ -10,6 +10,7 @@ namespace AopSample
             testService.Test();
 
             Console.WriteLine("Hello World!");
+            Console.ReadLine();
         }
     }
 }
