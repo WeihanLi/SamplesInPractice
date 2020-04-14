@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace PipelineSample
 {
-    public interface IPipelineBuilder<TContext> where TContext : IPipelineContext
+    public interface IPipelineBuilder<TContext>
     {
         IPipelineBuilder<TContext> Use(Func<Action<TContext>, Action<TContext>> middleware);
 
         Action<TContext> Build();
     }
 
-    public class PipelineBuilder<TContext> : IPipelineBuilder<TContext> where TContext : IPipelineContext
+    public class PipelineBuilder<TContext> : IPipelineBuilder<TContext>
     {
         private readonly Action<TContext> _completeFunc;
-        private readonly IList<Func<Action<TContext>, Action<TContext>>> pipelines = new List<Func<Action<TContext>, Action<TContext>>>();
+        private readonly IList<Func<Action<TContext>, Action<TContext>>> _pipelines = new List<Func<Action<TContext>, Action<TContext>>>();
 
         public PipelineBuilder(Action<TContext> completeFunc)
         {
@@ -23,7 +23,7 @@ namespace PipelineSample
 
         public IPipelineBuilder<TContext> Use(Func<Action<TContext>, Action<TContext>> middleware)
         {
-            pipelines.Add(middleware);
+            _pipelines.Add(middleware);
             return this;
         }
 
@@ -35,7 +35,7 @@ namespace PipelineSample
         public Action<TContext> Build()
         {
             var request = _completeFunc;
-            foreach (var pipeline in pipelines.Reverse())
+            foreach (var pipeline in _pipelines.Reverse())
             {
                 request = pipeline(request);
             }

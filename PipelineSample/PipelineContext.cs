@@ -1,10 +1,6 @@
 ﻿namespace PipelineSample
 {
-    public interface IPipelineContext
-    {
-    }
-
-    public class RequestContext : IPipelineContext
+    public class RequestContext
     {
         public string RequesterName { get; set; }
 

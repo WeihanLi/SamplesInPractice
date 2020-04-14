@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace PipelineSample
 {
-    public interface IAsyncPipelineBuilder<TContext> where TContext : IPipelineContext
+    public interface IAsyncPipelineBuilder<TContext>
     {
         IAsyncPipelineBuilder<TContext> Use(Func<Func<TContext, Task>, Func<TContext, Task>> middleware);
 
         Func<TContext, Task> Build();
     }
 
-    public class AsyncPipelineBuilder<TContext> : IAsyncPipelineBuilder<TContext> where TContext : IPipelineContext
+    public class AsyncPipelineBuilder<TContext> : IAsyncPipelineBuilder<TContext>
     {
         private readonly Func<TContext, Task> _completeFunc;
-        private readonly IList<Func<Func<TContext, Task>, Func<TContext, Task>>> pipelines = new List<Func<Func<TContext, Task>, Func<TContext, Task>>>();
+        private readonly IList<Func<Func<TContext, Task>, Func<TContext, Task>>> _pipelines = new List<Func<Func<TContext, Task>, Func<TContext, Task>>>();
 
         public AsyncPipelineBuilder(Func<TContext, Task> completeFunc)
         {
@@ -24,7 +24,7 @@ namespace PipelineSample
 
         public IAsyncPipelineBuilder<TContext> Use(Func<Func<TContext, Task>, Func<TContext, Task>> middleware)
         {
-            pipelines.Add(middleware);
+            _pipelines.Add(middleware);
             return this;
         }
 
@@ -36,7 +36,7 @@ namespace PipelineSample
         public Func<TContext, Task> Build()
         {
             var request = _completeFunc;
-            foreach (var pipeline in pipelines.Reverse())
+            foreach (var pipeline in _pipelines.Reverse())
             {
                 request = pipeline(request);
             }
