@@ -4,8 +4,11 @@ namespace AopSample
 {
     public class Program
     {
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            var testService = ProxyGenerator.Instance.CreateInterfaceProxy<ITestService>();
+            testService.Test();
+
             Console.WriteLine("Hello World!");
         }
     }
