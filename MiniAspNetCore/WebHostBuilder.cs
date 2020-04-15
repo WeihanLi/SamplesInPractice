@@ -103,9 +103,20 @@ namespace MiniAspNetCore
         {
             var webHostBuilder = new WebHostBuilder();
             webHostBuilder.ConfigureConfiguration(builder => builder.AddJsonFile("appsettings.json", true, true));
-            webHostBuilder.ConfigureServices((configuration, services) => services.AddSingleton<IServer, HttpListenerServer>());
+            webHostBuilder.UseHttpListenerServer();
 
             return webHostBuilder;
+        }
+    }
+
+    public static class WebHostBuilderExtensions
+    {
+        public static IWebHostBuilder UseHttpListenerServer(this IWebHostBuilder builder)
+        {
+            return builder.ConfigureServices((configuration, services) =>
+                {
+                    services.AddSingleton<IServer, HttpListenerServer>();
+                });
         }
     }
 }
