@@ -46,10 +46,9 @@ namespace MiniAspNetCore
             {
                 var listenerContext = await _listener.GetContextAsync();
 
-                var feature = new HttpListenerFeature(listenerContext);
                 var featureCollection = new FeatureCollection();
-                featureCollection.Set<IRequestFeature>(feature);
-                featureCollection.Set<IResponseFeature>(feature);
+                featureCollection.Set(listenerContext.GetRequestFeature());
+                featureCollection.Set(listenerContext.GetResponseFeature());
 
                 using (var scope = _serviceProvider.CreateScope())
                 {
@@ -59,8 +58,8 @@ namespace MiniAspNetCore
                     };
 
                     await requestHandler(httpContext);
-                    listenerContext.Response.Close();
                 }
+                listenerContext.Response.Close();
             }
         }
 

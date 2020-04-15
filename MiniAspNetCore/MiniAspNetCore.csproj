@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.34-preview-20200415-091017" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.34-preview-20200415-132242" />
   </ItemGroup>
 
 </Project>

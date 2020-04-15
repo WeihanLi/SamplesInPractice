@@ -20,16 +20,20 @@ namespace MiniAspNetCore
             set => _responseFeature.StatusCode = value;
         }
 
-        public ValueTask WriteAsync(byte[] responseBytes)
+        public Task WriteAsync(byte[] responseBytes)
         {
             if (_responseFeature.StatusCode <= 0)
             {
                 _responseFeature.StatusCode = 200;
             }
 
-            return _responseFeature.Body.WriteAsync(responseBytes);
+            return _responseFeature.Body.WriteAsync(responseBytes).AsTask();
         }
+    }
 
-        public ValueTask WriteAsync(string responseText) => WriteAsync(responseText.GetBytes());
+    public static class HttpResponseExtensions
+    {
+        public static Task WriteAsync(this HttpResponse response, string responseText)
+            => response.WriteAsync(responseText.GetBytes());
     }
 }

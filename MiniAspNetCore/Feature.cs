@@ -25,36 +25,56 @@ namespace MiniAspNetCore
         public Stream Body { get; }
     }
 
-    public class HttpListenerFeature : IRequestFeature, IResponseFeature
+    public class HttpListenerRequestFeature : IRequestFeature
     {
-        private readonly HttpListenerContext _httpListenerContext;
+        private readonly HttpListenerRequest _request;
 
-        public HttpListenerFeature(HttpListenerContext httpListenerContext)
+        public HttpListenerRequestFeature(HttpListenerContext listenerContext)
         {
-            _httpListenerContext = httpListenerContext;
+            _request = listenerContext.Request;
         }
 
-        int IResponseFeature.StatusCode { get => _httpListenerContext.Response.StatusCode; set => _httpListenerContext.Response.StatusCode = value; }
+        public Uri Url => _request.Url;
+        public string Method => _request.HttpMethod;
+        public NameValueCollection Headers => _request.Headers;
+        public Stream Body => _request.InputStream;
+    }
 
-        NameValueCollection IResponseFeature.Headers
+    public class HttpListenerResponseFeature : IResponseFeature
+    {
+        private readonly HttpListenerResponse _response;
+
+        public HttpListenerResponseFeature(HttpListenerContext httpListenerContext)
         {
-            get => _httpListenerContext.Response.Headers;
+            _response = httpListenerContext.Response;
+        }
+
+        public int StatusCode { get => _response.StatusCode; set => _response.StatusCode = value; }
+
+        public NameValueCollection Headers
+        {
+            get => _response.Headers;
             set
             {
-                _httpListenerContext.Response.Headers = new WebHeaderCollection();
+                _response.Headers = new WebHeaderCollection();
                 foreach (var key in value.AllKeys)
-                    _httpListenerContext.Response.Headers.Add(key, value[key]);
+                    _response.Headers.Add(key, value[key]);
             }
         }
 
-        NameValueCollection IRequestFeature.Headers => _httpListenerContext.Request.Headers;
+        public Stream Body => _response.OutputStream;
+    }
 
-        Stream IResponseFeature.Body => _httpListenerContext.Response.OutputStream;
+    public static class HttpListenerContextExtensions
+    {
+        public static IRequestFeature GetRequestFeature(this HttpListenerContext context)
+        {
+            return new HttpListenerRequestFeature(context);
+        }
 
-        Stream IRequestFeature.Body => _httpListenerContext.Request.InputStream;
-
-        string IRequestFeature.Method => _httpListenerContext.Request.HttpMethod;
-
-        Uri IRequestFeature.Url => _httpListenerContext.Request.Url;
+        public static IResponseFeature GetResponseFeature(this HttpListenerContext context)
+        {
+            return new HttpListenerResponseFeature(context);
+        }
     }
 }

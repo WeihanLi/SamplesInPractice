@@ -35,7 +35,7 @@ namespace MiniAspNetCore
 
         IWebHostBuilder ConfigureServices(Action<IConfiguration, IServiceCollection> configureAction);
 
-        IWebHostBuilder Init(Action<IConfiguration, IServiceProvider> initAction);
+        IWebHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction);
 
         IWebHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction);
 
@@ -70,7 +70,17 @@ namespace MiniAspNetCore
             return this;
         }
 
-        public IWebHostBuilder Init(Action<IConfiguration, IServiceProvider> initAction)
+        public IWebHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction)
+        {
+            if (null != configureAction)
+            {
+                var configuration = _configurationBuilder.Build();
+                configureAction?.Invoke(configuration, _requestPipeline);
+            }
+            return this;
+        }
+
+        public IWebHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction)
         {
             if (null != initAction)
             {
@@ -82,16 +92,6 @@ namespace MiniAspNetCore
             return this;
         }
 
-        public IWebHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction)
-        {
-            if (null != configureAction)
-            {
-                var configuration = _configurationBuilder.Build();
-                configureAction?.Invoke(configuration, _requestPipeline);
-            }
-            return this;
-        }
-
         public IHost Build()
         {
             var configuration = _configurationBuilder.Build();
@@ -99,7 +99,7 @@ namespace MiniAspNetCore
             return new WebHost(_serviceCollection.BuildServiceProvider(), _requestPipeline.Build());
         }
 
-        public static WebHostBuilder CreateDefault()
+        public static WebHostBuilder CreateDefault(string[] args)
         {
             var webHostBuilder = new WebHostBuilder();
             webHostBuilder.ConfigureConfiguration(builder => builder.AddJsonFile("appsettings.json", true, true));
