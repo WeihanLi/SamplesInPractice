@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace AopSample
 {
@@ -10,6 +11,12 @@ namespace AopSample
 
         public object[] Parameters { get; set; }
 
-        public object Invoke() => MethodInfo?.Invoke(Target, Parameters);
+        public Type[] GenericParameters { get; set; }
+    }
+
+    public static class MethodInvocationContextExtensions
+    {
+        public static object Invoke(this MethodInvocationContext context) =>
+            context.MethodInfo?.Invoke(context.Target, context.Parameters);
     }
 }

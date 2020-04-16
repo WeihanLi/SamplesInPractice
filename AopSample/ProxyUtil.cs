@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using WeihanLi.Extensions;
 
 namespace AopSample
 {
@@ -24,7 +23,6 @@ namespace AopSample
             var proxyTypeName = $"{ProxyAssemblyName}.{interfaceType.FullName}";
             var type = _proxyTypes.GetOrAdd(proxyTypeName, name =>
             {
-                //
                 var typeBuilder = _moduleBuilder.DefineType(proxyTypeName, TypeAttributes.Public, typeof(object), new[] { interfaceType });
                 typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
 
@@ -41,6 +39,18 @@ namespace AopSample
                         );
                     var ilGenerator = methodBuilder.GetILGenerator();
                     ilGenerator.EmitWriteLine($"method [{method.Name}] is invoking...");
+
+                    //var builder = PipelineBuilder.Create<MethodInvocationContext>(context => context.Invoke());
+                    //foreach (var aspect in method.GetCustomAttributes<AbstractAspect>())
+                    //{
+                    //    builder.Use((context, next) =>
+                    //    {
+                    //        aspect.Invoke(context);
+                    //        next();
+                    //    });
+                    //}
+                    //var aspectDelegate = builder.Build();
+
                     if (method.ReturnType != typeof(void))
                     {
                     }
