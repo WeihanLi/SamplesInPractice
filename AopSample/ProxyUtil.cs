@@ -51,9 +51,6 @@ namespace AopSample
                     //}
                     //var aspectDelegate = builder.Build();
 
-                    if (method.ReturnType != typeof(void))
-                    {
-                    }
                     ilGenerator.Emit(OpCodes.Ret);
                     typeBuilder.DefineMethodOverride(methodBuilder, method);
                 }

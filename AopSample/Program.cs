@@ -9,7 +9,6 @@ namespace AopSample
             var testService = ProxyGenerator.Instance.CreateInterfaceProxy<ITestService>();
             testService.Test();
 
-            Console.WriteLine("Hello World!");
             Console.ReadLine();
         }
     }
