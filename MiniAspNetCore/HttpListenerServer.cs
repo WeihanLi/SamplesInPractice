@@ -22,7 +22,8 @@ namespace MiniAspNetCore
             {
                 foreach (var url in urls.Select(u => u?.Trim()).Where(u => u.IsNullOrEmpty()).Distinct())
                 {
-                    // Prefixes must end in a forward slash ("/") https://stackoverflow.com/questions/26157475/use-of-httplistener
+                    // Prefixes must end in a forward slash ("/")
+                    // https://stackoverflow.com/questions/26157475/use-of-httplistener
                     _listener.Prefixes.Add(url.EndsWith("/") ? url : $"{url}/");
                 }
             }
@@ -42,7 +43,7 @@ namespace MiniAspNetCore
                 Console.WriteLine("the server is listening on ");
                 Console.WriteLine(_listener.Prefixes.StringJoin(","));
             }
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var listenerContext = await _listener.GetContextAsync();
 

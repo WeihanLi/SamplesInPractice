@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using WeihanLi.Extensions;
 
 namespace MiniAspNetCore
@@ -20,20 +21,25 @@ namespace MiniAspNetCore
             set => _responseFeature.StatusCode = value;
         }
 
-        public Task WriteAsync(byte[] responseBytes)
+        public async Task WriteAsync(byte[] responseBytes)
         {
             if (_responseFeature.StatusCode <= 0)
             {
                 _responseFeature.StatusCode = 200;
             }
-
-            return _responseFeature.Body.WriteAsync(responseBytes).AsTask();
+            if (responseBytes != null && responseBytes.Length > 0)
+            {
+                await _responseFeature.Body.WriteAsync(responseBytes);
+            }
         }
     }
 
     public static class HttpResponseExtensions
     {
         public static Task WriteAsync(this HttpResponse response, string responseText)
-            => response.WriteAsync(responseText.GetBytes());
+            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteAsync(responseText.GetBytes());
+
+        public static Task WriteLineAsync(this HttpResponse response, string responseText)
+            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteAsync($"{responseText}{Environment.NewLine}".GetBytes());
     }
 }

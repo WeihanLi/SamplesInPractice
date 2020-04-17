@@ -23,43 +23,44 @@ namespace MiniAspNetCore
             _server = serviceProvider.GetRequiredService<IServer>();
         }
 
-        public Task RunAsync(CancellationToken cancellationToken = default)
+        public async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            return _server.StartAsync(_requestDelegate, cancellationToken);
+            cancellationToken.Register(() => _server.StopAsync().RunSynchronously());
+            await _server.StartAsync(_requestDelegate, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    public interface IWebHostBuilder
+    public interface IHostBuilder
     {
-        IWebHostBuilder ConfigureConfiguration(Action<IConfigurationBuilder> configAction);
+        IHostBuilder ConfigureConfiguration(Action<IConfigurationBuilder> configAction);
 
-        IWebHostBuilder ConfigureServices(Action<IConfiguration, IServiceCollection> configureAction);
+        IHostBuilder ConfigureServices(Action<IConfiguration, IServiceCollection> configureAction);
 
-        IWebHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction);
+        IHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction);
 
-        IWebHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction);
+        IHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction);
 
         IHost Build();
     }
 
-    public class WebHostBuilder : IWebHostBuilder
+    public class WebHostBuilder : IHostBuilder
     {
         private readonly IConfigurationBuilder _configurationBuilder = new ConfigurationBuilder();
         private readonly IServiceCollection _serviceCollection = new ServiceCollection();
 
-        private IAsyncPipelineBuilder<HttpContext> _requestPipeline = PipelineBuilder.CreateAsync<HttpContext>(context =>
+        private readonly IAsyncPipelineBuilder<HttpContext> _requestPipeline = PipelineBuilder.CreateAsync<HttpContext>(context =>
         {
             context.Response.StatusCode = 404;
             return Task.CompletedTask;
         });
 
-        public IWebHostBuilder ConfigureConfiguration(Action<IConfigurationBuilder> configAction)
+        public IHostBuilder ConfigureConfiguration(Action<IConfigurationBuilder> configAction)
         {
             configAction?.Invoke(_configurationBuilder);
             return this;
         }
 
-        public IWebHostBuilder ConfigureServices(Action<IConfiguration, IServiceCollection> configureAction)
+        public IHostBuilder ConfigureServices(Action<IConfiguration, IServiceCollection> configureAction)
         {
             if (null != configureAction)
             {
@@ -70,7 +71,7 @@ namespace MiniAspNetCore
             return this;
         }
 
-        public IWebHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction)
+        public IHostBuilder ConfigureApplication(Action<IConfiguration, IAsyncPipelineBuilder<HttpContext>> configureAction)
         {
             if (null != configureAction)
             {
@@ -80,7 +81,7 @@ namespace MiniAspNetCore
             return this;
         }
 
-        public IWebHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction)
+        public IHostBuilder Initialize(Action<IConfiguration, IServiceProvider> initAction)
         {
             if (null != initAction)
             {
@@ -102,8 +103,10 @@ namespace MiniAspNetCore
         public static WebHostBuilder CreateDefault(string[] args)
         {
             var webHostBuilder = new WebHostBuilder();
-            webHostBuilder.ConfigureConfiguration(builder => builder.AddJsonFile("appsettings.json", true, true));
-            webHostBuilder.UseHttpListenerServer();
+            webHostBuilder
+                .ConfigureConfiguration(builder => builder.AddJsonFile("appsettings.json", true, true))
+                .UseHttpListenerServer()
+                ;
 
             return webHostBuilder;
         }
@@ -111,7 +114,7 @@ namespace MiniAspNetCore
 
     public static class WebHostBuilderExtensions
     {
-        public static IWebHostBuilder UseHttpListenerServer(this IWebHostBuilder builder)
+        public static IHostBuilder UseHttpListenerServer(this IHostBuilder builder)
         {
             return builder.ConfigureServices((configuration, services) =>
                 {

@@ -11,7 +11,6 @@ namespace MiniAspNetCore
 
         public static async Task Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += OnExit;
             Console.CancelKeyPress += OnExit;
 
             var host = WebHostBuilder.CreateDefault(args)
@@ -25,20 +24,20 @@ namespace MiniAspNetCore
                     app.When(context => context.Request.Url.PathAndQuery.Contains("test"),
                         p => { p.Run(context => context.Response.WriteAsync("test")); });
                     app
-                        .Use((context, next) =>
+                        .Use(async (context, next) =>
                         {
-                            Console.WriteLine($"middleware1, requestPath:{context.Request.Url.PathAndQuery}");
-                            return next();
+                            await context.Response.WriteLineAsync($"middleware1, requestPath:{context.Request.Url.AbsolutePath}");
+                            await next();
                         })
-                        .Use((context, next) =>
+                        .Use(async (context, next) =>
                         {
-                            Console.WriteLine($"middleware2, requestPath:{context.Request.Url.PathAndQuery}");
-                            return next();
+                            await context.Response.WriteLineAsync($"middleware2, requestPath:{context.Request.Url.AbsolutePath}");
+                            await next();
                         })
-                        .Use((context, next) =>
+                        .Use(async (context, next) =>
                         {
-                            Console.WriteLine($"middleware3, requestPath:{context.Request.Url.PathAndQuery}");
-                            return next();
+                            await context.Response.WriteLineAsync($"middleware3, requestPath:{context.Request.Url.AbsolutePath}");
+                            await next();
                         })
                         ;
                     app.Run(context => context.Response.WriteAsync("Hello Mini Asp.Net Core"));
@@ -52,6 +51,7 @@ namespace MiniAspNetCore
 
         private static void OnExit(object sender, EventArgs e)
         {
+            Console.WriteLine("exiting ...");
             Cts.Cancel();
         }
     }
