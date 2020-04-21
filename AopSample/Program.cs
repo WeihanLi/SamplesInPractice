@@ -8,6 +8,8 @@ namespace AopSample
         {
             var testService = ProxyGenerator.Instance.CreateInterfaceProxy<ITestService>();
             testService.Test();
+            Console.WriteLine();
+            testService.Test1(1, "str");
 
             Console.ReadLine();
         }

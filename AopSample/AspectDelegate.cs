@@ -21,10 +21,9 @@ namespace AopSample
                 {
                     foreach (var aspect in context.Method.GetCustomAttributes<AbstractAspect>(true))
                     {
-                        builder.Use((x, next) =>
+                        builder.Use(next =>
                         {
-                            aspect.Invoke(x);
-                            next();
+                            return (Action<MethodInvocationContext>)(ctx => aspect.Invoke(context, next));
                         });
                     }
                 }

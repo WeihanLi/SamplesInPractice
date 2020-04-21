@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace AopSample
 {
@@ -27,6 +28,7 @@ namespace AopSample
     {
         public static object Invoke(this MethodInvocationContext context)
         {
+            Console.WriteLine($"real method[{context.Method.Name}] invoking...");
             return context.MethodBase?.Invoke(context.Target, context.Parameters);
         }
     }
