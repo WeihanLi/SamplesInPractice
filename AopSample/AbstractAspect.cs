@@ -11,15 +11,17 @@ namespace AopSample
     {
         public override void Invoke(MethodInvocationContext methodInvocationContext)
         {
+            Console.WriteLine("begin ...");
             try
             {
                 methodInvocationContext.Invoke();
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Invoke {methodInvocationContext.MethodInfo.DeclaringType?.FullName}.{methodInvocationContext.MethodInfo.Name} exception");
+                Console.WriteLine($"Invoke {methodInvocationContext.Method.DeclaringType?.FullName}.{methodInvocationContext.Method.Name} exception");
                 Console.WriteLine(e);
             }
+            Console.WriteLine("end ...");
         }
     }
 }

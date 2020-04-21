@@ -1,22 +1,33 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace AopSample
 {
     public class MethodInvocationContext
     {
-        public MethodInfo MethodInfo { get; set; }
+        public MethodInfo Method { get; }
 
-        public object Target { get; set; }
+        public MethodInfo MethodBase { get; }
 
-        public object[] Parameters { get; set; }
+        public object Target { get; }
 
-        public Type[] GenericParameters { get; set; }
+        public object[] Parameters { get; }
+
+        public object ReturnValue { get; set; }
+
+        public MethodInvocationContext(MethodInfo method, MethodInfo methodBase, object target, object[] parameters)
+        {
+            Method = method;
+            MethodBase = methodBase;
+            Target = target;
+            Parameters = parameters;
+        }
     }
 
     public static class MethodInvocationContextExtensions
     {
-        public static object Invoke(this MethodInvocationContext context) =>
-            context.MethodInfo?.Invoke(context.Target, context.Parameters);
+        public static object Invoke(this MethodInvocationContext context)
+        {
+            return context.MethodBase?.Invoke(context.Target, context.Parameters);
+        }
     }
 }

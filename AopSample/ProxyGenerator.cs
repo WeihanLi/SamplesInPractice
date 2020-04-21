@@ -1,11 +1,22 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 
 namespace AopSample
 {
-    public static class ProxyGeneratorExtensions
+    public static class Extensions
     {
         public static TInterface CreateInterfaceProxy<TInterface>(this ProxyGenerator proxyGenerator) =>
             (TInterface)proxyGenerator.CreateInterfaceProxy(typeof(TInterface));
+
+        public static MethodBase GetBaseMethod(this MethodBase currentMethod)
+        {
+            return currentMethod?.DeclaringType?.BaseType?
+                .GetMethod(
+                    currentMethod.Name,
+                    currentMethod.GetParameters().Select(o => o.ParameterType).ToArray()
+                );
+        }
     }
 
     public class ProxyGenerator
