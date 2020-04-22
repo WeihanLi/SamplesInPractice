@@ -21,6 +21,9 @@ namespace AopSample
 
     public class TestService : ITestService
     {
+        [TryInvokeAspect]
+        public virtual string TestProp { get; set; }
+
         public void Test()
         {
             Console.WriteLine("test invoked");
@@ -32,7 +35,6 @@ namespace AopSample
         }
 
         [TryInvoke1Aspect]
-        [TryInvoke2Aspect]
         public virtual string Test2()
         {
             return "Hello";

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using WeihanLi.Common.Helpers;
+using WeihanLi.Extensions;
 
 namespace AopSample
 {
@@ -13,21 +16,38 @@ namespace AopSample
         {
             var action = _aspectDelegates.GetOrAdd($"{context.ProxyMethod.DeclaringType}.{context.ProxyMethod}", m =>
             {
-                var builder = PipelineBuilder.Create<MethodInvocationContext>(x => x.Invoke());
-
+                var aspects = new List<AbstractAspect>(8);
                 if (context.MethodBase != null)
                 {
-                    foreach (var aspect in context.MethodBase.GetCustomAttributes<AbstractAspect>(true))
+                    foreach (var aspect in context.MethodBase.GetCustomAttributes<AbstractAspect>())
                     {
-                        builder.Use(aspect.Invoke);
+                        if (!aspects.Exists(x => x.GetType() == aspect.GetType()))
+                        {
+                            aspects.Add(aspect);
+                        }
                     }
                 }
-                else if (context.ProxyMethod != null)
+
+                var methodParameterTypes = context.ProxyMethod.GetParameters().Select(p => p.GetType()).ToArray();
+                foreach (var implementedInterface in context.ProxyTarget.GetType().GetImplementedInterfaces())
                 {
-                    foreach (var aspect in context.ProxyMethod.GetCustomAttributes<AbstractAspect>(true))
+                    var method = implementedInterface.GetMethod(context.ProxyMethod.Name, methodParameterTypes);
+                    if (null != method)
                     {
-                        builder.Use(aspect.Invoke);
+                        foreach (var aspect in method.GetCustomAttributes<AbstractAspect>())
+                        {
+                            if (!aspects.Exists(x => x.GetType() == aspect.GetType()))
+                            {
+                                aspects.Add(aspect);
+                            }
+                        }
                     }
+                }
+
+                var builder = PipelineBuilder.Create<MethodInvocationContext>(x => x.Invoke());
+                foreach (var aspect in aspects)
+                {
+                    builder.Use(aspect.Invoke);
                 }
                 return builder.Build();
             });

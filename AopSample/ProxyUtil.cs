@@ -185,13 +185,9 @@ namespace AopSample
                     il.Emit(OpCodes.Ret);
                 }
 
-                var methods = implementType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
+                var methods = interfaceType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
                 foreach (var method in methods)
                 {
-                    if (method.IsFinal || _ignoredMethodNames.Contains(method.Name))
-                    {
-                        continue;
-                    }
                     var methodParameterTypes = method.GetParameters()
                         .Select(p => p.ParameterType)
                         .ToArray();
@@ -324,7 +320,9 @@ namespace AopSample
                     il.Emit(OpCodes.Ret);
                 }
 
-                var methods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
+                var methods = interfaceTypes.IsNullOrEmpty()
+                    ? classType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    : interfaceTypes.Select(it => it.GetMethods()).SelectMany(m => m).ToArray();
                 foreach (var method in methods)
                 {
                     if (method.IsFinal || _ignoredMethodNames.Contains(method.Name))
