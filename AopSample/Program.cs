@@ -6,7 +6,9 @@ namespace AopSample
     {
         public static void Main(string[] args)
         {
-            var testService = ProxyGenerator.Instance.CreateInterfaceProxy<ITestService, TestService>();
+            //var testService0 = ProxyGenerator.Instance.CreateClassProxy<ITestService>();
+            //var testService1 = ProxyGenerator.Instance.CreateClassProxy<ITestService, TestService>();
+            var testService = ProxyGenerator.Instance.CreateClassProxy<TestService>();
             testService.Test();
             Console.WriteLine();
             testService.Test1(1, "str");

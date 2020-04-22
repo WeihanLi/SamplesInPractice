@@ -30,6 +30,14 @@ namespace AopSample
 
         public static Type CreateInterfaceProxy(Type interfaceType)
         {
+            if (null == interfaceType)
+            {
+                throw new ArgumentNullException(nameof(interfaceType));
+            }
+            if (!interfaceType.IsInterface)
+            {
+                throw new InvalidOperationException($"{interfaceType.FullName} is not an interface");
+            }
             var proxyTypeName = $"{ProxyAssemblyName}.{interfaceType.FullName}";
             var type = _proxyTypes.GetOrAdd(proxyTypeName, name =>
             {
@@ -133,6 +141,15 @@ namespace AopSample
 
         public static Type CreateInterfaceProxy(Type interfaceType, Type implementType)
         {
+            if (null == interfaceType)
+            {
+                throw new ArgumentNullException(nameof(interfaceType));
+            }
+            if (!interfaceType.IsInterface)
+            {
+                throw new InvalidOperationException($"{interfaceType.FullName} is not an interface");
+            }
+
             if (null == implementType)
                 return CreateInterfaceProxy(interfaceType);
 
@@ -229,6 +246,145 @@ namespace AopSample
                     il.Emit(OpCodes.Stloc, localParameters);
 
                     il.Emit(OpCodes.Newobj, implementType.GetConstructor(Type.EmptyTypes));
+                    il.Emit(OpCodes.Stloc, localTarget);
+
+                    // var invocation = new MethodInvocationContext(method, methodBase, this, parameters);
+                    var localAspectInvocation = il.DeclareLocal(typeof(MethodInvocationContext));
+                    il.Emit(OpCodes.Ldloc, localCurrentMethod);
+                    il.Emit(OpCodes.Ldloc, localMethodBase);
+                    il.Emit(OpCodes.Ldarg_0);
+                    il.Emit(OpCodes.Ldloc, localTarget);
+                    il.Emit(OpCodes.Ldloc, localParameters);
+
+                    il.New(typeof(MethodInvocationContext).GetConstructors()[0]);
+                    il.Emit(OpCodes.Stloc, localAspectInvocation);
+
+                    // AspectDelegate.InvokeAspectDelegate(invocation);
+                    il.Emit(OpCodes.Ldloc, localAspectInvocation);
+                    var invokeAspectDelegateMethod =
+                        typeof(AspectDelegate).GetMethod(nameof(AspectDelegate.InvokeAspectDelegate));
+                    il.Call(invokeAspectDelegateMethod);
+                    il.Emit(OpCodes.Nop);
+
+                    if (method.ReturnType != typeof(void))
+                    {
+                        // load return value
+                        il.Emit(OpCodes.Ldloc, localAspectInvocation);
+                        var getMethod = typeof(MethodInvocationContext).GetProperty("ReturnValue").GetGetMethod();
+                        il.EmitCall(OpCodes.Callvirt, getMethod, Type.EmptyTypes);
+
+                        if (method.ReturnType.IsValueType)
+                        {
+                            il.EmitCastToType(typeof(object), method.ReturnType);
+                        }
+
+                        il.Emit(OpCodes.Stloc, localReturnValue);
+                        il.Emit(OpCodes.Ldloc, localReturnValue);
+                    }
+
+                    il.Emit(OpCodes.Ret);
+                }
+
+                return typeBuilder.CreateType();
+            });
+            return type;
+        }
+
+        public static Type CreateClassProxy(Type classType, params Type[] interfaceTypes)
+        {
+            if (classType.IsSealed)
+                throw new InvalidOperationException("the implementType is sealed");
+
+            //
+            var proxyTypeName = $"{ProxyAssemblyName}.{classType.FullName}.{classType.FullName}";
+
+            var type = _proxyTypes.GetOrAdd(proxyTypeName, name =>
+            {
+                var typeBuilder = _moduleBuilder.DefineType(proxyTypeName, TypeAttributes.Public, classType, interfaceTypes);
+                typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
+
+                foreach (var constructor in classType.GetConstructors())
+                {
+                    var constructorTypes = constructor.GetParameters().Select(o => o.ParameterType).ToArray();
+                    var c = typeBuilder.DefineConstructor(
+                        MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName,
+                        CallingConventions.Standard,
+                        constructorTypes);
+
+                    var il = c.GetILGenerator();
+                    il.Emit(OpCodes.Ldarg_0);
+
+                    for (var i = 0; i < constructorTypes.Length; i++)
+                    {
+                        il.Emit(OpCodes.Ldarg, i + 1);
+                    }
+
+                    il.Call(constructor);
+                    il.Emit(OpCodes.Nop);
+                    il.Emit(OpCodes.Ret);
+                }
+
+                var methods = classType.GetMethods(BindingFlags.Instance | BindingFlags.Public);
+                foreach (var method in methods)
+                {
+                    if (method.IsFinal || _ignoredMethodNames.Contains(method.Name))
+                    {
+                        continue;
+                    }
+                    var methodParameterTypes = method.GetParameters()
+                        .Select(p => p.ParameterType)
+                        .ToArray();
+                    var methodBuilder = typeBuilder.DefineMethod(method.Name,
+                        MethodAttributes.Private | MethodAttributes.Final | MethodAttributes.HideBySig |
+                          MethodAttributes.Virtual | MethodAttributes.NewSlot,
+                        method.CallingConvention,
+                        method.ReturnType,
+                        methodParameterTypes
+                        );
+                    foreach (var customAttribute in method.CustomAttributes)
+                    {
+                        methodBuilder.SetCustomAttribute(DefineCustomAttribute(customAttribute));
+                    }
+                    typeBuilder.DefineMethodOverride(methodBuilder, method);
+
+                    var il = methodBuilder.GetILGenerator();
+
+                    var localReturnValue = il.DeclareReturnValue(method);
+                    var localCurrentMethod = il.DeclareLocal(typeof(MethodInfo));
+                    var localMethodBase = il.DeclareLocal(typeof(MethodInfo));
+                    var localParameters = il.DeclareLocal(typeof(object[]));
+                    var localTarget = il.DeclareLocal(typeof(object));
+
+                    // var currentMethod = MethodBase.GetCurrentMethod();
+                    il.Call(typeof(MethodBase).GetMethod(nameof(MethodBase.GetCurrentMethod)));
+                    il.EmitCastToType(typeof(MethodBase), typeof(MethodInfo));
+                    il.Emit(OpCodes.Stloc, localCurrentMethod);
+
+                    il.Emit(OpCodes.Ldloc, localCurrentMethod);
+                    il.Call(typeof(Extensions).GetMethod(nameof(Extensions.GetBaseMethod), BindingFlags.Static | BindingFlags.Public));
+                    il.Emit(OpCodes.Stloc, localMethodBase);
+
+                    // var parameters = new[] {a, b, c};
+                    il.Emit(OpCodes.Ldc_I4, methodParameterTypes.Length);
+                    il.Emit(OpCodes.Newarr, typeof(object));
+                    if (methodParameterTypes.Length > 0)
+                    {
+                        for (var i = 0; i < methodParameterTypes.Length; i++)
+                        {
+                            il.Emit(OpCodes.Dup);
+                            il.Emit(OpCodes.Ldc_I4, i);
+                            il.Emit(OpCodes.Ldarg, i + 1);
+                            if (methodParameterTypes[i].IsValueType)
+                            {
+                                il.Emit(OpCodes.Box, methodParameterTypes[i].UnderlyingSystemType);
+                            }
+
+                            il.Emit(OpCodes.Stelem_Ref);
+                        }
+                    }
+                    il.Emit(OpCodes.Stloc, localParameters);
+
+                    il.Emit(OpCodes.Newobj, classType.GetConstructor(Type.EmptyTypes));
                     il.Emit(OpCodes.Stloc, localTarget);
 
                     // var invocation = new MethodInvocationContext(method, methodBase, this, parameters);

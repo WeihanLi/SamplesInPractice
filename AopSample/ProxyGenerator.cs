@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using WeihanLi.Extensions;
 
 namespace AopSample
 {
@@ -12,13 +13,37 @@ namespace AopSample
         public static TInterface CreateInterfaceProxy<TInterface, TImplement>(this ProxyGenerator proxyGenerator) where TImplement : TInterface =>
             (TInterface)proxyGenerator.CreateInterfaceProxy(typeof(TInterface), typeof(TImplement));
 
+        public static TClass CreateClassProxy<TClass>(this ProxyGenerator proxyGenerator) where TClass : class =>
+            (TClass)proxyGenerator.CreateClassProxy(typeof(TClass));
+
+        public static TClass CreateClassProxy<TClass, TImplement>(this ProxyGenerator proxyGenerator) where TImplement : TClass =>
+            (TClass)proxyGenerator.CreateClassProxy(typeof(TClass), typeof(TImplement));
+
         public static MethodBase GetBaseMethod(this MethodBase currentMethod)
         {
-            return currentMethod?.DeclaringType?.BaseType?
+            if (null == currentMethod?.DeclaringType)
+                return null;
+
+            var parameters = currentMethod.GetParameters().Select(o => o.ParameterType).ToArray();
+
+            var baseTypeMethod = currentMethod.DeclaringType.BaseType?
                 .GetMethod(
                     currentMethod.Name,
-                    currentMethod.GetParameters().Select(o => o.ParameterType).ToArray()
+                    parameters
                 );
+            if (null != baseTypeMethod)
+                return baseTypeMethod;
+
+            foreach (var interfaceType in currentMethod.DeclaringType.BaseType.GetImplementedInterfaces())
+            {
+                baseTypeMethod = interfaceType.GetMethod(currentMethod.Name, parameters);
+                if (null != baseTypeMethod)
+                {
+                    return baseTypeMethod;
+                }
+            }
+
+            return null;
         }
     }
 
@@ -40,12 +65,14 @@ namespace AopSample
 
         public object CreateClassProxy(Type classType, params Type[] interfaceTypes)
         {
-            throw new NotImplementedException();
+            var type = ProxyUtil.CreateClassProxy(classType, interfaceTypes);
+            return Activator.CreateInstance(type);
         }
 
         public object CreateClassProxy(Type classType, Type implementationType, params Type[] interfaceTypes)
         {
-            throw new NotImplementedException();
+            var type = ProxyUtil.CreateClassProxy(classType, interfaceTypes);
+            return Activator.CreateInstance(type);
         }
     }
 }
