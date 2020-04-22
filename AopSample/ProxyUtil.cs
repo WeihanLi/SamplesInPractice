@@ -256,7 +256,7 @@ namespace AopSample
                         var getMethod = typeof(MethodInvocationContext).GetProperty("ReturnValue").GetGetMethod();
                         il.EmitCall(OpCodes.Callvirt, getMethod, Type.EmptyTypes);
 
-                        if (method.ReturnType != typeof(object))
+                        if (method.ReturnType.IsValueType)
                         {
                             il.EmitCastToType(typeof(object), method.ReturnType);
                         }
