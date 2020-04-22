@@ -35,10 +35,13 @@ namespace AopSample
         }
 
         public static LocalBuilder DeclareReturnValue(this ILGenerator il, MethodInfo method)
+            => DeclareReturnValue(il, method?.ReturnType);
+
+        public static LocalBuilder DeclareReturnValue(this ILGenerator il, Type returnType)
         {
-            if (method.ReturnType != typeof(void))
+            if (returnType != typeof(void))
             {
-                return il.DeclareLocal(method.ReturnType);
+                return il.DeclareLocal(returnType);
             }
 
             return null;
@@ -55,15 +58,6 @@ namespace AopSample
             il.Emit(OpCodes.Ret);
         }
 
-        public static void LoadMethodParameters(this ILGenerator il, MethodInfo method)
-        {
-            il.Emit(OpCodes.Ldarg_0);
-            for (var i = 1; i <= method.GetParameters().Length; i++)
-            {
-                il.Emit(OpCodes.Ldarg, i);
-            }
-        }
-
         public static void Call(this ILGenerator il, MethodInfo method)
         {
             il.Emit(OpCodes.Call, method);
@@ -72,11 +66,6 @@ namespace AopSample
         public static void Call(this ILGenerator il, ConstructorInfo constructor)
         {
             il.Emit(OpCodes.Call, constructor);
-        }
-
-        public static void CallVirt(this ILGenerator il, MethodInfo method)
-        {
-            il.Emit(OpCodes.Callvirt, method);
         }
 
         public static void New(this ILGenerator il, ConstructorInfo constructor)
