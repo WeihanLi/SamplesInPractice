@@ -5,9 +5,11 @@ namespace AopSample
 {
     public class MethodInvocationContext
     {
-        public MethodInfo Method { get; }
+        public MethodInfo ProxyMethod { get; }
 
         public MethodInfo MethodBase { get; }
+
+        public object ProxyTarget { get; }
 
         public object Target { get; }
 
@@ -15,10 +17,11 @@ namespace AopSample
 
         public object ReturnValue { get; set; }
 
-        public MethodInvocationContext(MethodInfo method, MethodInfo methodBase, object target, object[] parameters)
+        public MethodInvocationContext(MethodInfo method, MethodInfo methodBase, object proxyTarget, object target, object[] parameters)
         {
-            Method = method;
+            ProxyMethod = method;
             MethodBase = methodBase;
+            ProxyTarget = proxyTarget;
             Target = target;
             Parameters = parameters;
         }
@@ -28,9 +31,9 @@ namespace AopSample
     {
         public static void Invoke(this MethodInvocationContext context)
         {
-            Console.WriteLine($"real method[{context.Method.Name}] invoking...");
+            Console.WriteLine($"real method[{context.ProxyMethod.Name}] invoking...");
             var returnValue = context.MethodBase?.Invoke(context.Target, context.Parameters);
-            if (null != returnValue && context.Method.ReturnType != typeof(void))
+            if (null != returnValue && context.ProxyMethod.ReturnType != typeof(void))
             {
                 context.ReturnValue = returnValue;
             }

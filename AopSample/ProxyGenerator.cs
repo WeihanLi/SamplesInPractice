@@ -9,6 +9,9 @@ namespace AopSample
         public static TInterface CreateInterfaceProxy<TInterface>(this ProxyGenerator proxyGenerator) =>
             (TInterface)proxyGenerator.CreateInterfaceProxy(typeof(TInterface));
 
+        public static TInterface CreateInterfaceProxy<TInterface, TImplement>(this ProxyGenerator proxyGenerator) where TImplement : TInterface =>
+            (TInterface)proxyGenerator.CreateInterfaceProxy(typeof(TInterface), typeof(TImplement));
+
         public static MethodBase GetBaseMethod(this MethodBase currentMethod)
         {
             return currentMethod?.DeclaringType?.BaseType?
@@ -29,9 +32,10 @@ namespace AopSample
             return Activator.CreateInstance(type);
         }
 
-        public object CreateInterfaceProxy(Type interfaceType, object implementationInstance)
+        public object CreateInterfaceProxy(Type interfaceType, Type implementationType)
         {
-            throw new NotImplementedException();
+            var type = ProxyUtil.CreateInterfaceProxy(interfaceType, implementationType);
+            return Activator.CreateInstance(type);
         }
 
         public object CreateClassProxy(Type classType, params Type[] interfaceTypes)

@@ -11,12 +11,20 @@ namespace AopSample
 
         public static void InvokeAspectDelegate(MethodInvocationContext context)
         {
-            var action = _aspectDelegates.GetOrAdd($"{context.Method.DeclaringType}.{context.Method}", m =>
+            var action = _aspectDelegates.GetOrAdd($"{context.ProxyMethod.DeclaringType}.{context.ProxyMethod}", m =>
             {
                 var builder = PipelineBuilder.Create<MethodInvocationContext>(x => x.Invoke());
-                if (context.Method != null)
+
+                if (context.MethodBase != null)
                 {
-                    foreach (var aspect in context.Method.GetCustomAttributes<AbstractAspect>(true))
+                    foreach (var aspect in context.MethodBase.GetCustomAttributes<AbstractAspect>(true))
+                    {
+                        builder.Use(aspect.Invoke);
+                    }
+                }
+                else if (context.ProxyMethod != null)
+                {
+                    foreach (var aspect in context.ProxyMethod.GetCustomAttributes<AbstractAspect>(true))
                     {
                         builder.Use(aspect.Invoke);
                     }
@@ -26,11 +34,11 @@ namespace AopSample
             action.Invoke(context);
 
             // check for return value
-            if (context.Method.ReturnType != typeof(void))
+            if (context.ProxyMethod.ReturnType != typeof(void))
             {
-                if (context.ReturnValue == null && context.Method.ReturnType.IsValueType)
+                if (context.ReturnValue == null && context.ProxyMethod.ReturnType.IsValueType)
                 {
-                    context.ReturnValue = Activator.CreateInstance(context.Method.ReturnType);
+                    context.ReturnValue = Activator.CreateInstance(context.ProxyMethod.ReturnType);
                 }
             }
         }

@@ -19,23 +19,27 @@ namespace AopSample
         int Test3();
     }
 
-    internal class TestService : ITestService
+    public class TestService : ITestService
     {
         public void Test()
         {
+            Console.WriteLine("test invoked");
         }
 
-        public void Test1(int a, string b)
+        public virtual void Test1(int a, string b)
         {
             Console.WriteLine($"a:{a}, b:{b}");
         }
 
-        public string Test2()
+        [TryInvoke1Aspect]
+        [TryInvoke2Aspect]
+        public virtual string Test2()
         {
             return "Hello";
         }
 
-        public int Test3()
+        [TryInvokeAspect]
+        public virtual int Test3()
         {
             return 1;
         }
