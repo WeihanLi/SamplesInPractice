@@ -21,29 +21,16 @@ namespace AopSample
 
         public static MethodBase GetBaseMethod(this MethodBase currentMethod)
         {
-            if (null == currentMethod?.DeclaringType)
+            if (null == currentMethod?.DeclaringType?.BaseType)
                 return null;
 
-            var parameters = currentMethod.GetParameters().Select(o => o.ParameterType).ToArray();
-
-            var baseTypeMethod = currentMethod.DeclaringType.BaseType?
+            var parameterTypes = currentMethod.GetParameters().Select(o => o.ParameterType).ToArray();
+            var baseTypeMethod = currentMethod.DeclaringType.BaseType
                 .GetMethod(
                     currentMethod.Name,
-                    parameters
+                    parameterTypes
                 );
-            if (null != baseTypeMethod)
-                return baseTypeMethod;
-
-            foreach (var interfaceType in currentMethod.DeclaringType.BaseType.GetImplementedInterfaces())
-            {
-                baseTypeMethod = interfaceType.GetMethod(currentMethod.Name, parameters);
-                if (null != baseTypeMethod)
-                {
-                    return baseTypeMethod;
-                }
-            }
-
-            return null;
+            return baseTypeMethod;
         }
     }
 
