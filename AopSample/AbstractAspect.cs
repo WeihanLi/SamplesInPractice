@@ -4,17 +4,17 @@ namespace AopSample
 {
     public abstract class AbstractAspect : Attribute
     {
-        public abstract void Invoke(MethodInvocationContext methodInvocationContext, Action<MethodInvocationContext> next);
+        public abstract void Invoke(MethodInvocationContext methodInvocationContext, Action next);
     }
 
     public class TryInvokeAspect : AbstractAspect
     {
-        public override void Invoke(MethodInvocationContext methodInvocationContext, Action<MethodInvocationContext> next)
+        public override void Invoke(MethodInvocationContext methodInvocationContext, Action next)
         {
             Console.WriteLine($"begin invoke method {methodInvocationContext.Method.Name} in {GetType().Name}...");
             try
             {
-                next(methodInvocationContext);
+                next();
             }
             catch (Exception e)
             {
@@ -27,12 +27,12 @@ namespace AopSample
 
     public class TryInvoke1Aspect : AbstractAspect
     {
-        public override void Invoke(MethodInvocationContext methodInvocationContext, Action<MethodInvocationContext> next)
+        public override void Invoke(MethodInvocationContext methodInvocationContext, Action next)
         {
             Console.WriteLine($"begin invoke method {methodInvocationContext.Method.Name} in {GetType().Name}...");
             try
             {
-                next(methodInvocationContext);
+                next();
             }
             catch (Exception e)
             {
@@ -45,12 +45,12 @@ namespace AopSample
 
     public class TryInvoke2Aspect : AbstractAspect
     {
-        public override void Invoke(MethodInvocationContext methodInvocationContext, Action<MethodInvocationContext> next)
+        public override void Invoke(MethodInvocationContext methodInvocationContext, Action next)
         {
             Console.WriteLine($"begin invoke method {methodInvocationContext.Method.Name} in {GetType().Name}...");
             try
             {
-                next(methodInvocationContext);
+                next();
             }
             catch (Exception e)
             {

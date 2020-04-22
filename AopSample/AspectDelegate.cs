@@ -11,25 +11,28 @@ namespace AopSample
 
         public static void InvokeAspectDelegate(MethodInvocationContext context)
         {
-            var action = _aspectDelegates.GetOrAdd(context.Method.ToString(), m =>
+            var action = _aspectDelegates.GetOrAdd($"{context.Method.DeclaringType}.{context.Method}", m =>
             {
-                var builder = PipelineBuilder.Create<MethodInvocationContext>(x =>
-                {
-                    x.ReturnValue = x.Invoke();
-                });
+                var builder = PipelineBuilder.Create<MethodInvocationContext>(x => x.Invoke());
                 if (context.Method != null)
                 {
                     foreach (var aspect in context.Method.GetCustomAttributes<AbstractAspect>(true))
                     {
-                        builder.Use(next =>
-                        {
-                            return (Action<MethodInvocationContext>)(ctx => aspect.Invoke(context, next));
-                        });
+                        builder.Use(aspect.Invoke);
                     }
                 }
                 return builder.Build();
             });
             action.Invoke(context);
+
+            // check for return value
+            if (context.Method.ReturnType != typeof(void))
+            {
+                if (context.ReturnValue == null && context.Method.ReturnType.IsValueType)
+                {
+                    context.ReturnValue = Activator.CreateInstance(context.Method.ReturnType);
+                }
+            }
         }
     }
 }

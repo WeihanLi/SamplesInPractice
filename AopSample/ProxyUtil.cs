@@ -96,15 +96,21 @@ namespace AopSample
                     il.Emit(OpCodes.Ldloc, localAspectInvocation);
                     var invokeAspectDelegateMethod =
                         typeof(AspectDelegate).GetMethod(nameof(AspectDelegate.InvokeAspectDelegate));
-
                     il.Call(invokeAspectDelegateMethod);
                     il.Emit(OpCodes.Nop);
 
                     if (method.ReturnType != typeof(void))
                     {
-                        il.EmitCall(OpCodes.Call,
-                            typeof(CoreExtension).GetMethod(nameof(CoreExtension.GetDefaultValue)),
-                            new Type[] { method.ReturnType });
+                        // load return value
+                        il.Emit(OpCodes.Ldloc, localAspectInvocation);
+                        var getMethod = typeof(MethodInvocationContext).GetProperty("ReturnValue").GetGetMethod();
+                        il.EmitCall(OpCodes.Callvirt, getMethod, Type.EmptyTypes);
+
+                        if (method.ReturnType != typeof(object))
+                        {
+                            il.EmitCastToType(typeof(object), method.ReturnType);
+                        }
+
                         il.Emit(OpCodes.Stloc, localReturnValue);
                         il.Emit(OpCodes.Ldloc, localReturnValue);
                     }
@@ -122,7 +128,6 @@ namespace AopSample
             if (customAttributeData.NamedArguments != null)
             {
                 var attributeTypeInfo = customAttributeData.AttributeType.GetTypeInfo();
-                var constructor = customAttributeData.Constructor;
                 //var constructorArgs = customAttributeData.ConstructorArguments.Select(c => c.Value).ToArray();
                 var constructorArgs = customAttributeData.ConstructorArguments
                     .Select(ReadAttributeValue)

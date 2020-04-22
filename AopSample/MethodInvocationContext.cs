@@ -26,10 +26,14 @@ namespace AopSample
 
     public static class MethodInvocationContextExtensions
     {
-        public static object Invoke(this MethodInvocationContext context)
+        public static void Invoke(this MethodInvocationContext context)
         {
             Console.WriteLine($"real method[{context.Method.Name}] invoking...");
-            return context.MethodBase?.Invoke(context.Target, context.Parameters);
+            var returnValue = context.MethodBase?.Invoke(context.Target, context.Parameters);
+            if (null != returnValue && context.Method.ReturnType != typeof(void))
+            {
+                context.ReturnValue = returnValue;
+            }
         }
     }
 }
