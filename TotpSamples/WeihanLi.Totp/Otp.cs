@@ -75,7 +75,7 @@ namespace WeihanLi.Totp
                 //                 | (hashResult[offset + 2] & 0xff) << 8
                 //                 | (hashResult[offset + 3] & 0xff);
 
-                return (num % (int)Math.Pow(10, _codeSize)).ToString();
+                return (num % (int)Math.Pow(10, _codeSize)).ToString().PadLeft(_codeSize, '0');
             }
         }
 
