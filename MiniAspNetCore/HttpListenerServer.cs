@@ -20,7 +20,11 @@ namespace MiniAspNetCore
             var urls = configuration.GetAppSetting("ASPNETCORE_URLS")?.Split(';');
             if (urls != null && urls.Length > 0)
             {
-                foreach (var url in urls.Select(u => u?.Trim()).Where(u => u.IsNullOrEmpty()).Distinct())
+                foreach (var url in urls
+                    .Where(u => u.IsNotNullOrEmpty())
+                    .Select(u => u.Trim())
+                    .Distinct()
+                )
                 {
                     // Prefixes must end in a forward slash ("/")
                     // https://stackoverflow.com/questions/26157475/use-of-httplistener

@@ -76,7 +76,7 @@ namespace MiniAspNetCore
             if (null != configureAction)
             {
                 var configuration = _configurationBuilder.Build();
-                configureAction?.Invoke(configuration, _requestPipeline);
+                configureAction.Invoke(configuration, _requestPipeline);
             }
             return this;
         }
