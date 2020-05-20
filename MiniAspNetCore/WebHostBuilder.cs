@@ -48,6 +48,8 @@ namespace MiniAspNetCore
         private readonly IConfigurationBuilder _configurationBuilder = new ConfigurationBuilder();
         private readonly IServiceCollection _serviceCollection = new ServiceCollection();
 
+        private Action<IConfiguration, IServiceProvider> _initAction = null;
+
         private readonly IAsyncPipelineBuilder<HttpContext> _requestPipeline = PipelineBuilder.CreateAsync<HttpContext>(context =>
         {
             context.Response.StatusCode = 404;
@@ -85,9 +87,7 @@ namespace MiniAspNetCore
         {
             if (null != initAction)
             {
-                var configuration = _configurationBuilder.Build();
-                var applicationServices = _serviceCollection.BuildServiceProvider();
-                initAction.Invoke(configuration, applicationServices);
+                _initAction = initAction;
             }
 
             return this;
@@ -97,7 +97,11 @@ namespace MiniAspNetCore
         {
             var configuration = _configurationBuilder.Build();
             _serviceCollection.AddSingleton<IConfiguration>(configuration);
-            return new WebHost(_serviceCollection.BuildServiceProvider(), _requestPipeline.Build());
+            var serviceProvider = _serviceCollection.BuildServiceProvider();
+
+            _initAction?.Invoke(configuration, serviceProvider);
+
+            return new WebHost(serviceProvider, _requestPipeline.Build());
         }
 
         public static WebHostBuilder CreateDefault(string[] args)
