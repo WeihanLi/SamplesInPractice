@@ -66,6 +66,7 @@ namespace MiniAspNetCore
                 }
                 listenerContext.Response.Close();
             }
+            _listener.Stop();
         }
 
         public Task StopAsync()

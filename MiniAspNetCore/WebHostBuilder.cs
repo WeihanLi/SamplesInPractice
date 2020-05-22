@@ -25,7 +25,6 @@ namespace MiniAspNetCore
 
         public async Task RunAsync(CancellationToken cancellationToken = default)
         {
-            cancellationToken.Register(() => _server.StopAsync().RunSynchronously());
             await _server.StartAsync(_requestDelegate, cancellationToken).ConfigureAwait(false);
         }
     }

@@ -7,7 +7,5 @@ namespace MiniAspNetCore
     public interface IServer
     {
         Task StartAsync(Func<HttpContext, Task> requestHandler, CancellationToken cancellationToken = default);
-
-        Task StopAsync();
     }
 }
