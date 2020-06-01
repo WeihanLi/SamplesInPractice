@@ -1,0 +1,13 @@
+﻿<Project>
+  <PropertyGroup>
+    <Authors>WeihanLi</Authors>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Source code settings -->
+  <PropertyGroup>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+    <RepositoryUrl>https://github.com/WeihanLi/SamplesInPractice</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+</Project>
