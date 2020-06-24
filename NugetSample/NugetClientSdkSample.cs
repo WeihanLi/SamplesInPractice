@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using NuGet.Common;
 using NuGet.Packaging.Core;
 using NuGet.Protocol;
@@ -20,6 +23,72 @@ namespace NugetSample
             var logger = NullLogger.Instance;
             var cache = new SourceCacheContext();
             var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.json");
+
+            {
+                var packagesFolder = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
+
+                if (string.IsNullOrEmpty(packagesFolder))
+                {
+                    // Nuget globalPackagesFolder resolve
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        var defaultConfigFilePath =
+                            $@"{Environment.GetEnvironmentVariable("APPDATA")}\NuGet\NuGet.Config";
+                        if (File.Exists(defaultConfigFilePath))
+                        {
+                            var doc = new XmlDocument();
+                            doc.Load(defaultConfigFilePath);
+                            var node = doc.SelectSingleNode("/configuration/config/add[@key='globalPackagesFolder']");
+                            if (node != null)
+                            {
+                                packagesFolder = node.Attributes["value"]?.Value;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(packagesFolder))
+                        {
+                            packagesFolder = $@"{Environment.GetEnvironmentVariable("USERPROFILE")}\.nuget\packages";
+                        }
+                    }
+                    else
+                    {
+                        var defaultConfigFilePath =
+                            $@"{Environment.GetEnvironmentVariable("HOME")}/.config/NuGet/NuGet.Config";
+                        if (File.Exists(defaultConfigFilePath))
+                        {
+                            var doc = new XmlDocument();
+                            doc.Load(defaultConfigFilePath);
+                            var node = doc.SelectSingleNode("/configuration/config/add[@key='globalPackagesFolder']");
+                            if (node != null)
+                            {
+                                packagesFolder = node.Attributes["value"]?.Value;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(packagesFolder))
+                        {
+                            defaultConfigFilePath = $@"{Environment.GetEnvironmentVariable("HOME")}/.nuget/NuGet/NuGet.Config";
+                            if (File.Exists(defaultConfigFilePath))
+                            {
+                                var doc = new XmlDocument();
+                                doc.Load(defaultConfigFilePath);
+                                var node = doc.SelectSingleNode("/configuration/config/add[@key='globalPackagesFolder']");
+                                if (node != null)
+                                {
+                                    packagesFolder = node.Value;
+                                }
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(packagesFolder))
+                        {
+                            packagesFolder = $@"{Environment.GetEnvironmentVariable("HOME")}/.nuget/packages";
+                        }
+                    }
+                }
+
+                Console.WriteLine($"globalPackagesFolder: {packagesFolder}");
+            }
 
             {
                 // get packages
@@ -83,16 +152,19 @@ namespace NugetSample
                 }
             }
 
-            var pkgDownloadContext = new PackageDownloadContext(cache);
-            var downloadRes = await repository.GetResourceAsync<DownloadResource>();
+            {
+                var pkgDownloadContext = new PackageDownloadContext(cache);
+                var downloadRes = await repository.GetResourceAsync<DownloadResource>();
 
-            var downloadResult = await RetryHelper.TryInvokeAsync(async () => await downloadRes.GetDownloadResourceResultAsync(
-                new PackageIdentity(packageId, packageVersion),
-                pkgDownloadContext,
-                @"C:\Users\liweihan\.nuget\packages",
-                logger,
-                CancellationToken.None), r => true);
-            Console.WriteLine(downloadResult.Status.ToString());
+                var downloadResult = await RetryHelper.TryInvokeAsync(async () =>
+                    await downloadRes.GetDownloadResourceResultAsync(
+                        new PackageIdentity(packageId, packageVersion),
+                        pkgDownloadContext,
+                        @"C:\Users\liweihan\.nuget\packages",
+                        logger,
+                        CancellationToken.None), r => true);
+                Console.WriteLine(downloadResult.Status.ToString());
+            }
         }
     }
 }
