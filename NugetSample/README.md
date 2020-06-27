@@ -225,7 +225,7 @@ var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.js
 
 最后提供一个解析 nuget `globalPackagesFolder` 的两种思路：
 
-一个是前面有篇文章介绍的，有个默认的配置文件，然后就是默认的配置，写了一个解析的方法示例，支持 WIndows/Linux/Mac：
+一个是前面有篇文章介绍的，有个默认的配置文件，然后就是默认的配置，写了一个解析的方法示例，支持 Windows/Linux/Mac：
 
 ``` csharp
 {
