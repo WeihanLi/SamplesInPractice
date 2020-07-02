@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,9 +41,15 @@ namespace XUnitDependencyInjectionSample
                     {
                         services.AddSingleton<IUserIdProvider, EnvironmentUserIdProvider>();
                     }
-                });
+                })
+                ;
 
             return hostBuilder;
+        }
+
+        protected override void Configure(IServiceProvider provider)
+        {
+            // 有一些测试数据要初始化可以放在这里
         }
     }
 }
