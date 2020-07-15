@@ -12,14 +12,25 @@ namespace NatashaSample
             var code = "Console.WriteLine(\"Hello World!\");";
 
             AssemblyDomain.Init();
-            using var domain = DomainManagement.Random;
-            var action = NDelegate
-                .UseDomain(domain)
-                .UseRandomName()
-                .Action(code)
-                ;
-            action.Invoke();
 
+            var outputData = string.Empty;
+
+            using(var output = WeihanLi.Common.Helpers.ConsoleOutput.Capture().GetAwaiter().GetResult())
+            {
+                using var domain = DomainManagement.Random;
+                var action = NDelegate
+                    .UseDomain(domain)
+                    .UseRandomName()
+                    .Action(code)
+                    ;
+                action.Invoke();
+
+                outputData = output.StandardOutput;
+            }
+            
+            Console.WriteLine($"outputData:{outputData}");
+
+            Console.WriteLine("completed.");
             Console.ReadLine();
         }
     }
