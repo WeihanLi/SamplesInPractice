@@ -11,10 +11,37 @@ namespace XUnitDependencyInjectionSample
 {
     public class Startup
     {
-        // 自定义 Host 构建，可以没有这样方法，没有这个方法会使用默认的 hostBuilder
-        public IHostBuilder CreateHostBuilder()
+        // 自定义 HostBuilder ，可以没有这个方法，没有这个方法会使用默认的 hostBuilder
+        // public IHostBuilder CreateHostBuilder()
+        // {
+        //     return new HostBuilder()
+        //         .ConfigureAppConfiguration(builder =>
+        //         {
+        //             // 注册配置
+        //             builder
+        //                 .AddInMemoryCollection(new Dictionary<string, string>()
+        //                 {
+        //                     {"UserName", "Alice"}
+        //                 })
+        //                 .AddJsonFile("appsettings.json")
+        //                 ;
+        //         })
+        //         .ConfigureServices((context, services) =>
+        //         {
+        //             // 注册自定义服务
+        //             services.AddSingleton<IIdGenerator, GuidIdGenerator>();
+        //             if (context.Configuration.GetAppSetting<bool>("XxxEnabled"))
+        //             {
+        //                 services.AddSingleton<IUserIdProvider, EnvironmentUserIdProvider>();
+        //             }
+        //         })
+        //         ;
+        // }
+
+        // 自定义 host 构建
+        public void ConfigureHost(IHostBuilder hostBuilder)
         {
-            return new HostBuilder()
+            hostBuilder
                 .ConfigureAppConfiguration(builder =>
                 {
                     // 注册配置
