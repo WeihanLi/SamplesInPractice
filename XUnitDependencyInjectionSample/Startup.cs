@@ -11,12 +11,10 @@ namespace XUnitDependencyInjectionSample
 {
     public class Startup
     {
-        // 配置 Host 注册，优先调用
-        // 也可以修改方法的返回值为  `IHostBuilder`，返回一个 全新的 hostBuilder，
-        // 有点类似于 asp.net core 2.x 里 Startup 里的 ConfigureServices 方法
-        public void ConfigureHost(IHostBuilder hostBuilder)
+        // 自定义 Host 构建，可以没有这样方法，没有这个方法会使用默认的 hostBuilder
+        public IHostBuilder CreateHostBuilder()
         {
-            hostBuilder
+            return new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
                     // 注册配置

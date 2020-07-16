@@ -25,12 +25,11 @@ namespace XUnitDependencyInjectionSample
 {
     public class Startup
     {
-        // 配置 Host 注册，优先调用
-        // 也可以修改方法的返回值为  `IHostBuilder`，返回一个 全新的 hostBuilder，
-        // 有点类似于 asp.net core 2.x 里 Startup 里的 ConfigureServices 方法
-        public void ConfigureHost(IHostBuilder hostBuilder)
+        // 自定义 Host 构建，可以没有这样方法
+        // 没有这个方法会使用一个默认的 hostBuilder
+        public IHostBuilder CreateHostBuilder()
         {
-            hostBuilder
+            return new HostBuilder()
                 .ConfigureAppConfiguration(builder =>
                 {
                     // 注册配置
@@ -73,13 +72,37 @@ namespace XUnitDependencyInjectionSample
 }
 ```
 
-`Startup` 和 asp.net core 里的 `Startup` 类似，会多一个 `ConfigureHost(IHostBuilder hostBuilder)` 的方法，允许用户自定义 Host 构建
+`Startup` 和 asp.net core 里的 `Startup` 类似，
 
-`ConfigureServices` 方法允许用户增加 `HostBuilderContext` 作为参数，可以通过 `hostBuilderContext` 来获取配置信息，也可以在 `ConfigueHost` 里注册也是一样的
+会多一个 `CreateHostBuilder` 的方法，允许用户自定义 Host 的构建，也可以没有这个方法
+
+`ConfigureServices` 方法允许用户增加 `HostBuilderContext` 作为参数，可以通过 `hostBuilderContext` 来获取配置信息，也可以在 `CreateHostBuilder` 里注册也是一样的
 
 注册配置/服务和 asp.net core 里一模一样，有数据或配置需要在项目启动时初始化的，可以放在 `Configure`  方法做，有点类似于 asp.net core 里 `Startup` 中的 `Configure` 方法，
 
 只是这里我们不需要配置 asp.net core 的请求管道
+
+## Startup 的寻找方法
+
+默认的 `Startup` 通常是 `ProjectName.Startup`，通常在项目根目录下创建一个 `Startup` 是不需要配置的，如果不是或不起作用，可以参考下面 Startup 的寻找规则
+
+如果要使用一个特别的 `Startup`, 你可以通过在项目文件的 `PropertyGroup` 部分定义 `XunitStartupAssembly` 和 `XunitStartupFullName`，具体规则如下
+
+``` xml
+<Project>
+  <PropertyGroup>
+    <XunitStartupAssembly>Abc</XunitStartupAssembly>
+    <XunitStartupFullName>Xyz</XunitStartupFullName>
+  </PropertyGroup>
+</Project>
+```
+
+| XunitStartupAssembly | XunitStartupFullName | Startup |
+| ------- | ------ | ------ |
+|   |   | Your.Test.Project.Startup, Your.Test.Project |
+| Abc |   | Abc.Startup, Abc |
+|   | Xyz | Xyz, Your.Test.Project |
+| Abc | Xyz | Xyz, Abc |
 
 ### 开始在测试代码里使用依赖注入吧
 
