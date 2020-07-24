@@ -17,6 +17,7 @@ namespace StupidSamples
             }
             catch (OutOfMemoryException)
             {
+                Console.WriteLine(nameof(OutOfMemoryException));
                 Console.WriteLine(list.Count);
                 var bytes = GC.GetTotalAllocatedBytes();
                 Console.WriteLine($"AllocatedBytes: { bytes / 1024.0 } kb");

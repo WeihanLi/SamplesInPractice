@@ -13,7 +13,11 @@ namespace StupidSamples
             // FullCpuSample.Test();
 
             // full memory
-            FullMemorySample.Test();
+            // FullMemorySample.Test();
+
+            // StackOverflow
+            StackOverflowSample.Test();
+            // StackOverflowSample.Test1();
 
             Console.WriteLine("completed");
             Console.ReadLine();
