@@ -16,4 +16,17 @@ namespace XUnitDependencyInjectionSample
             _testOutputHelperAccessor.Output?.WriteLine(output);
         }
     }
+
+    public interface IService
+    {
+        string GetValue();
+    }
+
+    public class Service : IService
+    {
+        public string GetValue()
+        {
+            return "proxy";
+        }
+    }
 }

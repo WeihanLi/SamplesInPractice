@@ -1,4 +1,5 @@
-﻿using WeihanLi.Common;
+﻿using AspectCore.DynamicProxy;
+using WeihanLi.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,11 +11,14 @@ namespace XUnitDependencyInjectionSample
         private readonly ITestOutputHelper _outputHelper;
         private readonly CustomService _customService;
 
-        public CustomServiceTest(IIdGenerator idGenerator, ITestOutputHelper outputHelper, CustomService customService)
+        private readonly IService _service;
+
+        public CustomServiceTest(IIdGenerator idGenerator, ITestOutputHelper outputHelper, CustomService customService, IService service)
         {
             _idGenerator = idGenerator;
             _outputHelper = outputHelper;
             _customService = customService;
+            _service = service;
         }
 
         [Fact]
@@ -29,6 +33,14 @@ namespace XUnitDependencyInjectionSample
         public void TestOutputHelperAccessorTest()
         {
             _customService.Output("Hello World");
+        }
+
+        [Fact]
+        public void AspectCoreTest()
+        {
+            var val = _service.GetValue();
+            Assert.Equal("proxy", val);
+            Assert.True(_service.IsProxy());
         }
     }
 }

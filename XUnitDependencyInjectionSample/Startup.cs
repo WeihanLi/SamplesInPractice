@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AspectCore.Configuration;
+using AspectCore.DependencyInjection;
+using AspectCore.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -53,14 +56,29 @@ namespace XUnitDependencyInjectionSample
                         .AddJsonFile("appsettings.json")
                         ;
                 })
-                .ConfigureServices((context, services) =>
+                 .ConfigureServices((context, services) =>
+                 {
+                     // 注册自定义服务
+                     services.AddSingleton<IIdGenerator, GuidIdGenerator>();
+                     services.AddTransient<IService, Service>();
+                     if (context.Configuration.GetAppSetting<bool>("XxxEnabled"))
+                     {
+                         services.AddSingleton<IUserIdProvider, EnvironmentUserIdProvider>();
+                     }
+                 })
+                .UseDynamicProxy()
+                .ConfigureDynamicProxy((context, services, config) =>
                 {
-                    // 注册自定义服务
-                    services.AddSingleton<IIdGenerator, GuidIdGenerator>();
-                    if (context.Configuration.GetAppSetting<bool>("XxxEnabled"))
+                    config.NonAspectPredicates.AddService("ITestOutputHelper");
+                    config.NonAspectPredicates.AddService("ITestOutputHelperAccessor");
+                    config.Interceptors.AddDelegate(async (ctx, next) =>
                     {
-                        services.AddSingleton<IUserIdProvider, EnvironmentUserIdProvider>();
-                    }
+                        await next(ctx);
+                        if (ctx.Implementation is IService)
+                        {
+                            ctx.ReturnValue = "proxy";
+                        }
+                    });
                 })
                 ;
         }
