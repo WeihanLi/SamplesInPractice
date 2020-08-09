@@ -48,7 +48,7 @@ namespace NPOISample
             props.CoreProperties.Description = setting.Description;
             props.ExtendedProperties.GetUnderlyingProperties().Company = setting.Company;
             props.ExtendedProperties.GetUnderlyingProperties().Application = "WeihanLi.Npoi";
-            // props.ExtendedProperties.GetUnderlyingProperties().AppVersion = "1.9.0";
+            props.ExtendedProperties.GetUnderlyingProperties().AppVersion = typeof(ExcelHelper).Assembly.GetName().Version?.ToString();
 
             workbook.ImportData(entities);
 
