@@ -16,7 +16,7 @@ namespace StupidSamples
             // FullMemorySample.Test();
 
             // StackOverflow
-            StackOverflowSample.Test();
+            // StackOverflowSample.Test();
             // StackOverflowSample.Test1();
 
             Console.WriteLine("completed");
