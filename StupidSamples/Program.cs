@@ -18,9 +18,10 @@ namespace StupidSamples
             // StackOverflow
             // StackOverflowSample.Test();
             // StackOverflowSample.Test1();
-            StackOverflowSample.Test2();
+            // StackOverflowSample.Test2();
+            // StackOverflowSample.Test3();
 
-            Console.WriteLine("completed");
+            //Console.WriteLine("completed");
             Console.ReadLine();
         }
     }

@@ -23,7 +23,10 @@ namespace StupidSamples
         {
             var thread = new Thread(() =>
             {
-                ReadOnlySpan<byte> bytes = stackalloc byte[31*1024+1];
+                ReadOnlySpan<byte> bytes = stackalloc byte[16*1024+1];
+                Console.WriteLine($"{bytes.Length} passed");
+
+                bytes = stackalloc byte[32*1024+1];
                 Console.WriteLine($"{bytes.Length} passed");
 
                 bytes = stackalloc byte[256*1024+1];
@@ -31,6 +34,25 @@ namespace StupidSamples
             }, 1);
             thread.IsBackground = true;
             thread.Start();
+        }
+
+        public static void Test3()
+        {
+            var thread = new Thread(() =>
+            {
+                TestMethod(1024);
+            }, 1);
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        private static void TestMethod(int num)
+        {
+            if(num > 0)
+            {
+                num--;
+                TestMethod(num);
+            }
         }
     }
 }
