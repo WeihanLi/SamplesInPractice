@@ -7,12 +7,12 @@ namespace StupidSamples
     {
         public static void Test()
         {
-            var list = new List<string>();
+            var list = new List<byte[]>();
             try
             {
                 while (true)
                 {
-                    list.Add(new string('x', int.MaxValue));
+                    list.Add(new byte[85000]);
                 }
             }
             catch (OutOfMemoryException)
