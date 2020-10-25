@@ -1,0 +1,4 @@
+*.dmp
+*.gcdump
+*.nettrace
+*.speedscope.json
