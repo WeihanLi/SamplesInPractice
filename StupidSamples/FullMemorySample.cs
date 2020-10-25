@@ -7,6 +7,9 @@ namespace StupidSamples
     {
         public static void Test()
         {
+            Console.ReadLine();
+            var bytes = GC.GetTotalAllocatedBytes();
+            Console.WriteLine($"AllocatedBytes: { bytes } bytes");
             var list = new List<byte[]>();
             try
             {
@@ -19,9 +22,10 @@ namespace StupidSamples
             {
                 Console.WriteLine(nameof(OutOfMemoryException));
                 Console.WriteLine(list.Count);
-                var bytes = GC.GetTotalAllocatedBytes();
-                Console.WriteLine($"AllocatedBytes: { bytes / 1024.0 } kb");
+                bytes = GC.GetTotalAllocatedBytes();
+                Console.WriteLine($"AllocatedBytes: { bytes } bytes");
             }
+            Console.ReadLine();
         }
     }
 }
