@@ -7,12 +7,18 @@ namespace StupidSamples
     {
         public static void Test()
         {
-            Parallel.For(0, Environment.ProcessorCount, i =>
-              {
-                  while (true)
-                  {
-                  }
-              });
+            Parallel.For(0,
+                Environment.ProcessorCount,
+                new ParallelOptions()
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount
+                },
+                i =>
+                {
+                    while (true)
+                    {
+                    }
+                });
         }
     }
 }
