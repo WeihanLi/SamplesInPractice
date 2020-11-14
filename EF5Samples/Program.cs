@@ -6,7 +6,7 @@ namespace EF5Samples
     {
         public static void Main(string[] args)
         {
-            SaveChangesInterceptorTest.MainTest();
+            DbContextFactoryTest.MainTest();
             Console.WriteLine("Hello World!");
         }
     }
