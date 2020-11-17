@@ -18,20 +18,7 @@ namespace EF5Samples
             });
             using var provider = services.BuildServiceProvider();
             var contextFactory = provider.GetRequiredService<IDbContextFactory<TestDbContext>>();
-            using (var dbContext = contextFactory.CreateDbContext())
-            {
-                Enumerable.Range(1, 100)
-                    .Select(i =>
-                   {
-                       dbContext.Posts.Add(new Post() { Id = i + 1, Author = $"author_{i}", Title = $"title_{i}" });
-                       return dbContext.SaveChangesAsync();
-                   })
-                    .WhenAll()
-                    .Wait();
-
-                Console.WriteLine(dbContext.Posts.Count());
-            }
-
+            
             Enumerable.Range(1, 100)
                 .Select(async i =>
                 {
