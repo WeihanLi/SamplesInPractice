@@ -1,15 +1,8 @@
-﻿using System;
+﻿using CSharp9Sample;
+using static System.Console;
 
-namespace CSharp9Sample
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            ForEachExtensions.MainTest();
+ForEachExtensions.MainTest();
+InitOnlySample.MainTest();
 
-            Console.WriteLine("Hello World!");
-            Console.ReadLine();
-        }
-    }
-}
+WriteLine("Hello World!");
+ReadLine();
