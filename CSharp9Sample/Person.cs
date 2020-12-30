@@ -24,6 +24,8 @@
 
         public string Name { get; init; }
 
+        public string Description { get; set; }
+
         public override string ToString()
         {
             return $"Name:{Name}(Age:{Age})";
