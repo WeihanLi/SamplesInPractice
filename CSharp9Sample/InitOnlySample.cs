@@ -1,4 +1,5 @@
 ﻿using System;
+using WeihanLi.Extensions;
 
 namespace CSharp9Sample
 {
@@ -32,6 +33,8 @@ namespace CSharp9Sample
             Console.WriteLine(p4);
 
             var model = new TestInitModel() { Name = "Test" };
+            var model1 = model.ToJson().JsonToObject<TestInitModel>();
+            Console.WriteLine(model1.Name);
         }
 
         private class TestInitModel
