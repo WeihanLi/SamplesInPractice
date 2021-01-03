@@ -32,9 +32,17 @@ namespace CSharp9Sample
             ReadOnlyPerson p4 = new("Tom", 10);
             Console.WriteLine(p4);
 
+            Console.WriteLine(new string('-', 60));
             var model = new TestInitModel() { Name = "Test" };
             var model1 = model.ToJson().JsonToObject<TestInitModel>();
             Console.WriteLine(model1.Name);
+
+            var model2 = new TestInitModel();
+            Console.WriteLine(model2.Name);
+            var nameProp = typeof(TestInitModel)
+                .GetProperty(nameof(model.Name));
+            nameProp?.GetSetMethod()?.Invoke(model2, new object[] { model.Name });
+            Console.WriteLine(model2.Name);
         }
 
         private class TestInitModel
