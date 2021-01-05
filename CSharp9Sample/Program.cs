@@ -6,6 +6,7 @@ using static System.Console;
 //InitOnlySample.MainTest();
 // PatternMatchingSample.MainTest();
 RecordSample.MainTest();
+// FunctionPointerSample.MainTest();
 
 WriteLine("Hello World!");
 ReadLine();
