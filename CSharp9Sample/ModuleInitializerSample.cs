@@ -20,5 +20,11 @@ namespace CSharp9Sample
         {
             Console.WriteLine($"{nameof(ModuleInitializerAttribute)} works");
         }
+
+        [ModuleInitializer]
+        internal static void Initialize2()
+        {
+            Console.WriteLine($"{nameof(ModuleInitializerAttribute)} works2");
+        }
     }
 }

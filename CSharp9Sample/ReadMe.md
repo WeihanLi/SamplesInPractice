@@ -181,7 +181,7 @@ WriteLine("Hello World!");
 Func<int, int, int> constant = (_, _) => 42;
 ```
 
-## Attributes for local function
+### Attributes for local function
 
 ``` csharp
 public static void MainTest()
