@@ -1,4 +1,5 @@
 ﻿using System;
+using WeihanLi.Common.Helpers;
 
 namespace NPOISample
 {
@@ -7,8 +8,11 @@ namespace NPOISample
         public static void Main(string[] args)
         {
             // RawNPOISample.BasicTest();
-            RawNPOISample.PrepareWorkbookTest();
+            // RawNPOISample.PrepareWorkbookTest();
             // RawNPOISample.ImportDataTest();
+
+            InvokeHelper.OnInvokeException = Console.WriteLine;
+            InvokeHelper.TryInvoke(NPOIExtensionSample.MainTest);
 
             Console.WriteLine("Completed!");
             Console.ReadLine();
