@@ -8,7 +8,7 @@ namespace EF5Samples
         {
             //DbContextFactoryTest.MainTest();
             //SaveChangesInterceptorTest.MainTest();
-
+            SavePointsTest.MainTest();
             Console.WriteLine("Hello World!");
         }
     }

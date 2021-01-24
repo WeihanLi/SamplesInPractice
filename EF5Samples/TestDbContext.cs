@@ -10,7 +10,7 @@ namespace EF5Samples
         {
         }
 
-        public DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
     }
 
     public class Post
