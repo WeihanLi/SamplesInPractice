@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using WeihanLi.Extensions;
 
 namespace EF5Samples
@@ -15,7 +18,7 @@ namespace EF5Samples
             services.AddDbContext<TestDbContext>(options =>
             {
                 options.UseInMemoryDatabase("Tests")
-                    //.LogTo(Console.WriteLine)
+                    .LogTo(Console.WriteLine, LogLevel.Information)
                     .AddInterceptors(new AuditInterceptor())
                     ;
             });
@@ -38,16 +41,16 @@ namespace EF5Samples
 
     public class AuditInterceptor : SaveChangesInterceptor
     {
+        private List<CompareModel> ChangesList { get; } = new();
+
         public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
-            var changesList = new List<CompareModel>();
-
             foreach (var entry in
                 eventData.Context.ChangeTracker.Entries<Post>())
             {
                 if (entry.State == EntityState.Added)
                 {
-                    changesList.Add(new CompareModel()
+                    ChangesList.Add(new CompareModel()
                     {
                         OriginalValue = null,
                         NewValue = entry.CurrentValues.ToObject(),
@@ -55,7 +58,7 @@ namespace EF5Samples
                 }
                 else if (entry.State == EntityState.Deleted)
                 {
-                    changesList.Add(new CompareModel()
+                    ChangesList.Add(new CompareModel()
                     {
                         OriginalValue = entry.OriginalValues.ToObject(),
                         NewValue = null,
@@ -63,20 +66,28 @@ namespace EF5Samples
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    changesList.Add(new CompareModel()
+                    ChangesList.Add(new CompareModel()
                     {
                         OriginalValue = entry.OriginalValues.ToObject(),
                         NewValue = entry.CurrentValues.ToObject(),
                     });
                 }
-                Console.WriteLine($"change list:{changesList.ToJson()}");
+                Console.WriteLine($"change list:{ChangesList.ToJson()}");
             }
             return base.SavingChanges(eventData, result);
         }
 
+        public override Task SaveChangesFailedAsync(DbContextErrorEventData eventData,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            ChangesList.Clear();
+            return base.SaveChangesFailedAsync(eventData, cancellationToken);
+        }
+
         public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
         {
-            Console.WriteLine($"changes:{eventData.EntitiesSavedCount}");
+            Console.WriteLine($"changes:{eventData.EntitiesSavedCount},{ChangesList.Count}");
+            ChangesList.Clear();
             return base.SavedChanges(eventData, result);
         }
 
