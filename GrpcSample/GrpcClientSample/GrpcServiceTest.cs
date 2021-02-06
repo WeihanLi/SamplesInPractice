@@ -24,7 +24,6 @@ namespace GrpcClientSample
         private static async Task HttpTest()
         {
             var httpChannel = GrpcChannel.ForAddress("http://localhost:5000");
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var client = new Greeter.GreeterClient(httpChannel);
             var reply = await client.SayHelloAsync(new HelloRequest()
             {
@@ -37,9 +36,7 @@ namespace GrpcClientSample
         {
             var services = new ServiceCollection();
 
-            services.AddGrpcClient<Greeter.GreeterClient>(o => o.Address = new Uri("https://localhost:5001"))
-                .ConfigureChannel(o => { })
-                ;
+            services.AddGrpcClient<Greeter.GreeterClient>(o => o.Address = new Uri("https://localhost:5001"));
             await using var serviceProvider = services.BuildServiceProvider();
 
             var client = serviceProvider.GetRequiredService<Greeter.GreeterClient>();

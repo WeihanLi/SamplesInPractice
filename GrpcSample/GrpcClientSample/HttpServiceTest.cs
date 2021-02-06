@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WeihanLi.Common.Helpers;
@@ -9,7 +10,11 @@ namespace GrpcClientSample
     {
         public static async Task MainTest()
         {
-            using var client = new HttpClient();
+            using var client = new HttpClient()
+            {
+                DefaultRequestVersion = HttpVersion.Version20,
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher,
+            };
             await InvokeHelper.TryInvokeAsync(async () =>
             {
                 var responseText = await client.GetStringAsync("https://localhost:5001/v1/greeter/test");

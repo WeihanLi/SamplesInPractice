@@ -10,41 +10,52 @@ namespace GrpcServerSample
 {
     public class Startup
     {
+        public IWebHostEnvironment Environment { get; }
+
+        public Startup(IWebHostEnvironment environment)
+        {
+            Environment = environment;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGrpc();
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = Environment.IsDevelopment();
+            });
             services.AddGrpcHttpApi();
 
-            services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-                })
-                .AddGrpcSwagger();
-
-            services.AddGrpcReflection();
+            if (Environment.IsDevelopment())
+            {
+                services.AddSwaggerGen(c =>
+                    {
+                        c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                    })
+                    .AddGrpcSwagger();
+                services.AddGrpcReflection();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger()
+                    .UseSwaggerUI(c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    });
             }
-
-            app.UseSwagger()
-                .UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                });
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                if (env.IsDevelopment())
+                if (Environment.IsDevelopment())
                 {
                     endpoints.MapGrpcReflectionService();
                 }
