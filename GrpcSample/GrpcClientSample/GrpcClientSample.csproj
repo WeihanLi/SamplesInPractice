@@ -13,7 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.43" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.44" />
   </ItemGroup>
 
   <ItemGroup>
