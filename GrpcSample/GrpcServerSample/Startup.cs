@@ -60,6 +60,7 @@ namespace GrpcServerSample
                     endpoints.MapGrpcReflectionService();
                 }
                 endpoints.MapGrpcService<GreetService>();
+                endpoints.MapGrpcService<TodoService>();
 
                 endpoints.MapGet("/", async context =>
                 {

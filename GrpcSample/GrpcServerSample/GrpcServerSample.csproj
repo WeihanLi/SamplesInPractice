@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="..\Protos\greet.proto" Link="Protos\greet.proto" />
+    <Protobuf Include="..\Protos\todo.proto" Link="Protos\todo.proto" GrpcServices="Server" />
   </ItemGroup>
 </Project>
