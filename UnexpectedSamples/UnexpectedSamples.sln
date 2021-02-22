@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnexpectedSamples", "Unexpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClassLibrary", "TestClassLibrary\TestClassLibrary.csproj", "{5402B755-4035-45F1-BE46-4C324A63243E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClassLibrary1", "TestClassLibrary1\TestClassLibrary1.csproj", "{42E569B9-AC15-4B2D-8EDD-6B03E9A992A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{5402B755-4035-45F1-BE46-4C324A63243E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5402B755-4035-45F1-BE46-4C324A63243E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5402B755-4035-45F1-BE46-4C324A63243E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E569B9-AC15-4B2D-8EDD-6B03E9A992A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E569B9-AC15-4B2D-8EDD-6B03E9A992A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E569B9-AC15-4B2D-8EDD-6B03E9A992A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E569B9-AC15-4B2D-8EDD-6B03E9A992A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
