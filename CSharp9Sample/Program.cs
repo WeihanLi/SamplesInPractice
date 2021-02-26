@@ -5,8 +5,10 @@ using static System.Console;
 //ForEachExtensions.MainTest();
 //InitOnlySample.MainTest();
 // PatternMatchingSample.MainTest();
-RecordSample.MainTest();
+// RecordSample.MainTest();
 // FunctionPointerSample.MainTest();
+
+IndexRangeSample.MainTest();
 
 WriteLine("Hello World!");
 ReadLine();
