@@ -6,7 +6,7 @@ xunit 是 .NET 里使用非常广泛的一个测试框架，有很多测试项�
 
 ## Get Started
 
-在 xunit 中不需要标记测试方法，所有 `public` 的类似都可以作为测试类，测试方法需要使用 `Fact` 或者 `Theory` 注解来标注方法，来看一个基本的使用示例：
+在 xunit 中不需要标记测试类，所有 `public` 的类似都可以作为测试类，测试方法需要使用 `Fact` 或者 `Theory` 注解来标注方法，来看一个基本的使用示例：
 
 首先准备了几个要测试的方法：
 
@@ -46,7 +46,7 @@ public class BasicTest
 }
 ```
 
-使用 `Fact` 标记的测试方法不能方法参数，只有标记 `Theory` 的方法可以有方法参数
+使用 `Fact` 标记的测试方法不能有方法参数，只有标记 `Theory` 的方法可以有方法参数
 
 使用 `Assert` 来断言结果是否符合预期，xunit 提供了很丰富的 `Assert` 方法，可以使得我们的测试代码更加简洁。
 
@@ -362,7 +362,7 @@ public class FilterTest
 
  ## Shared Context
 
-单元测试类通常共享设置和清除代码（通常称为“测试上下文”）。 xunit 提供了几种共享设置和清除代码的方法，具体取决于要共享的对象的范围。
+单元测试类通常共享初始化和清理代码（通常称为“测试上下文”）。 xunit 提供了几种共享初始化和清理代码代码的方法，具体取决于要共享的对象的范围。
 
 - [构造器和 `Dispose` 方法](https://xunit.net/docs/shared-context#constructor) (共享初始化和 Dispose，不需要共享对象)
 - [Class Fixtures](https://xunit.net/docs/shared-context#class-fixture) (同一个测试类中共享对象)
