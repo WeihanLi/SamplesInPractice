@@ -63,10 +63,5 @@ namespace CSharp9Sample
                 return array;
             }
         }
-
-        private static void Dump<T>(this T value)
-        {
-            Console.WriteLine(value?.ToJsonOrString());
-        }
     }
 }
