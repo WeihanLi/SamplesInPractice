@@ -132,24 +132,8 @@ namespace XunitSample
             });
 
             repositoryMock.Verify(x => x.Delete(1));
-        }
-
-        [Fact]
-        public void Sequence()
-        {
-            var repositoryMock = new Mock<IRepository>();
-            var service = new TestService(repositoryMock.Object);
-
-            repositoryMock.SetupSequence(x => x.GetCount())
-                .Returns(1)
-                .Returns(2)
-                .Returns(3)
-                .Throws(new InvalidOperationException());
-
-            Assert.Equal(1, service.GetCount());
-            Assert.Equal(2, service.GetCount());
-            Assert.Equal(3, service.GetCount());
-            Assert.Throws<InvalidOperationException>(() => service.GetCount());
+            repositoryMock.Verify(x => x.Version, Times.Never());
+            Assert.Throws<MockException>(() => repositoryMock.Verify(x => x.Delete(2)));
         }
 
         [Fact]
@@ -189,6 +173,24 @@ namespace XunitSample
         }
 
         [Fact]
+        public void Sequence()
+        {
+            var repositoryMock = new Mock<IRepository>();
+            var service = new TestService(repositoryMock.Object);
+
+            repositoryMock.SetupSequence(x => x.GetCount())
+                .Returns(1)
+                .Returns(2)
+                .Returns(3)
+                .Throws(new InvalidOperationException());
+
+            Assert.Equal(1, service.GetCount());
+            Assert.Equal(2, service.GetCount());
+            Assert.Equal(3, service.GetCount());
+            Assert.Throws<InvalidOperationException>(() => service.GetCount());
+        }
+
+        [Fact]
         public void MockLinq()
         {
             var services = Mock.Of<IServiceProvider>(sp =>
@@ -202,13 +204,19 @@ namespace XunitSample
         [Fact]
         public void MockBehaviorTest()
         {
-            // Make mock behave like a "true Mock", raising exceptions for anything that doesn't have a corresponding expectation: in Moq slang a "Strict" mock;
-            // default behavior is "Loose" mock, which never throws and returns default values or empty arrays, enumerable, etc
+            // Make mock behave like a "true Mock",
+            // raising exceptions for anything that doesn't have a corresponding expectation: in Moq slang a "Strict" mock;
+            // default behavior is "Loose" mock,
+            // which never throws and returns default values or empty arrays, enumerable, etc
 
             var repositoryMock = new Mock<IRepository>();
             var service = new TestService(repositoryMock.Object);
             Assert.Equal(0, service.GetCount());
             Assert.Null(service.GetList());
+
+            var arrayResult = repositoryMock.Object.GetArray();
+            Assert.NotNull(arrayResult);
+            Assert.Empty(arrayResult);
 
             repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
             Assert.Throws<MockException>(() => new TestService(repositoryMock.Object).GetCount());
@@ -229,6 +237,8 @@ namespace XunitSample
         Task<int> GetCountAsync();
 
         TestModel GetById(int id);
+
+        TestModel[] GetArray();
 
         List<TestModel> GetList();
 
