@@ -1,32 +1,31 @@
-﻿using Microsoft.Extensions.Configuration;
-using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 using WeihanLi.Extensions;
 
 namespace RedisCopy
 {
     public class Program
     {
-        private static int batchSize;
+        private static int _batchSize;
 
         public static async Task Main(string[] args)
         {
-            //
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            batchSize = configuration.GetAppSetting<int>("BatchSize");
-            if (batchSize <= 0)
+            _batchSize = configuration.GetAppSetting<int>("BatchSize");
+            if (_batchSize <= 0)
             {
-                batchSize = 50;
+                _batchSize = 50;
             }
 
-            var srcRedis = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Source"));
-            var destRedis = ConnectionMultiplexer.Connect(configuration.GetConnectionString("Dest"));
+            var srcRedis = await ConnectionMultiplexer.ConnectAsync(configuration.GetConnectionString("Source"));
+            var destRedis = await ConnectionMultiplexer.ConnectAsync(configuration.GetConnectionString("Dest"));
 
-            var databases = configuration.GetAppSetting("SyncDatabases")
+            var databases = configuration.GetAppSetting("SyncDatabases")!
                 .SplitArray<int>();
             if (databases.Length > 0)
             {
@@ -45,12 +44,12 @@ namespace RedisCopy
         {
             Console.WriteLine($"-- sync db:{database} begin --");
 
-            var pageSize = batchSize;
+            var pageSize = _batchSize;
             var pageIndex = 0;
-            while (pageSize >= batchSize)
+            while (pageSize >= _batchSize)
             {
                 pageSize = 0;
-                foreach (var redisKey in redisServer.Keys(database, pageSize: batchSize, pageOffset: pageIndex))
+                await foreach (var redisKey in redisServer.KeysAsync(database, pageSize: _batchSize, pageOffset: pageIndex))
                 {
                     Console.WriteLine($"-- sync db:{database},{redisKey} begin --");
                     try
@@ -74,11 +73,11 @@ namespace RedisCopy
             Console.WriteLine($"-- sync db:{database} end --");
         }
 
-        private static async Task SyncRedisKeyAsync(IDatabase srcDatabase, RedisKey redisKey, IDatabase destDatabase)
+        private static async Task SyncRedisKeyAsync(IDatabaseAsync srcDatabase, RedisKey redisKey, IDatabaseAsync destDatabase)
         {
-            if (destDatabase.KeyExists(redisKey))
+            if (await destDatabase.KeyExistsAsync(redisKey))
             {
-                destDatabase.KeyDelete(redisKey);
+                await destDatabase.KeyDeleteAsync(redisKey);
             }
             var type = await srcDatabase.KeyTypeAsync(redisKey);
             switch (type)
@@ -108,10 +107,6 @@ namespace RedisCopy
                     await destDatabase.HashSetAsync(redisKey, hash);
                     break;
 
-                case RedisType.Stream:
-                case RedisType.Unknown:
-                case RedisType.None:
-                    throw new NotSupportedException($"not supported redis data type:{type}");
                 default:
                     throw new ArgumentOutOfRangeException();
             }
