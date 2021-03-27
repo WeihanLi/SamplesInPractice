@@ -2,6 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using WeihanLi.Common.Helpers;
+using WeihanLi.Common.Logging;
+using WeihanLi.Extensions;
+
+LogHelper.ConfigureLogging(builder => builder.AddConsole());
+
+//InvokeHelper.TryInvoke(() =>
+//{
+//    var queue = new PriorityQueue<string, int>();
+//    Enumerable.Range(1, 100)
+//    .Select(x => Task.Run(() => queue.Enqueue(x.ToString(), x)))
+//    .WhenAll().Wait();
+//    Console.WriteLine(queue.Count);
+//});
+//Console.ReadLine();
 
 Sample1();
 Console.WriteLine(new string('-', 100));
