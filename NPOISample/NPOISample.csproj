@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Npoi" Version="1.14.0" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.46" />
+    <PackageReference Include="WeihanLi.Npoi" Version="1.16.0" />
   </ItemGroup>
 
 </Project>

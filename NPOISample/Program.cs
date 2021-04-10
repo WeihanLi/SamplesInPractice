@@ -12,7 +12,7 @@ namespace NPOISample
             // RawNPOISample.ImportDataTest();
 
             InvokeHelper.OnInvokeException = Console.WriteLine;
-            InvokeHelper.TryInvoke(NPOIExtensionSample.MainTest);
+            InvokeHelper.TryInvoke(NPOIImageSample.MainTest);
 
             Console.WriteLine("Completed!");
             Console.ReadLine();
