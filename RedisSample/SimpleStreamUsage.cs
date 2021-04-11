@@ -50,6 +50,8 @@ namespace RedisSample
                     {
                         Console.WriteLine(entry.Id);
                         entry.Values.Dump();
+                        // delete message if you want
+                        // redis.StreamDelete(StreamKey, new[] { entry.Id });
                     }
 
                     lastMsgId = entries[^1].Id;
