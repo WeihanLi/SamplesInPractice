@@ -7,8 +7,8 @@ using static System.Console;
 // PatternMatchingSample.MainTest();
 // RecordSample.MainTest();
 // FunctionPointerSample.MainTest();
+//IndexRangeSample.MainTest();
 
-IndexRangeSample.MainTest();
-
+CleanCodeSample.MainTest();
 WriteLine("Hello World!");
 ReadLine();
