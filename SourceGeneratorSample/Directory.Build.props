@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Authors>WeihanLi</Authors>
+  </PropertyGroup>
+</Project>
