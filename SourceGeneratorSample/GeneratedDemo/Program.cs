@@ -1,5 +1,11 @@
 ﻿using System;
+using Generators;
 
-//HelloGenerated.HelloGenerator.Test();
+TestHelper.Test();
+
+HelloGenerated.HelloGenerator.Test();
+Generated.ModelGenerator.Test();
 
 Console.WriteLine("Hello World!");
+
+Console.ReadLine();

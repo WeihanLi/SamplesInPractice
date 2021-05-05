@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 
 namespace Generators
 {
@@ -9,14 +8,18 @@ namespace Generators
         public void Initialize(GeneratorInitializationContext context)
         {
             // for debugging
-            if (!Debugger.IsAttached) Debugger.Launch();
+            // if (!Debugger.IsAttached) Debugger.Launch();
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var code = @"namespace HelloGenerated{ public class HelloGenerator{
-  public static void Test()=> System.Console.WriteLine(""Hello Generator"");
-}}";
+            var code = @"namespace HelloGenerated
+{
+  public class HelloGenerator
+  {
+    public static void Test() => System.Console.WriteLine(""Hello Generator"");
+  }
+}";
             context.AddSource(nameof(HelloGenerator), code);
         }
     }
