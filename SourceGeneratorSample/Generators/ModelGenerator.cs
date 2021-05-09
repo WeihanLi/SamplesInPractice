@@ -13,7 +13,7 @@ namespace Generators
         public void Initialize(GeneratorInitializationContext context)
         {
             // Debugger.Launch();
-            context.RegisterForSyntaxNotifications(() => new CustomSyntaxReceiver(typeof(User).Assembly.GetName()));
+            context.RegisterForSyntaxNotifications(() => new CustomSyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -49,13 +49,6 @@ namespace Generated
 
     internal class CustomSyntaxReceiver : ISyntaxReceiver
     {
-        private readonly string _assemblyName;
-
-        public CustomSyntaxReceiver(AssemblyName assemblyName)
-        {
-            _assemblyName = assemblyName.Name;
-        }
-
         public List<ClassDeclarationSyntax> Models { get; } = new();
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)

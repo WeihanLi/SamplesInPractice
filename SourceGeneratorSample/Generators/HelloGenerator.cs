@@ -2,25 +2,25 @@
 
 namespace Generators
 {
-    [Generator]
-    public class HelloGenerator : ISourceGenerator
+[Generator]
+public class HelloGenerator : ISourceGenerator
+{
+    public void Initialize(GeneratorInitializationContext context)
     {
-        public void Initialize(GeneratorInitializationContext context)
-        {
-            // for debugging
-            // if (!Debugger.IsAttached) Debugger.Launch();
-        }
+        // for debugging
+        // if (!Debugger.IsAttached) Debugger.Launch();
+    }
 
-        public void Execute(GeneratorExecutionContext context)
-        {
-            var code = @"namespace HelloGenerated
+    public void Execute(GeneratorExecutionContext context)
+    {
+        var code = @"namespace HelloGenerated
 {
   public class HelloGenerator
   {
     public static void Test() => System.Console.WriteLine(""Hello Generator"");
   }
 }";
-            context.AddSource(nameof(HelloGenerator), code);
-        }
+        context.AddSource(nameof(HelloGenerator), code);
     }
+}
 }
