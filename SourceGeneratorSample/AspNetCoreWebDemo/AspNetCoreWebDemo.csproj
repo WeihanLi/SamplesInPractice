@@ -15,9 +15,6 @@
  <ItemGroup>
     <ProjectReference Include="..\Generators\Generators.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
- <ItemGroup>
-   <Folder Include="Controllers\" />
- </ItemGroup>
   <!--<PropertyGroup>
     <GetTargetPathDependsOn>;GetDependencyTargetPaths</GetTargetPathDependsOn>
   </PropertyGroup>
