@@ -1,0 +1,14 @@
+﻿using AspNetCoreWebDemo.Models;
+using WeihanLi.EntityFramework;
+
+namespace AspNetCoreWebDemo.Business
+{
+    public partial interface I{PropertyName}Service: IEFRepository<AppDbContext, {TypeName}>{}
+
+    public partial class {PropertyName}Service: EFRepository<AppDbContext, {TypeName}>,  I{PropertyName}Service
+    {
+        public {PropertyName}Service(AppDbContext dbContext) : base(dbContext)
+        {
+        }
+    }
+}

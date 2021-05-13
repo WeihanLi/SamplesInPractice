@@ -1,0 +1,62 @@
+﻿using AspNetCoreWebDemo.Business;
+using AspNetCoreWebDemo.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using WeihanLi.Common.Helpers;
+using WeihanLi.Common.Models;
+using WeihanLi.EntityFramework;
+
+namespace AspNetCoreWebDemo.Controllers
+{
+    [Route("api/[controller]")]
+    public partial class {PropertyName}Controller : ControllerBase
+    {
+        private readonly I{PropertyName}Service _service;
+        public {PropertyName}Controller(I{PropertyName}Service service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
+        public Task<IPagedListResult<{TypeName}>> List([FromQuery] PagedRequest request)
+        {
+            return _service.PagedAsync(request.PageNum, request.PageSize, ExpressionHelper.True<{TypeName}>(), x => x.Id, false,
+                HttpContext.RequestAborted);
+        }
+
+        [HttpGet("{id}")]
+        public Task<{TypeName}> Details(int id)
+        {
+            return _service.FetchAsync(x => x.Id == id,
+                HttpContext.RequestAborted);
+        }
+
+        [HttpPost]
+        public async Task<{TypeName}> Create([FromBody] {TypeName} model)
+        {
+            var result = await _service.InsertAsync(model);
+            model.Id = result;
+            return model;
+        }
+
+        [HttpPut("{id}")]
+        public async Task<{TypeName}> Update(int id, [FromBody] {TypeName} model)
+        {
+            model.Id = id;
+            var result = await _service.UpdateWithoutAsync(model, x => x.Id);
+            return model;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<{TypeName}>> Delete(int id)
+        {
+            var t = await _service.FetchAsync(x => x.Id == id);
+            if (t is null)
+            {
+                return NotFound();
+            }
+            await _service.DeleteAsync(x => x.Id == id);
+            return t;
+        }
+    }
+}
