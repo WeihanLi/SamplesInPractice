@@ -3,10 +3,6 @@ using WeihanLi.Extensions;
 
 namespace CSharp9Sample
 {
-    internal interface IFlyH
-    {
-    }
-
     internal interface IFly
     {
         private const string DefaultName = nameof(IFly);
@@ -19,13 +15,19 @@ namespace CSharp9Sample
         // private string name = "";
         
         string Name { get; }
-
+        
         void Fly() => Console.WriteLine($"{Name.GetValueOrDefault((DefaultName))} is flying");
     }
 
     internal class Superman : IFly
     {
         public string Name => nameof(Superman);
+
+        public void Test()
+        {
+            ((IFly) this).Fly();
+            Console.WriteLine(Name);
+        }
     }
 
     internal class MonkeyKing : IFly
@@ -42,6 +44,9 @@ namespace CSharp9Sample
     {
         public static void MainTest()
         {
+            // Cannot resolve symbol 'Fly'
+            // new Superman().Fly();
+
             IFly fly = new Superman();
             fly.Fly();
 
