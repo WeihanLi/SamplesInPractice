@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriorityQueueSample", "Prio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MininalAPI", "MininalAPI\MininalAPI.csproj", "{52E0BB1C-A668-4FD3-B16F-98570951F9B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqSample", "LinqSample\LinqSample.csproj", "{0B7E6726-131C-4161-A907-549379618D6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{52E0BB1C-A668-4FD3-B16F-98570951F9B7}.Release|x64.Build.0 = Release|Any CPU
 		{52E0BB1C-A668-4FD3-B16F-98570951F9B7}.Release|x86.ActiveCfg = Release|Any CPU
 		{52E0BB1C-A668-4FD3-B16F-98570951F9B7}.Release|x86.Build.0 = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|x64.Build.0 = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Debug|x86.Build.0 = Debug|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x64.Build.0 = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
