@@ -35,7 +35,6 @@ var xs = Enumerable.Range(1, 5).ToArray();
 var ys = xs.Select(x => x.ToString());
 var zs = xs.Select(x => x % 2 == 0);
 
-//xs.Zip(ys,zs).Select(( x,y,z) => $"{x},{y},{z}").Dump();
 foreach (var (x,y,z) in xs.Zip(ys, zs))
 {
     $"{x},{y},{z}".Dump();
