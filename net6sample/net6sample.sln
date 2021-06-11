@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MininalAPI", "MininalAPI\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqSample", "LinqSample\LinqSample.csproj", "{0B7E6726-131C-4161-A907-549379618D6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelSample", "ParallelSample\ParallelSample.csproj", "{13E7D227-E636-4009-B4B1-B34967F9B9F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x64.Build.0 = Release|Any CPU
 		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x86.ActiveCfg = Release|Any CPU
 		{0B7E6726-131C-4161-A907-549379618D6C}.Release|x86.Build.0 = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|x64.Build.0 = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Debug|x86.Build.0 = Debug|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|x64.ActiveCfg = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|x64.Build.0 = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|x86.ActiveCfg = Release|Any CPU
+		{13E7D227-E636-4009-B4B1-B34967F9B9F7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
