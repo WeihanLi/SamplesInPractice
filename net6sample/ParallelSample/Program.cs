@@ -8,7 +8,7 @@ using static System.Console;
 var watch = Stopwatch.StartNew();
 await Task.WhenAll(Enumerable.Range(1, 100).Select(_ => Task.Delay(1000)));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
 watch.Restart();
 using var semaphore = new SemaphoreSlim(10, 10);
@@ -25,14 +25,14 @@ await Task.WhenAll(Enumerable.Range(1, 100).Select(async _ =>
     }
 }));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
-Console.WriteLine($"{nameof(Environment.ProcessorCount)}: {Environment.ProcessorCount}");
+WriteLine($"{nameof(Environment.ProcessorCount)}: {Environment.ProcessorCount}");
 
 watch.Restart();
 await Parallel.ForEachAsync(Enumerable.Range(1, 100), async (_, _) => await Task.Delay(1000));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
 watch.Restart();
 await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
@@ -40,7 +40,7 @@ await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
     MaxDegreeOfParallelism = 10
 }, async (_, _) => await Task.Delay(1000));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
 watch.Restart();
 await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
@@ -48,7 +48,7 @@ await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
     MaxDegreeOfParallelism = 100
 }, async (_, _) => await Task.Delay(1000));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
 watch.Restart();
 await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
@@ -56,6 +56,6 @@ await Parallel.ForEachAsync(Enumerable.Range(1, 100), new ParallelOptions()
     MaxDegreeOfParallelism = int.MaxValue
 }, async (_, _) => await Task.Delay(1000));
 watch.Stop();
-Console.WriteLine(watch.ElapsedMilliseconds);
+WriteLine(watch.ElapsedMilliseconds);
 
 WriteLine("Hello world");
