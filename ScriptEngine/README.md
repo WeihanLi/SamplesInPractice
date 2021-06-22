@@ -153,5 +153,5 @@ Natasha 是一个基于 Roslyn 来实现动态编译，能够让你更方便进�
 
 ## Reference
 
-- <https://github.com/dotnet/roslyn/wiki/Scripting-API-Samples>
+- <https://github.com/dotnet/roslyn/blob/main/docs/wiki/Scripting-API-Samples.md>
 - <https://github.com/dotnetcore/Natasha>
