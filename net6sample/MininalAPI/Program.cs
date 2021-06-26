@@ -1,6 +1,4 @@
-using System;
-using Microsoft.AspNetCore.Builder;
-
 var app = WebApplication.Create(args);
-app.Map("/", (Func<string>)(() => "Hello World"));
+app.Map("/", () => "Hello World");
+app.Map("/info", [HttpPost]() => new{ Time = DateTime.UtcNow});
 app.Run();
