@@ -56,7 +56,7 @@ namespace DiagnosticSample.Controllers
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(seconds));
             cts.Token.ThrowIfCancellationRequested();
-            lock (cts)
+            lock (Lock)
             {
                 TestMethod1();
             }
