@@ -1,4 +1,4 @@
-var app = WebApplication.Create(args);
+﻿var app = WebApplication.Create(args);
 app.Map("/", () => "Hello World");
-app.Map("/info", [HttpPost]() => new{ Time = DateTime.UtcNow});
+app.MapPost("/info", [HttpPost](IWebHostEnvironment env) => new { Time = DateTime.UtcNow, env.EnvironmentName });
 app.Run();
