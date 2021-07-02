@@ -79,7 +79,7 @@ var host = builder.Build();
 host.Run();
 ```
 
-这里的示例是基于 .NET 6 的，使用了之前提到过的最小 API，只需要这些代码我们的应用就可以跑起来了，接着我们就来看一下使用效果吧，
+这里的示例是只需要这些代码我们的应用就可以跑起来了，接着我们就来看一下使用效果吧
 
 ## Demo
 
@@ -113,9 +113,9 @@ app.Map(new PathString("/redeploy"), appBuilder => appBuilder.Run(context =>
 
 ## More
 
-这样一个简单的 `DynamicFileProvider` 的功能就完成了。
+这样一个简单的 `DynamicFileProvider` 的功能就完成了，我们就可以动态的切换静态资源的不同版本了。
 
-如果实际使用的话可以考虑更新一下 redeploy 接口，把新的网站内容通过上传文件的形式上传到网站下，然后触发配置的更新，而且可以保留最近几个版本的更新，这样部署历史也有了，也方便进行回滚
+如果实际使用的话可以考虑更新一下 `redeploy` 接口，把新的网站内容通过上传文件的形式上传到网站下，然后触发配置的更新，而且可以保留最近几个版本的更新，这样部署历史也有了，也方便进行回滚
 
 可以思考一下，如果我们的站点是集群部署的，需要改造什么？
 
@@ -125,10 +125,8 @@ app.Map(new PathString("/redeploy"), appBuilder => appBuilder.Run(context =>
 另一个问题是配置的管理和更新，对于集群部署的配置，通常我们需要使用配置中心来统一管理配置，这样就和上面的配置一样了，配置更新时也会触发更新。
 </div>
 
-
 ## References
 
 - [https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?WT.mc_id=DT-MVP-5004222)
 - [https://docs.microsoft.com/zh-cn/azure/app-service/deploy-best-practices](https://docs.microsoft.com/zh-cn/azure/app-service/deploy-best-practices?WT.mc_id=DT-MVP-5004222)
 - <https://github.com/WeihanLi/SamplesInPractice/tree/master/DynamicStaticFileProvider>
-
