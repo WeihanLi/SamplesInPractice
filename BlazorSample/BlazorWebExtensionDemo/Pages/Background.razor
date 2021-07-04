@@ -1,14 +1,14 @@
-﻿@page "/background"
-@inherits Blazor.BrowserExtension.Pages.BackgroundPage
-<h3>Background</h3>
+﻿@page "/background.html"
+@inherits BackgroundPage
+@using WebExtensions.Net.Tabs
 
 @code {
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var extensionUrl = await WebExtension.Runtime.GetURL("index.html");
         // this opens index.html in the extension as a new tab when the background page is loaded
-        await WebExtension.Tabs.Create(new WebExtension.Net.Tabs.CreateProperties
+        var extensionUrl = await WebExtensions.Runtime.GetURL("index.html");
+        await WebExtensions.Tabs.Create(new CreateProperties
         {
             Url = extensionUrl
         });
