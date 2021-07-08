@@ -8,7 +8,7 @@
 
 ## BlazorBrowserExtension
 
-`Blazor.BrowserExtension` 是一个使用 Blazor 来开发浏览器扩展的开源项目，项目地址是: https://github.com/mingyaulee/Blazor.BrowserExtension，其工作方式是 Blazor WebAssembly 模式来代替 JavaScript 来工作，这个项目依托于作者的另外一个项目 <https://github.com/mingyaulee/WebExtensions.Net>，`WebExtensions.Net` 这个项目主要是提供了浏览器扩展和浏览器进行交互的 C# API，而 `Blazor.BrowserExtension` 项目则是在其基础之上将浏览器扩展的开发模式和 Blazor 相结合，并且借助于 MS Build 自动化地生成浏览器扩展所必需的资源文件，进一步 C# 简化开发浏览器扩展的上手难度
+`Blazor.BrowserExtension` 是一个使用 Blazor 来开发浏览器扩展的开源项目，项目地址是: https://github.com/mingyaulee/Blazor.BrowserExtension，其工作方式是 Blazor WebAssembly 模式来代替 JavaScript 来工作，这个项目依托于作者的另外一个项目 <https://github.com/mingyaulee/WebExtensions.Net>，`WebExtensions.Net` 这个项目主要是提供了浏览器扩展和浏览器进行交互的 C# API，而 `Blazor.BrowserExtension` 项目则是在其基础之上将浏览器扩展的开发模式和 Blazor 相结合，并且借助于 MS Build 自动化地生成浏览器扩展所必需的资源文件，进一步简化了 C# 开发浏览器扩展的上手难度
 
 ## Get Started
 
