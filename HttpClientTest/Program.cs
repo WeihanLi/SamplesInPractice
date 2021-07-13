@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
+using HttpClientTest;
 using WeihanLi.Common.Helpers;
 
-namespace HttpClientTest
-{
-    public class Program
-    {
-        public static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
+InvokeHelper.OnInvokeException = Console.WriteLine;
 
-        public static async Task MainAsync(string[] args)
-        {
-            InvokeHelper.OnInvokeException = Console.WriteLine;
+// await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.FormUrlEncodedContentLengthTest);
+// Console.WriteLine();
+// await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.StringContentLengthTest);
+// Console.WriteLine();
+// await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.ByteArrayContentLengthTest);
+// Console.WriteLine();
 
-            await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.FormUrlEncodedContentLengthTest);
-            Console.WriteLine();
-            await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.StringContentLengthTest);
-            Console.WriteLine();
-            await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.ByteArrayContentLengthTest);
+await InvokeHelper.TryInvokeAsync(NoAutoRedirectSample.MainTest);
 
-            Console.WriteLine("Completed!");
-            Console.ReadLine();
-        }
-    }
-}
+Console.WriteLine("Completed!");
+Console.ReadLine();
