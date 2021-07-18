@@ -8,6 +8,7 @@ namespace HttpClientTest
 {
     public class NoAutoRedirectSample
     {
+        private const string BaseUrl = "https://cn.iherb.com/blog/";
         public static async Task MainTest()
         {
             var articlePathString = @"
@@ -25,21 +26,28 @@ namespace HttpClientTest
 ";
 
             var articlePath = articlePathString.Split(new[]{ Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-            // Console.WriteLine(articlePath.ToJson());
+            var httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
+            using var res = await httpClient.GetAsync(articlePath[0].TrimStart('/'));
+            Console.WriteLine(res.RequestMessage.RequestUri.ToString());
+            Console.WriteLine(res.StatusCode);
             
-            var httpClient = new HttpClient(new HttpClientHandler()
+            httpClient = new HttpClient(new HttpClientHandler()
             {
                 AllowAutoRedirect = false
             })
             {
-                BaseAddress = new Uri("https://www.iherb.com/blog/")
+                BaseAddress = new Uri(BaseUrl)
             };
+            using var res1 = await httpClient.GetAsync(articlePath[0].TrimStart('/'));
+            Console.WriteLine(res1.RequestMessage.RequestUri.ToString());
+            Console.WriteLine(res1.StatusCode);
 
             var articleIds = await Task.WhenAll(articlePath.Select(async path =>
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, path.TrimStart('/'));
-                request.Headers.TryAddWithoutValidation("cookie", "ih-preference=store=0&country=US&language=en-US&currency=USD;iher-pref1=storeid=0&sccode=US&lan=en-US&scurcode=USD&pc=Nzg0MTU=&whr=1&wp=1&lchg=1&ifv=1;");
-                using var response = await httpClient.SendAsync(request);
+                using var response = await httpClient.GetAsync(path.TrimStart('/'));
                 var statusCode = (int)response.StatusCode;
                 if(statusCode != 302)
                 {
