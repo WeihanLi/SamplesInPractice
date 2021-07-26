@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.IO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using System.IO;
 
 namespace DynamicStaticFileProvider
 {
@@ -13,13 +13,16 @@ namespace DynamicStaticFileProvider
 
     public class DynamicFileProvider : IFileProvider
     {
-        private PhysicalFileProvider _physicalFileProvider;
         private const string DefaultSlotName = "Slot1";
+        private PhysicalFileProvider _physicalFileProvider;
 
-        public DynamicFileProvider(IOptionsMonitor<DynamicFileProviderOptions> optionsMonitor, IWebHostEnvironment webHostEnvironment)
+        public DynamicFileProvider(IOptionsMonitor<DynamicFileProviderOptions> optionsMonitor,
+            IWebHostEnvironment webHostEnvironment)
         {
             var webRoot = webHostEnvironment.ContentRootPath;
-            _physicalFileProvider = new PhysicalFileProvider(Path.Combine(webRoot, optionsMonitor.CurrentValue.CurrentSlot ?? DefaultSlotName));
+            _physicalFileProvider =
+                new PhysicalFileProvider(Path.Combine(webRoot,
+                    optionsMonitor.CurrentValue.CurrentSlot ?? DefaultSlotName));
             optionsMonitor.OnChange(options =>
             {
                 var path = Path.Combine(webRoot, options.CurrentSlot);
