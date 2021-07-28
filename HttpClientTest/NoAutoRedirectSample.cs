@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Net;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace HttpClientTest
             using var res = await httpClient.GetAsync(articlePath[0].TrimStart('/'));
             Console.WriteLine(res.RequestMessage.RequestUri.ToString());
             Console.WriteLine(res.StatusCode);
+            Console.ReadLine();
             
             httpClient = new HttpClient(new HttpClientHandler()
             {
@@ -44,10 +46,11 @@ namespace HttpClientTest
             using var res1 = await httpClient.GetAsync(articlePath[0].TrimStart('/'));
             Console.WriteLine(res1.RequestMessage.RequestUri.ToString());
             Console.WriteLine(res1.StatusCode);
+            Console.ReadLine();
 
             var articleIds = await Task.WhenAll(articlePath.Select(async path =>
             {
-                using var response = await httpClient.GetAsync(path.TrimStart('/'));
+                using var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, path.TrimStart('/')));
                 var statusCode = (int)response.StatusCode;
                 if(statusCode != 302)
                 {
