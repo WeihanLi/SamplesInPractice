@@ -2,8 +2,6 @@
 using System.Linq;
 using WeihanLi.Extensions;
 
-var list = Enumerable.Range(1, 10).ToList();
-
 // Index/Range support
 Enumerable.Range(1, 10).ElementAt(^2).Dump(); // returns 9
 Enumerable.Range(1, 10).Take(^2..).Dump(); // returns [9,10]
@@ -14,7 +12,7 @@ Enumerable.Range(1, 10).Take(2..4).Dump(); // returns [3,4]
 Enumerable.Range(1, 20).DistinctBy(x => x % 3).Dump(); // {1, 2, 3}
 var first = new (string Name, int Age)[] { ("Francis", 20), ("Lindsey", 30), ("Ashley", 40) };
 var second = new (string Name, int Age)[] { ("Claire", 30), ("Pat", 30), ("Drew", 33) };
-first.UnionBy(second, person => person.Age).Dump(); // { ("Francis", 20), ("Lindsey", 30), ("Ashley", 40), ("Drew", 33) }
+first.UnionBy(second, person => person.Age).Select(x => $"{x.Name}, {x.Age}").Dump(); // { ("Francis", 20), ("Lindsey", 30), ("Ashley", 40), ("Drew", 33) }
 
 // MaxBy/MinBy
 var people = new (string Name, int Age)[] { ("Francis", 20), ("Lindsey", 30), ("Ashley", 40) };
@@ -22,8 +20,9 @@ people.MaxBy(person => person.Age).Dump(); // ("Ashley", 40)
 people.MinBy(x => x.Name).Dump(); // ("Ashley", 40)
 
 // Chunk
-var nums = list.Chunk(3);
-nums.Dump();
+var list = Enumerable.Range(1, 10).ToList();
+var chucks = list.Chunk(3);
+chucks.Dump();
 
 // FirstOrDefault/LastOrDefault/SingleOrDefault
 Enumerable.Empty<int>().FirstOrDefault(-1).Dump();
