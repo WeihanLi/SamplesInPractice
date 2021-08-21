@@ -5,10 +5,10 @@ tasks.AddRange(new[]
     Task.Delay(TimeSpan.FromSeconds(8)),
     Task.Delay(TimeSpan.FromSeconds(6))
 });
-
+Task task = Task.WhenAll(tasks);
 try
 {
-    await Task.WhenAll(tasks).WaitAsync(TimeSpan.FromSeconds(3));
+    await task.WaitAsync(TimeSpan.FromSeconds(3));
 }
 catch (TimeoutException)
 {
@@ -17,24 +17,28 @@ catch (TimeoutException)
 finally
 {
     Console.WriteLine(string.Join(",", tasks.Select(t => t.Status.ToString())));
+    Console.WriteLine(task.Status);
 }
 
 await Task.Delay(TimeSpan.FromSeconds(5));
 Console.WriteLine(string.Join(",", tasks.Select(t => t.Status.ToString())));
+Console.WriteLine(task.Status);
+
+Console.ReadLine();
 
 var cts = new CancellationTokenSource();
 tasks.Clear();
 tasks.AddRange(new[]
 {
-    Task.Delay(TimeSpan.FromSeconds(5)),
+    Task.Delay(TimeSpan.FromSeconds(4)),
     Task.Delay(TimeSpan.FromSeconds(8)),
     Task.Delay(TimeSpan.FromSeconds(6))
 });
-
+task = Task.WhenAll(tasks);
 try
 {
     cts.CancelAfter(TimeSpan.FromSeconds(5));
-    await Task.WhenAll(tasks).WaitAsync(cts.Token);
+    await task.WaitAsync(cts.Token);
 }
 catch (TaskCanceledException)
 {
@@ -43,12 +47,35 @@ catch (TaskCanceledException)
 finally
 {
     Console.WriteLine(string.Join(",", tasks.Select(t => t.Status.ToString())));
+    Console.WriteLine(task.Status);
 }
-
 
 await Task.Delay(TimeSpan.FromSeconds(5));
 Console.WriteLine(string.Join(",", tasks.Select(t => t.Status.ToString())));
+Console.WriteLine(task.Status);
+Console.ReadLine();
 
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+try
+{
+    await Task.Delay(TimeSpan.FromSeconds(5))
+      .WaitAsync(TimeSpan.FromSeconds(3), CancellationToken.None);
+}
+catch(Exception ex)
+{
+    Console.WriteLine(ex.GetType().Name);
+}
+
+
+try
+{
+    using var cancellationTokenSource = new CancellationTokenSource();
+    cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(2));
+    await Task.Delay(TimeSpan.FromSeconds(5))
+      .WaitAsync(TimeSpan.FromSeconds(10), cancellationTokenSource.Token);
+}
+catch(Exception ex)
+{
+    Console.WriteLine(ex.GetType().Name);
+}
+
 Console.ReadLine();
