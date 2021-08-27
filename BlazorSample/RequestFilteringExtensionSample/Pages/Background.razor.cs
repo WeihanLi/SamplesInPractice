@@ -21,7 +21,28 @@ namespace RequestFilteringExtensionSample.Pages
                 return new BlockingResponse {RedirectUrl = targetUrl};
             }, new RequestFilter
             {
-                Urls = new[] {"*://docs.microsoft.com/*"}, 
+                // https://github.com/mjisaak/mvp-docs-learn-champion-extension/blob/master/src/main.js
+                Urls = new[] 
+                {
+                    "https://social.technet.microsoft.com/*",
+                    "https://docs.microsoft.com/*",
+                    "https://azure.microsoft.com/*",
+                    "https://techcommunity.microsoft.com/*",
+                    "https://social.msdn.microsoft.com/*",
+                    "https://devblogs.microsoft.com/*",
+                    "https://developer.microsoft.com/*",
+                    "https://channel9.msdn.com/*",
+                    "https://gallery.technet.microsoft.com/*",
+                    "https://cloudblogs.microsoft.com/*",
+                    "https://technet.microsoft.com/*",
+                    "https://docs.azure.cn/*",
+                    "https://www.azure.cn/*",
+                    "https://msdn.microsoft.com/*",
+                    "https://blogs.msdn.microsoft.com/*",
+                    "https://blogs.technet.microsoft.com/*",
+                    "https://microsoft.com/handsonlabs/*",
+                    "https://csc.docs.microsoft.com/*"
+                }, 
                 Types = new[] {ResourceType.MainFrame}
             }, new[] {OnBeforeRequestOptions.Blocking});
         }
