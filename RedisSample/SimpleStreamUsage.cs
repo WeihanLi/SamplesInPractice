@@ -11,7 +11,7 @@ namespace RedisSample
 
         public static async Task MainTest()
         {
-            await RedisHelper.GetDatabase().KeyDeleteAsync(StreamKey);
+            await RedisHelper.GetRedisDb().KeyDeleteAsync(StreamKey);
             // register background consumer
             _ = Task.Factory.StartNew(Consume).ConfigureAwait(false);
             //
@@ -24,7 +24,7 @@ namespace RedisSample
             var input = Console.ReadLine();
             while (input is not "q" and not "Q")
             {
-                var redis = RedisHelper.GetDatabase();
+                var redis = RedisHelper.GetRedisDb();
                 for (var i = 0; i < 10; i++)
                 {
                     await redis.StreamAddAsync(StreamKey, "message", $"test_message_{i}");
@@ -40,7 +40,7 @@ namespace RedisSample
             {
                 await InvokeHelper.TryInvokeAsync(async () =>
                 {
-                    var redis = RedisHelper.GetDatabase();
+                    var redis = RedisHelper.GetRedisDb();
                     var entries = await redis.StreamReadAsync(StreamKey, lastMsgId, 2);
                     if (entries.Length == 0)
                     {

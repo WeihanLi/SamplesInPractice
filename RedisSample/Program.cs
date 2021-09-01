@@ -5,8 +5,10 @@ using WeihanLi.Common.Logging;
 
 LogHelper.ConfigureLogging(builder => builder.AddConsole());
 
-//await SimpleStreamUsage.MainTest();
-await StreamConsumerGroupSample.MainTest();
+// await SimpleStreamUsage.MainTest();
+// await StreamConsumerGroupSample.MainTest();
+
+await StreamTrimSample.MainTest();
 
 Console.WriteLine("Completed");
 Console.ReadLine();
