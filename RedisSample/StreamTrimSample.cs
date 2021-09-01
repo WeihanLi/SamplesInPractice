@@ -84,7 +84,7 @@ namespace RedisSample
             await redis.KeyDeleteAsync(streamKey);
         }
 
-        private static async Task AddStreamMessage(string key, int msgCount, Action? action=null)
+        private static async Task AddStreamMessage(string key, int msgCount, Action action=null)
         {
             var redis = RedisHelper.GetRedisDb();
             for (var i = 0; i < msgCount; i++)
