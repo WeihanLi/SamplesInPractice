@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Import Include="System.Security.Cryptography"/>
-    <Import Include="WeihanLi.Common.Helpers"/>
-    <Import Include="WeihanLi.Extensions"/>
+    <Using Include="System.Security.Cryptography"/>
+    <Using Include="WeihanLi.Common.Helpers"/>
+    <Using Include="WeihanLi.Extensions"/>
   </ItemGroup>
 
   <ItemGroup>
