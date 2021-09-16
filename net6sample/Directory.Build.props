@@ -1,7 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <Authors>WeihanLi</Authors>
-    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <!-- Source code settings -->
