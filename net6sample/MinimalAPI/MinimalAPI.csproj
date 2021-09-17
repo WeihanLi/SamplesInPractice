@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <NoWarn>$(NoWarn);CS0105</NoWarn>
   </PropertyGroup>
 
 </Project>

@@ -100,7 +100,7 @@ app.Run();
 
 ## More
 
-上面的示例代码可以在 Github 上获取 <https://github.com/WeihanLi/SamplesInPractice/tree/master/net6sample/MininalAPI>
+上面的示例代码可以在 Github 上获取 <https://github.com/WeihanLi/SamplesInPractice/tree/master/net6sample/MinimalAPI>
 
 编译需要安装 .NET 6  preview 5 环境
 
@@ -111,4 +111,4 @@ app.Run();
 ## References
 
 - <https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-6-preview-4/>
-- <https://github.com/WeihanLi/SamplesInPractice/tree/master/net6sample/MininalAPI>
+- <https://github.com/WeihanLi/SamplesInPractice/tree/master/net6sample/MinimalAPI>
