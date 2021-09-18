@@ -41,7 +41,7 @@ app.MapPost("/api/todo", async (TodoItem item, TodoDbContext dbContext) =>
 });
 app.MapPut("/api/todo/{id}", async (int id, TodoItem item, TodoDbContext dbContext) => 
 {
-    if(id <= 0)
+    if(id <= 0 || string.IsNullOrWhiteSpace(item?.Title))
     {
         return Results.BadRequest();
     }
