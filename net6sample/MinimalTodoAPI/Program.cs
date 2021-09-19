@@ -6,6 +6,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "MinimalTodoAPI", Version = "v1" });
 });
+builder.Services.AddAuthentication(QueryAuthenticationDefaults.AuthenticationSchema)
+    .AddQuery();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
@@ -56,6 +59,8 @@ app.MapPut("/api/todo/{id}", async (int id, TodoItem item, TodoDbContext dbConte
     await dbContext.SaveChangesAsync();
     return Results.Ok(todo);
 });
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapDelete("/api/todo/{id}", async (int id, TodoDbContext dbContext) =>
 {
     if (id <= 0)
@@ -70,6 +75,6 @@ app.MapDelete("/api/todo/{id}", async (int id, TodoDbContext dbContext) =>
     dbContext.Remove(todo);
     await dbContext.SaveChangesAsync();
     return Results.Ok(todo);
-});
+}).RequireAuthorization();
 
 app.Run();
