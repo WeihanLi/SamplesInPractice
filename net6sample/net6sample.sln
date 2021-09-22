@@ -5,7 +5,7 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriorityQueueSample", "PriorityQueueSample\PriorityQueueSample.csproj", "{BEEC978F-7381-4982-8F2D-F7DB0582BEF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MininalAPI", "MininalAPI\MininalAPI.csproj", "{52E0BB1C-A668-4FD3-B16F-98570951F9B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalAPI", "MinimalAPI\MinimalAPI.csproj", "{52E0BB1C-A668-4FD3-B16F-98570951F9B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqSample", "LinqSample\LinqSample.csproj", "{0B7E6726-131C-4161-A907-549379618D6C}"
 EndProject
