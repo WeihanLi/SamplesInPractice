@@ -1,11 +1,9 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddHttpLogging(options =>
 {
-    // options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
     options.RequestHeaders.Add("Cache-Control");
     options.ResponseHeaders.Add("Server");
 });

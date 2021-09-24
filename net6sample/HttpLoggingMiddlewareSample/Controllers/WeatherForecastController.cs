@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace HttpLoggingMiddlewareSample.Controllers;
 
@@ -29,4 +29,7 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+
+    [HttpPost]
+    public IActionResult Post(System.Text.Json.JsonElement element) => Ok(element);
 }
