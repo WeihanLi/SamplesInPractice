@@ -32,4 +32,26 @@ public class WeatherForecastController : ControllerBase
 
     [HttpPost]
     public IActionResult Post(System.Text.Json.JsonElement element) => Ok(element);
+
+    [HttpPost("form")]
+    public IActionResult Form([FromForm] string title)
+    {
+        return Ok(new
+        {
+            title
+        });
+    }
+
+    [HttpPost("file")]
+    public IActionResult PostFile([FromForm]string title, IFormFile file)
+    {
+        return Ok(new
+        {
+            title,
+            file.FileName,
+            file.Name,
+            file.ContentType,
+            file.ContentDisposition
+        });
+    }
 }
