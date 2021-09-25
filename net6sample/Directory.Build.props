@@ -1,12 +1,6 @@
 ﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <!-- Source code settings -->
-  <PropertyGroup>
-    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
-    <RepositoryUrl>https://github.com/WeihanLi/SamplesInPractice</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 </Project>
