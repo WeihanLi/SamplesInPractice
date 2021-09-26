@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using WeihanLi.Extensions;
+
+
+JsonFormatter.JsonNetSample();
+JsonFormatter.JsonNetSample2();
+JsonFormatter.SystemJsonSample();
 
 // Parse a JSON object
 var jNode = JsonNode.Parse(@"{""MyProperty"":42}");
