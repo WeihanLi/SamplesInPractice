@@ -8,11 +8,7 @@ public class CustomConvertSample
 {
     public static void MainTest()
     {
-        var model = new TestModel
-        {
-            Id = "123",
-            Name = "456"
-        };
+        var model = new TestModel("123", "456");
         var jsonString = JsonSerializer.Serialize(model);
         WriteLine(jsonString);
         var node = JsonNode.Parse(jsonString);
@@ -34,12 +30,7 @@ public class CustomConvertSample
     }
 }
 
-public record TestModel
-{
-    [JsonConverter(typeof(StringOrIntConverter))]
-    public string Id { get; init; } = default!;
-    public string? Name { get; set; }
-}
+public record TestModel([property:JsonConverter(typeof(StringOrIntConverter))]string Id,string Name);
 
 public class StringOrIntConverter : JsonConverter<string>
 {
