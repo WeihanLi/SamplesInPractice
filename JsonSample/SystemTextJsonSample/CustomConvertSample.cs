@@ -22,6 +22,15 @@ public class CustomConvertSample
         WriteLine(newJsonString);
         var newModel = JsonSerializer.Deserialize<TestModel>(newJsonString);
         WriteLine(model == newModel);
+
+        node["Name"] = 345;
+        WriteLine(JsonSerializer.Deserialize<TestModel>(node.ToJsonString(), new JsonSerializerOptions
+        {
+            Converters =
+            {
+                new StringOrIntConverter()
+            }
+        })?.Name);
     }
 }
 

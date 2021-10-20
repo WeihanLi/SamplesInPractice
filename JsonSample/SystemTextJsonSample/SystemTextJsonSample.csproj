@@ -10,6 +10,8 @@
   <ItemGroup>
     <Using Include="$(RootNameSpace)" />
     <Using Include="System.Console" Static="true"/>
+    <Using Include="WeihanLi.Common.Helpers.InvokeHelper" Static="true"/>
+    <Using Include="WeihanLi.Common.Helpers" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WeihanLi.Common" Version="1.0.47-*" />
