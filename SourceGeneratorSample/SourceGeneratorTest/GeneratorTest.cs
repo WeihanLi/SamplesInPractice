@@ -16,7 +16,6 @@ public class GeneratorTest
     [Fact]
     public async Task HelloGeneratorTest()
     {
-        var code = string.Empty;
         var generatedCode = @"namespace HelloGenerated
 {
   public class HelloGenerator
@@ -28,7 +27,6 @@ public class GeneratorTest
         {
             TestState =
                 {
-                    Sources = { code },
                     GeneratedSources =
                     {
                         (typeof(HelloGenerator), $"{nameof(HelloGenerator)}.cs", SourceText.From(generatedCode, Encoding.UTF8)),
