@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace Generators
-{
+namespace Generators;
+
 [Generator]
 public class HelloGenerator : ISourceGenerator
 {
@@ -22,5 +22,4 @@ public class HelloGenerator : ISourceGenerator
 }";
         context.AddSource(nameof(HelloGenerator), code);
     }
-}
 }

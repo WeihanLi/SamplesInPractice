@@ -1,9 +1,8 @@
 ﻿using WeihanLi.Extensions;
 
-namespace Generators
+namespace Generators;
+
+public class TestHelper
 {
-    public class TestHelper
-    {
-        public static void Test() => "Test".Dump();
-    }
+    public static void Test() => "Test".Dump();
 }
