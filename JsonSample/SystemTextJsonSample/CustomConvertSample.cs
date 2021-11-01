@@ -1,8 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-
-namespace SystemTextJsonSample;
+﻿namespace SystemTextJsonSample;
 
 public class CustomConvertSample
 {

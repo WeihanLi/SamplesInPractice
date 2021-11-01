@@ -1,2 +1,2 @@
 ﻿OnInvokeException = WriteLine;
-TryInvoke(CustomConvertSample.MainTest);
+TryInvoke(JsonExtensionDataSample.MainTest);
