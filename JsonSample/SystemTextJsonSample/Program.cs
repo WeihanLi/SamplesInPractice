@@ -1,2 +1,3 @@
 ﻿OnInvokeException = WriteLine;
-TryInvoke(JsonExtensionDataSample.MainTest);
+TryInvoke(EncoderSample.MainTest);
+ReadLine();
