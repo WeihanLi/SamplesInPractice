@@ -48,16 +48,16 @@ namespace StupidSamples
 
         public static void Test4()
         {
-            var isNegative = false;
+            var isNegative = true;
             var oper = '>';
             Func<int, bool> filter;
 
             //// 1.
-            //if (isNegative)
+            //if (!isNegative)
             //{
             //    filter = oper == '>'
-            //      ? (i => i < 0)
-            //      : (i => i > 0);
+            //      ? (i => i > 0)
+            //      : (i => i < 0);
             //}
             //else
             //{
@@ -66,23 +66,23 @@ namespace StupidSamples
             //      : (i => i >= 0);
             //}
 
-            //// 2.
-            //filter = oper == '>'
-            //    ? (i => i < 0)
-            //    : (i => i > 0);
-            //if (isNegative)
-            //{
-            //    filter = i => !filter(i);
-            //}
+            // 2.
+            filter = oper == '>'
+                ? (i => i > 0)
+                : (i => i < 0);
+            if (isNegative)
+            {
+                filter = i => !filter(i);
+            }
 
             // 3.
-            filter = (isNegative, oper) switch
-            {
-                (false, '>') => i => i > 0,
-                (false, _) => i => i < 0,
-                (true, '>') => i => i <= 0,
-                (true, _) => i => i >= 0,
-            };
+            //filter = (isNegative, oper) switch
+            //{
+            //    (false, '>') => i => i > 0,
+            //    (false, _) => i => i < 0,
+            //    (true, '>') => i => i <= 0,
+            //    (true, _) => i => i >= 0,
+            //};
 
             Console.WriteLine(filter(10));
         }
