@@ -13,8 +13,8 @@ public class StructSample
 
         // Parameterless constructor
         Console.WriteLine(new Point2().ToString());
-        Console.WriteLine(default(Point2).ToString());
         Console.WriteLine((new Point2() with { X = 2 }).ToString());
+        Console.WriteLine(default(Point2).ToString());
 
         // More
         var obj = new
@@ -24,6 +24,8 @@ public class StructSample
         };
         Console.WriteLine(JsonSerializer.Serialize(obj));
         Console.WriteLine(JsonSerializer.Serialize(obj with { X = 3, Y = 3 }));
+
+        Console.WriteLine(new RecordClassModel(1, "Test").ToString());
     }
 
     private record struct Point(int X, int Y);
@@ -45,4 +47,6 @@ public class StructSample
             return $"{X}_{Y}";
         }
     }
+
+    private record class RecordClassModel(int Id, string Name);
 }
