@@ -1,5 +1,7 @@
-﻿LogHelper.ConfigureLogging(builder=> builder.AddConsole());
+﻿LogHelper.ConfigureLogging(builder => builder.AddConsole());
 
-CallerInfo.MainTest();
+// CallerInfo.MainTest();
+
+StructSample.MainTest();
 
 Console.ReadLine();
