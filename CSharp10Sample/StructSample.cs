@@ -6,15 +6,20 @@ public class StructSample
 {
     public static void MainTest()
     {
+        // record struct
         var p = new Point(1, 2);
         Console.WriteLine(p);
         var p1 = p with { X = 2 };
         Console.WriteLine(p1);
+        Console.WriteLine(new Point());
+        Console.WriteLine();
 
         // Parameterless constructor
         Console.WriteLine(new Point2().ToString());
         Console.WriteLine((new Point2() with { X = 2 }).ToString());
         Console.WriteLine(default(Point2).ToString());
+        Console.WriteLine(Activator.CreateInstance<Point2>());
+        Console.WriteLine();
 
         // More
         var obj = new
