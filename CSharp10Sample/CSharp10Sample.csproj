@@ -14,7 +14,10 @@
   <ItemGroup>
     <Using Include="$(RootNamespace)"/>
     <Using Include="WeihanLi.Common.Helpers"/>
+    <Using Include="WeihanLi.Common.Helpers.InvokeHelper" Static="true"/>
     <Using Include="WeihanLi.Common.Logging"/>
+    <Using Include="System.IO.File" Alias="MyFile"/>
+    <Using Remove="System.Net.Http" />
   </ItemGroup>
 
 </Project>
