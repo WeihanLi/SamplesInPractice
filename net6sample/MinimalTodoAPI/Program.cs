@@ -28,11 +28,10 @@ app.MapGet("/contextSample", (HttpContext context) =>
  {
      return Results.Ok(context.Request.Query);
  }).ExcludeFromDescription();
-
 app.MapGet("/api/todo", (TodoDbContext dbContext) => dbContext.TodoItems.AsNoTracking().ToArrayAsync());
-app.MapPost("/api/todo", async (TodoItem item, TodoDbContext dbContext) => 
+app.MapPost("/api/todo", async (TodoItem item, TodoDbContext dbContext) =>
 {
-    if(string.IsNullOrWhiteSpace(item?.Title))
+    if (string.IsNullOrWhiteSpace(item?.Title))
     {
         return Results.BadRequest();
     }
@@ -42,14 +41,14 @@ app.MapPost("/api/todo", async (TodoItem item, TodoDbContext dbContext) =>
     await dbContext.SaveChangesAsync();
     return Results.Created($"/api/todo/{item.Id}", item);
 });
-app.MapPut("/api/todo/{id}", async (int id, TodoItem item, TodoDbContext dbContext) => 
+app.MapPut("/api/todo/{id}", [Authorize]async (int id, TodoItem item, TodoDbContext dbContext) =>
 {
-    if(id <= 0 || string.IsNullOrWhiteSpace(item?.Title))
+    if (id <= 0 || string.IsNullOrWhiteSpace(item?.Title))
     {
         return Results.BadRequest();
     }
     var todo = await dbContext.TodoItems.FindAsync(id);
-    if(todo is null)
+    if (todo is null)
     {
         return Results.NotFound();
     }
@@ -59,6 +58,7 @@ app.MapPut("/api/todo/{id}", async (int id, TodoItem item, TodoDbContext dbConte
     await dbContext.SaveChangesAsync();
     return Results.Ok(todo);
 });
+app.UseHttpLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapDelete("/api/todo/{id}", async (int id, TodoDbContext dbContext) =>
@@ -76,5 +76,5 @@ app.MapDelete("/api/todo/{id}", async (int id, TodoDbContext dbContext) =>
     await dbContext.SaveChangesAsync();
     return Results.Ok(todo);
 }).RequireAuthorization();
-
+app.MapFallback(() => "Hello world");
 app.Run();
