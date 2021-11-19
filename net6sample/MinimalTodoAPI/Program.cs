@@ -22,7 +22,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MinimalTodoAPI v1"));
 }
-
+app.Map("/healthz", a => a.Run((context) =>
+    {
+        context.Response.StatusCode = 200;
+        return System.Threading.Tasks.Task.CompletedTask;
+    }));
 app.Map("/health", Results.Ok);
 app.MapGet("/contextSample", (HttpContext context) =>
  {
