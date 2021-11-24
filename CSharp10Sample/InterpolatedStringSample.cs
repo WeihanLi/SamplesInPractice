@@ -34,7 +34,7 @@ public class InterpolatedStringSample
         Console.WriteLine();
         LogInterpolatedString($"The num is 10");
         Console.WriteLine();
-        LogInterpolatedString($"The num is {num}");
+        LogInterpolatedString($"The num is {num}!");
         Console.WriteLine();
         // InterpolatedStringHandlerArgument
         LogInterpolatedString(10, $"The num is {num}");
@@ -42,6 +42,8 @@ public class InterpolatedStringSample
         LogInterpolatedString(15, $"The num is {num}");
         Console.WriteLine();
         LogInterpolatedString(20, $"The num is {num}");
+        Console.WriteLine();
+        LogInterpolatedString(12, $"The num is {num} and the time is {DateTime.Now}!");
     }
 
     private static void LogInterpolatedString(string str)
@@ -96,23 +98,28 @@ public struct CustomInterpolatedStringHandler
     }
 
     // Required
-    public void AppendLiteral(string s)
+    public bool AppendLiteral(string s)
     {
+        if (s.Length <= 1)
+            return false;
+
         Console.WriteLine($"\tAppendLiteral called: {{{s}}}");
         builder.Append(s);
         Console.WriteLine($"\tAppended the literal string");
+        return true;
     }
 
     // Required
-    public void AppendFormatted<T>(T t)
+    public bool AppendFormatted<T>(T t)
     {
         Console.WriteLine($"\tAppendFormatted called: {{{t}}} is of type {typeof(T)}");
         if (t is int n && n < _limit)
         {
-            return;
+            return false;
         }
         builder.Append(t?.ToString());
         Console.WriteLine($"\tAppended the formatted object");
+        return true;
     }
 
     public override string ToString()
