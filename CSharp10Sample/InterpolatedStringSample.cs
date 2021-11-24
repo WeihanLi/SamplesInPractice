@@ -40,6 +40,8 @@ public class InterpolatedStringSample
         LogInterpolatedString(10, $"The num is {num}");
         Console.WriteLine();
         LogInterpolatedString(15, $"The num is {num}");
+        Console.WriteLine();
+        LogInterpolatedString(20, $"The num is {num}");
     }
 
     private static void LogInterpolatedString(string str)
@@ -77,12 +79,18 @@ public struct CustomInterpolatedStringHandler
     /// </summary>
     /// <param name="literalLength">string literal length</param>
     /// <param name="formattedCount">formatted count</param>
-    public CustomInterpolatedStringHandler(int literalLength, int formattedCount) : this(literalLength, formattedCount, 0)
-    { }
-
-    public CustomInterpolatedStringHandler(int literalLength, int formattedCount, int limit)
+    public CustomInterpolatedStringHandler(int literalLength, int formattedCount)
     {
         builder = new StringBuilder(literalLength);
+        Console.WriteLine($"\tliteral length: {literalLength}, formattedCount: {formattedCount}");
+        _limit = 0;
+    }
+
+    public CustomInterpolatedStringHandler(int literalLength, int formattedCount, int limit, out bool shouldAppend)
+    {
+        shouldAppend = limit < 20;
+
+        builder = new StringBuilder(shouldAppend ? literalLength : 0);
         Console.WriteLine($"\tliteral length: {literalLength}, formattedCount: {formattedCount}");
         _limit = limit;
     }
