@@ -1,7 +1,9 @@
 ﻿LogHelper.ConfigureLogging(builder => builder.AddConsole());
 
 // CallerInfo.MainTest();
+// StructSample.MainTest();
+// LamdbaEnhancement.MainTest();
 
-StructSample.MainTest();
+InterpolatedStringSample.MainTest();
 
 Console.ReadLine();
