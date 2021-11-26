@@ -3,7 +3,8 @@
 public class GenericAttributeSample
 {
     // Error   CS0655	'DataValiadator' is not a valid named attribute argument because it is not a valid attribute parameter type
-    // [ExcelConfiguration<TestModel>(DataValiadator = m => m.Id > 0)]
+    //[ExcelConfiguration<TestModel>(DataValiadator = m => m.Id > 0)]
+    [ExcelConfiguration<TestModel>]
     public class TestModel
     {
         public int Id { get; set; }
