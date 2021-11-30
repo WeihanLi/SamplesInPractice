@@ -6,7 +6,7 @@ Console.CancelKeyPress += (sender, e) =>
     cts.Cancel();
 };
 
-var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
 try
 {
     while (await timer.WaitForNextTickAsync(cts.Token))
