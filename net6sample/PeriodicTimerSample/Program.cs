@@ -18,4 +18,13 @@ catch (OperationCanceledException)
 {
     Console.WriteLine("Operation cancelled");
 }
+
+// Dispose
+var timer1 = new PeriodicTimer(TimeSpan.FromSeconds(2));
+timer1.Dispose();
+if (await timer1.WaitForNextTickAsync())
+{
+    Console.WriteLine("Timer1 event triggered");
+}
+
 Console.WriteLine("Hello world");
