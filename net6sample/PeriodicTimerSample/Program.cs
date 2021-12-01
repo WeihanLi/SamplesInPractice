@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-var cts = new CancellationTokenSource();
+using var cts = new CancellationTokenSource();
 Console.CancelKeyPress += (sender, e) =>
 {
     e.Cancel = true;
