@@ -41,7 +41,7 @@ public class LamdbaEnhancement
         // Lambda method
         // Action<string> func3 = LocalMethod;
         var func3 = LocalMethod;
-        void LocalMethod(string a)
+        static void LocalMethod(string a)
         {
             Console.WriteLine(a);
         }
