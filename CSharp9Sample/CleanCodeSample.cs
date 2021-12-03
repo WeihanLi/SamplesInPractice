@@ -37,6 +37,16 @@ namespace CSharp9Sample
                 new(),
                 new(),
             };
+
+            var requests1 = new ReviewRequest[]
+            {
+                new()
+                {
+                    State = ReviewState.Rejected
+                },
+                new(),
+                new(),
+            };
         }
 
         private static void PatternMatching()

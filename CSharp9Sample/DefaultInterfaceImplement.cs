@@ -3,6 +3,7 @@ using WeihanLi.Extensions;
 
 namespace CSharp9Sample
 {
+    // C# 8 Feature -- Default interface implement
     internal interface IFly
     {
         private const string DefaultName = nameof(IFly);
@@ -10,12 +11,12 @@ namespace CSharp9Sample
         protected static string GetDefaultName() => DefaultName;
 
         public static string GetPublicName() => DefaultName;
-        
+
         // Interface cannot contain instance fields
         // private string name = "";
-        
+
         string Name { get; }
-        
+
         void Fly() => Console.WriteLine($"{Name.GetValueOrDefault((DefaultName))} is flying");
     }
 
@@ -25,7 +26,7 @@ namespace CSharp9Sample
 
         public void Test()
         {
-            ((IFly) this).Fly();
+            ((IFly)this).Fly();
             Console.WriteLine(Name);
         }
     }
@@ -52,10 +53,10 @@ namespace CSharp9Sample
 
             fly = new MonkeyKing();
             fly.Fly();
-            
+
             // Cannot access protected method 'GetDefaultName' here
             // IFly.GetDefaultName().Dump();
-            
+
             IFly.GetPublicName().Dump();
         }
     }

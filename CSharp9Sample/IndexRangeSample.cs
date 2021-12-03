@@ -4,6 +4,7 @@ using WeihanLi.Extensions;
 
 namespace CSharp9Sample
 {
+    // C# 8 feature
     public static class IndexRangeSample
     {
         public static void MainTest()
