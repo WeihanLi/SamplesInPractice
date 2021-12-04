@@ -5,12 +5,13 @@ Console.CancelKeyPress += (sender, e) =>
     e.Cancel = true;
     cts.Cancel();
 };
-
+cts.CancelAfter(TimeSpan.FromSeconds(30));
 using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
 try
 {
     while (await timer.WaitForNextTickAsync(cts.Token))
     {
+        await Task.Delay(5000);
         Console.WriteLine($"Timed event triggered({DateTime.Now:HH:mm:ss})");
     }
 }
