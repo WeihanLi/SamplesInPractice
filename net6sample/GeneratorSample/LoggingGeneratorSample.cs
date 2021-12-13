@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
@@ -29,7 +28,6 @@ public partial class LoggingGeneratorSample
     }
 }
 
-
 internal partial class InstanceLoggingGenerator
 {
     private readonly ILogger _logger;
@@ -48,7 +46,7 @@ public static partial class LoggingHelper
     [LoggerMessage(Level = LogLevel.Information, EventId = 0, Message = "Logging generator sample begin")]
     public static partial void TestBegin(this ILogger logger);
 
-    [LoggerMessage(Level = LogLevel.Information, EventId = 1, Message = "Logging generator sample end")]
+    [LoggerMessage(Level = LogLevel.Information, EventId = 1, Message = "Logging generator sample end", SkipEnabledCheck = true)]
     public static partial void TestEnd(this ILogger logger);
 
     [LoggerMessage(EventId = 2, Message = "Logging generator sample user {userName}")]
