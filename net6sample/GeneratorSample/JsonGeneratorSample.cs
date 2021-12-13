@@ -11,8 +11,8 @@ public partial class JsonGeneratorSample
     {
         var person = new Person
         {
-           FirstName = "Alice",
-           LastName = "Blue"
+            FirstName = "Alice",
+            LastName = "Blue"
         };
         Console.WriteLine(person.ToString());
         var json = JsonSerializer.Serialize(person, PersonJsonContext.Default.Options);
@@ -23,12 +23,12 @@ public partial class JsonGeneratorSample
         OutputCompareResult(person == person1);
     }
 
-    private static void OutputCompareResult(bool result, [CallerArgumentExpression("result")]string? expression=null)
+    private static void OutputCompareResult(bool result, [CallerArgumentExpression("result")] string? expression = null)
     {
         Console.WriteLine($"{expression}: {result}");
     }
 
-    
+
     private record Person
     {
         //init-only properties, deserialization of which is currently not supported in source generation mode
@@ -39,7 +39,7 @@ public partial class JsonGeneratorSample
     }
 
     [JsonSerializable(typeof(Person))]
-    private partial class PersonJsonContext: JsonSerializerContext
+    private partial class PersonJsonContext : JsonSerializerContext
     {
     }
 }

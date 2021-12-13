@@ -13,17 +13,17 @@ public partial class LoggingGeneratorSample
         {
             options.JsonWriterOptions = new JsonWriterOptions()
             {
-                Indented = true, 
+                Indented = true,
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
         }));
-        
+
         var logger = loggerFactory.CreateLogger<LoggingGeneratorSample>();
         logger.TestBegin();
         logger.TestWithArgument(LogLevel.Warning, Environment.UserName);
         logger.TestWithEmptyMessage(LogLevel.Information, Environment.MachineName);
         logger.TestEnd();
-        
+
         // instance logging test
         new InstanceLoggingGenerator(logger).LoggingTest();
     }
@@ -53,11 +53,11 @@ public static partial class LoggingHelper
 
     [LoggerMessage(EventId = 2, Message = "Logging generator sample user {userName}")]
     public static partial void TestWithArgument(this ILogger logger, LogLevel logLevel, string userName);
-    
+
     // warning SYSLIB1015: Argument 'host' is not referenced from the logging message
     [LoggerMessage(EventId = 3)]
     public static partial void TestWithEmptyMessage(this ILogger logger, LogLevel logLevel, string host);
-    
+
     [LoggerMessage(
         EventId = 9,
         Level = LogLevel.Trace,
