@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 namespace GeneratorSample;
 
@@ -28,7 +27,6 @@ public partial class JsonGeneratorSample
         Console.WriteLine($"{expression}: {result}");
     }
 
-
     private record Person
     {
         //init-only properties, deserialization of which is currently not supported in source generation mode
@@ -38,6 +36,7 @@ public partial class JsonGeneratorSample
         public string LastName { get; set; } = string.Empty;
     }
 
+    [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
     [JsonSerializable(typeof(Person))]
     private partial class PersonJsonContext : JsonSerializerContext
     {
