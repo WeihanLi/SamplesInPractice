@@ -14,6 +14,7 @@ try
         await Task.Delay(5000);
         Console.WriteLine($"Timed event triggered({DateTime.Now:HH:mm:ss})");
     }
+    Console.WriteLine("123");
 }
 catch (OperationCanceledException)
 {
