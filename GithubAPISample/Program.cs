@@ -59,12 +59,24 @@ prList.OrderBy(x => x.RepoName)
     .ThenBy(x => x.CreatedAt)
     .ToCsvFile(Path.Combine(Directory.GetCurrentDirectory(), "pr-list.csv"));
 
-var result = prList.GroupBy(x => x.RepoName)
-    .Select(g => $@"{g.Key}
-{g.OrderBy(x => x.CreatedAt).Select(x => $"\t{x.Title}\t{x.CreatedAt}\t{x.ClosedAt}").StringJoin(Environment.NewLine)}
-").StringJoin(Environment.NewLine);
+// var result = prList.GroupBy(x => x.RepoName)
+//     .Select(g => $@"{g.Key}
+// {g.OrderBy(x => x.CreatedAt).Select(x => $"\t{x.Title}\t{x.CreatedAt}\t{x.ClosedAt}").StringJoin(Environment.NewLine)}
+// ").StringJoin(Environment.NewLine);
 
-Console.WriteLine(result);
+var mdContent = prList.GroupBy(g => new
+{
+  g.RepoName,
+  g.RepoUrl
+})
+.OrderBy(g => g.Key.RepoName)
+.Select(g => $@"- [{g.Key.RepoName}]({g.Key.RepoUrl})
+{g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title} <{x.Url}>").StringJoin(Environment.NewLine)}
+")
+.StringJoin(Environment.NewLine);
+
+await File.WriteAllTextAsync("result.md", mdContent);
+Console.WriteLine("Completed");
 Console.ReadLine();
 
 internal class GithubPRModel
