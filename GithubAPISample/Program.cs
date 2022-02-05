@@ -42,7 +42,7 @@ do
             Title = item["title"]?.GetValue<string>(),
             Body = item["body"]?.GetValue<string>(),
             Url = item["html_url"]?.GetValue<string>(),
-            CreatedAt = item["created_at"]?.GetValue<DateTimeOffset?>(),
+            CreatedAt = item["created_at"]?.GetValue<DateTimeOffset>(),
             ClosedAt = item["closed_at"]?.GetValue<DateTimeOffset>()
         });
     }
