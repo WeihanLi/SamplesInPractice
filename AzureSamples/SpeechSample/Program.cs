@@ -1,9 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Microsoft.CognitiveServices.Speech;
+﻿using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
-using WeihanLi.Extensions;
 
-Console.WriteLine("Hello, World!");
 var text = @".NET 20 周年生日快乐";
 const string locale = "zh-CN";
 
@@ -15,10 +12,9 @@ config.OutputFormat = OutputFormat.Detailed;
 
 // Creates a speech synthesizer
 using var synthesizer = new SpeechSynthesizer(config);
-using var voicesResult = await synthesizer.GetVoicesAsync();
-var voices = voicesResult.Voices
-    .Where(x => x.Locale.EqualsIgnoreCase(locale))
-    .ToArray();
+// await synthesizer.SpeakTextAsync(text);
+using var voicesResult = await synthesizer.GetVoicesAsync(locale);
+var voices = voicesResult.Voices;
 var autoDetectSourceLanguageConfig = AutoDetectSourceLanguageConfig.FromLanguages(new[] { "en-US", "zh-CN" });
 foreach (var voice in voices)
 {
@@ -26,11 +22,40 @@ foreach (var voice in voices)
 
     config.SpeechSynthesisVoiceName = voice.ShortName;
     var outputFileName = $"output-{voice.ShortName}.wav";
-    using (var output = AudioConfig.FromWavFileOutput(outputFileName))
     {
+        //using var speechSynthesizer = new SpeechSynthesizer(config);
+        //using var speechSynthesisResult = await speechSynthesizer.SpeakTextAsync(text);
+    }
+    {
+        using var output = AudioConfig.FromWavFileOutput(outputFileName);
         using var speechSynthesizer = new SpeechSynthesizer(config, output);
         using var speechSynthesisResult = await speechSynthesizer.SpeakTextAsync(text);
         Console.WriteLine($"Result: {speechSynthesisResult.Reason}");
+    }
+    {
+        using var streamSynthesizer = new SpeechSynthesizer(config, null);
+        var streamResult = await streamSynthesizer.SpeakTextAsync(text);
+        using var audioDataStream = AudioDataStream.FromResult(streamResult);
+        // SaveToFile
+        //await audioDataStream.SaveToWaveFileAsync(outputFileName);
+
+        // Reads data from the stream
+        using var ms = new MemoryStream();
+        var buffer = new byte[32000];
+        uint filledSize;
+        while ((filledSize = audioDataStream.ReadData(buffer)) > 0)
+        {
+            ms.Write(buffer, 0, (int)filledSize);
+        }
+        Console.WriteLine($"Totally {ms.Length} bytes received.");
+    }
+    {
+        var ssml =
+            $@"<speak xmlns=""http://www.w3.org/2001/10/synthesis"" xmlns:mstts=""http://www.w3.org/2001/mstts"" xmlns:emo=""http://www.w3.org/2009/10/emotionml"" version=""1.0"" xml:lang=""en-US""><voice name=""zh-CN-XiaoxiaoNeural""><prosody rate=""0%"" pitch=""50%"">
+        {text}
+        </prosody></voice></speak>";
+        using var ssmlSynthesisResult = await synthesizer.SpeakSsmlAsync(ssml);
+        Console.WriteLine($"Result: {ssmlSynthesisResult.Reason}");
     }
 
     config.SpeechRecognitionLanguage = locale;
