@@ -40,10 +40,10 @@ public class CallerInfo
     }
 
     private static void DumpCallerInfo(
-           [CallerFilePath] string? callerFilePath = null,
-           [CallerLineNumber] int? callerLineNumber = null,
-           [CallerMemberName] string? callerMemberName = null
-           )
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int? callerLineNumber = null,
+        [CallerMemberName] string? callerMemberName = null
+    )
     {
         Console.WriteLine("Caller info:");
         Console.WriteLine($@"CallerFilePath: {callerFilePath}
