@@ -20,7 +20,7 @@ public class ValuesController : ControllerBase
     [HttpGet("test")]
     public async Task<IActionResult> Test(string ip, [FromServices] HttpClient httpClient)
     {
-        var url = $"http://{ip}/ap/values";
+        var url = $"http://{ip}/api/values";
         try
         {
             var result = await httpClient.GetFromJsonAsync<string[]>(url);
