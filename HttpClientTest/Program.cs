@@ -1,8 +1,8 @@
-﻿using System;
-using HttpClientTest;
+﻿using HttpClientTest;
 using WeihanLi.Common.Helpers;
+using WeihanLi.Common.Logging;
 
-InvokeHelper.OnInvokeException = Console.WriteLine;
+LogHelper.ConfigureLogging(builder => builder.AddConsole());
 
 // await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.FormUrlEncodedContentLengthTest);
 // Console.WriteLine();
