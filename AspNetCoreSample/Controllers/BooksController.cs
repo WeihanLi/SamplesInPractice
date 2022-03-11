@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AspNetCoreSample.Models;
+﻿using AspNetCoreSample.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSample.Controllers

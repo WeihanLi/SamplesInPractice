@@ -1,10 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace AspNetCoreSample.Extensions
