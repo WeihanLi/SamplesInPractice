@@ -1,3 +1,4 @@
 ﻿OnInvokeException = WriteLine;
-TryInvoke(EncoderSample.MainTest);
+//TryInvoke(EncoderSample.MainTest);
+TryInvoke(JsonNodeSample.MainTest);
 ReadLine();
