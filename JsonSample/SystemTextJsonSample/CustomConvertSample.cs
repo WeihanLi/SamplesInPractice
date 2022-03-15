@@ -8,7 +8,7 @@ public class CustomConvertSample
         var jsonString = JsonSerializer.Serialize(model);
         WriteLine(jsonString);
         var node = JsonNode.Parse(jsonString);
-        ArgumentNullException.ThrowIfNull(node, nameof(node));
+        ArgumentNullException.ThrowIfNull(node);
         node["Id"] = 123;
         var newJsonString = node.ToJsonString();
         WriteLine(newJsonString);
