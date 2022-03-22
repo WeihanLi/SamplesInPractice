@@ -1,4 +1,6 @@
 ﻿using Json.Schema;
+using WeihanLi.Common;
+using WeihanLi.Common.Http;
 
 namespace SystemTextJsonSample;
 
@@ -8,7 +10,7 @@ public class JsonSchemaSample
     {
         JsonSchemaBuildTest();
 
-        JsonSchemaLoadValidateTest();
+        JsonSchemaLoadValidateTest().Wait();
     }
 
     private static void JsonSchemaBuildTest()
@@ -36,7 +38,7 @@ public class JsonSchemaSample
         WriteLine(validateResults.IsValid);
     }
 
-    private static void JsonSchemaLoadValidateTest()
+    private static async Task JsonSchemaLoadValidateTest()
     {
         const string testJsonSchema = @"
 {
@@ -135,5 +137,28 @@ public class JsonSchemaSample
         validateResult = schema.Validate(jsonElement, validationOptions);
         WriteLine(validateResult.IsValid);
         WriteLine(validateResult.Message);
+        WriteLine();
+
+        using var httpClient = new HttpClient(new NoProxyHttpClientHandler());
+        var result = await httpClient.GetStringAsync("http://reservation.weihanli.xyz/api/notice");
+        validateResult = schema.Validate(result, validationOptions);
+        WriteLine(validateResult.IsValid);
+        WriteLine(validateResult.Message);
+    }
+}
+
+public static class JsonSchemaExtensions
+{
+    public static ValidationResults Validate(this JsonSchema jsonSchema, JsonDocument jsonDocument, ValidationOptions? validationOptions = null)
+    {
+        return jsonSchema.Validate(jsonDocument.RootElement, validationOptions);
+    }
+
+    public static ValidationResults Validate(this JsonSchema jsonSchema, string jsonString, ValidationOptions? validationOptions = null)
+    {
+        Guard.NotNull(jsonSchema);
+        Guard.NotNull(jsonString);
+        using var jsonDocument = JsonDocument.Parse(jsonString);
+        return jsonSchema.Validate(jsonDocument, validationOptions);
     }
 }
