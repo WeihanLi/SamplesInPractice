@@ -17,7 +17,7 @@
     <Using Include="WeihanLi.Common.Helpers" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JsonSchema.Net" Version="2.1.2" />
+    <PackageReference Include="JsonSchema.Net" Version="2.2.0" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.50" />
   </ItemGroup>
 

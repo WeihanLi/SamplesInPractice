@@ -146,19 +146,3 @@ public class JsonSchemaSample
         WriteLine(validateResult.Message);
     }
 }
-
-public static class JsonSchemaExtensions
-{
-    public static ValidationResults Validate(this JsonSchema jsonSchema, JsonDocument jsonDocument, ValidationOptions? validationOptions = null)
-    {
-        return jsonSchema.Validate(jsonDocument.RootElement, validationOptions);
-    }
-
-    public static ValidationResults Validate(this JsonSchema jsonSchema, string jsonString, ValidationOptions? validationOptions = null)
-    {
-        Guard.NotNull(jsonSchema);
-        Guard.NotNull(jsonString);
-        using var jsonDocument = JsonDocument.Parse(jsonString);
-        return jsonSchema.Validate(jsonDocument, validationOptions);
-    }
-}
