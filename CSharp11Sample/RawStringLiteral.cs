@@ -23,7 +23,7 @@ X-dotnet-HTTPie-ResponseTimestamp: 2022/3/23 22:05:03 +08:00
 """;
         Console.WriteLine(rawJson);
 
-
+        Console.WriteLine("""<div style="color:red">Amazing .NET</div>""");
 
         var interpolatedString = $$"""
 {
@@ -32,5 +32,10 @@ X-dotnet-HTTPie-ResponseTimestamp: 2022/3/23 22:05:03 +08:00
 }
 """;
         Console.WriteLine(interpolatedString);
+                
+        var oh = """"
+          Ok to use """ here
+          """";
+        Console.WriteLine(oh);
     }
 }
