@@ -34,7 +34,7 @@ public class JsonSchemaSample
         WriteLine(schemaString);
         WriteLine();
 
-        var validateResults = jsonSchema.Validate(JsonDocument.Parse("{}").RootElement);
+        var validateResults = jsonSchema.Validate("{}");
         WriteLine(validateResults.IsValid);
     }
 
@@ -128,13 +128,11 @@ public class JsonSchemaSample
             OutputFormat = OutputFormat.Detailed
         };
 
-        var jsonElement = JsonDocument.Parse(validJson).RootElement;
-        var validateResult = schema.Validate(jsonElement, validationOptions);
+        var validateResult = schema.Validate(validJson, validationOptions);
         WriteLine(validateResult.IsValid);
         WriteLine(validateResult.Message);
 
-        jsonElement = JsonDocument.Parse(invalidJson).RootElement;
-        validateResult = schema.Validate(jsonElement, validationOptions);
+        validateResult = schema.Validate(invalidJson, validationOptions);
         WriteLine(validateResult.IsValid);
         WriteLine(validateResult.Message);
         WriteLine();
