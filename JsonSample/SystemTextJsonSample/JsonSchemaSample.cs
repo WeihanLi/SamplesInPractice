@@ -36,6 +36,7 @@ public class JsonSchemaSample
 
         var validateResults = jsonSchema.Validate("{}");
         WriteLine(validateResults.IsValid);
+        WriteLine();
     }
 
     private static async Task JsonSchemaLoadValidateTest()
