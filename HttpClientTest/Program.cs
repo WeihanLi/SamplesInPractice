@@ -11,7 +11,9 @@ LogHelper.ConfigureLogging(builder => builder.AddConsole());
 // await InvokeHelper.TryInvokeAsync(FormUrlEncodeContentTest.ByteArrayContentLengthTest);
 // Console.WriteLine();
 
-await InvokeHelper.TryInvokeAsync(NoAutoRedirectSample.MainTest);
+// await InvokeHelper.TryInvokeAsync(NoAutoRedirectSample.MainTest);
+
+await InvokeHelper.TryInvokeAsync(HttpClientEventSample.MainTest);
 
 Console.WriteLine("Completed!");
 Console.ReadLine();

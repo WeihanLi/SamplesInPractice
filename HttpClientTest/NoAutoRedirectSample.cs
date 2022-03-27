@@ -52,7 +52,7 @@ namespace HttpClientTest
             {
                 using var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, path.TrimStart('/')));
                 var statusCode = (int)response.StatusCode;
-                if(statusCode != 302)
+                if(statusCode != 302 || response.Headers.Location is null)
                 {
                     return -1;
                 }
