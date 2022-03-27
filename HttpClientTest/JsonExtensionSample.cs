@@ -49,15 +49,15 @@ public class JsonExtensionSample
         }
 
         {
-            var result = await httpClient.GetFromJsonAsync<ResultModel>(url);
+            var result = await httpClient.GetFromJsonAsync<Result>(url);
             ArgumentNullException.ThrowIfNull(result);
-            Console.WriteLine($"{result.Status}: {result.ErrorMsg}");
+            Console.WriteLine($"{result.Status}: {result.Msg}");
         }
 
         {
-            var result = await httpClient.GetFromJsonAsync<ResultModel>(url, new JsonSerializerOptions());
+            var result = await httpClient.GetFromJsonAsync<Result>(url, new JsonSerializerOptions());
             ArgumentNullException.ThrowIfNull(result);
-            Console.WriteLine($"{result.Status}: {result.ErrorMsg}");
+            Console.WriteLine($"{result.Status}: {result.Msg}");
         }
     }
 }
