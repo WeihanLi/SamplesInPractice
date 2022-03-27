@@ -5,11 +5,11 @@ public class ListPatternSample
     public static void MainTest()
     {
         var array =
+            //new List<int>()
             new[]
             {
                 1,2,3,4,5
             }
-            //new List<int>()
             ;
 
         if (array is [1, ..])
