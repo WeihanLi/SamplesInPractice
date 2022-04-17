@@ -1,14 +1,19 @@
 ﻿using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
+using SpeechSample;
 
 var text = @".NET 20 周年生日快乐";
 const string locale = "zh-CN";
 
 var key = Environment.GetEnvironmentVariable("SpeechSubscriptionKey");
-var config = SpeechConfig.FromSubscription(key, "eastasia");
+Helper.RegisterSpeechConfig(key ?? "");
+var config = Helper.SpeechConfig;
 //https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support
 config.SpeechSynthesisLanguage = locale;
 config.OutputFormat = OutputFormat.Detailed;
+
+await GenerateVoiceOutput.MainTest();
+Console.ReadLine();
 
 // Creates a speech synthesizer
 using var synthesizer = new SpeechSynthesizer(config);
