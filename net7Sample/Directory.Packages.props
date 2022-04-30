@@ -1,0 +1,10 @@
+﻿<Project>
+  <PropertyGroup>
+    <!-- Enable central package management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.0-preview.3.22175.4" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.51" />
+  </ItemGroup>
+</Project>

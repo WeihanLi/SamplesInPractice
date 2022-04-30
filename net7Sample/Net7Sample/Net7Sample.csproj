@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="WeihanLi.Common.Helpers"/>
-    <Using Include="WeihanLi.Common.Logging"/>
-    <Using Include="Net7Sample"/>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.48" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="WeihanLi.Common" />
+  </ItemGroup>
+  <ItemGroup>    
+    <Using Include="WeihanLi.Common.Helpers" />
+    <Using Include="WeihanLi.Common.Logging" />
   </ItemGroup>
 
 </Project>
