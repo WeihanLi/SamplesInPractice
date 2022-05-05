@@ -1,4 +1,6 @@
-﻿const string testKey = "test";
+﻿using Microsoft.Extensions.Configuration;
+
+const string testKey = "test";
 
 var configuration = new ConfigurationManager();
 Console.WriteLine(configuration[testKey]);
