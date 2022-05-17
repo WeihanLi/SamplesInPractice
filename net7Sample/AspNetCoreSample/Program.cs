@@ -10,6 +10,10 @@ var app = builder.Build();
 
 app.Map("/", () => "Hello MinimalAPI").AddFilter<OutputDotNetVersionFilter>();
 
+var hello = app.MapGroup("/hello");
+hello.Map("/test", () => "test");
+hello.Map("/test2", () => "test2");
+
 app.MapControllers();
 
 app.Run();
