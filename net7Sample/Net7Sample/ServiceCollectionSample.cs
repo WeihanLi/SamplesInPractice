@@ -15,11 +15,6 @@ public class ServiceCollectionSample
             Console.WriteLine(provider.GetRequiredService<IUserIdProvider>().GetHashCode());
         }
 
-        await using (var provider2 = services.BuildServiceProvider())
-        {
-            Console.WriteLine(provider2.GetRequiredService<IUserIdProvider>().GetHashCode());
-        }
-
         //
         Console.WriteLine(services.IsReadOnly);
 
