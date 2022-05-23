@@ -8,5 +8,8 @@ public class ArgumentExceptionSample
 
         name = null;
         ArgumentNullException.ThrowIfNull(name);
+
+        name = string.Empty;
+        ArgumentException.ThrowIfNullOrEmpty(name);
     }
 }
