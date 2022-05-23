@@ -3,13 +3,15 @@ public class ArgumentExceptionSample
 {
     public static void MainTest()
     {
+        InvokeHelper.OnInvokeException = Console.Error.WriteLine;
+
         var name = "test";
         ArgumentNullException.ThrowIfNull(name);
 
         name = null;
-        ArgumentNullException.ThrowIfNull(name);
+        InvokeHelper.TryInvoke(() => ArgumentNullException.ThrowIfNull(name));
 
         name = string.Empty;
-        ArgumentException.ThrowIfNullOrEmpty(name);
+        InvokeHelper.TryInvoke(() => ArgumentException.ThrowIfNullOrEmpty(name));
     }
 }
