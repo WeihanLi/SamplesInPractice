@@ -21,7 +21,7 @@ namespace MiniAspNetCore
             set => _responseFeature.StatusCode = value;
         }
 
-        public async Task WriteAsync(byte[] responseBytes)
+        public async Task WriteBytesAsync(byte[] responseBytes)
         {
             if (_responseFeature.StatusCode <= 0)
             {
@@ -37,9 +37,9 @@ namespace MiniAspNetCore
     public static class HttpResponseExtensions
     {
         public static Task WriteAsync(this HttpResponse response, string responseText)
-            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteAsync(responseText.GetBytes());
+            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteBytesAsync(responseText.GetBytes());
 
         public static Task WriteLineAsync(this HttpResponse response, string responseText)
-            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteAsync($"{responseText}{Environment.NewLine}".GetBytes());
+            => string.IsNullOrEmpty(responseText) ? Task.CompletedTask : response.WriteBytesAsync($"{responseText}{Environment.NewLine}".GetBytes());
     }
 }
