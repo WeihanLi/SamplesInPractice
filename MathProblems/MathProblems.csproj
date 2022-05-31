@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Combinatorics" Version="2.0.0" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.51" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.52" />
   </ItemGroup>
 
 </Project>

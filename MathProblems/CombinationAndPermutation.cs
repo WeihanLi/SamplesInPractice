@@ -1,4 +1,4 @@
-﻿using Combinatorics.Collections;
+﻿using WeihanLi.Common.Helpers.Combinatorics;
 using WeihanLi.Extensions;
 
 namespace MathProblems;
@@ -24,7 +24,7 @@ internal static class CombinationAndPermutation
         // Permutations(numbers);
 
         var numbers = new[] { 1, 2, 3 };
-        foreach (var p in Partitions(numbers, 2))
+        foreach (var p in numbers.Partitions(2))
         {
             Console.WriteLine(p.Select(x => x.StringJoin(",")).StringJoin("\t"));
         }
@@ -32,7 +32,7 @@ internal static class CombinationAndPermutation
         Console.ReadLine();
 
         foreach (var split in Enumerable.Range(1, 5)
-            .Select(i => Partitions(new[] { 1, 2, 3, 4, 5 }, i)))
+            .Select(i => new[] { 1, 2, 3, 4, 5 }.Partitions(i)))
         {
             var cnt = 0;
             foreach (var item in split)
@@ -46,58 +46,6 @@ internal static class CombinationAndPermutation
 
         Console.WriteLine();
         Console.ReadLine();
-    }
-
-    // https://github.com/more-itertools/more-itertools/blob/master/more_itertools/more.py#L3149
-    //def set_partitions_helper(L, k):
-    //n = len(L)
-    //if k == 1:
-    //    yield [L]
-    //elif n == k:
-    //    yield [[s] for s in L]
-    //else:
-    //    e, *M = L
-    //    for p in set_partitions_helper(M, k - 1):
-    //        yield [[e], *p]
-    //    for p in set_partitions_helper(M, k):
-    //        for i in range(len(p)):
-    //            yield p[:i] + [[e] + p[i]] + p[i + 1 :]
-    private static IEnumerable<int[][]> Partitions(this int[] numbers, int batch)
-    {
-        if (batch <= 0 || numbers.Length < batch)
-        {
-            throw new ArgumentException("Invalid batch size", nameof(batch));
-        }
-        if (batch == 1)
-        {
-            yield return new[] { numbers };
-        }
-        else if (batch == numbers.Length)
-        {
-            yield return numbers.Select(x => new[] { x }).ToArray();
-        }
-        else
-        {
-            var e = numbers[0];
-            var m = numbers[1..];
-            foreach (var p in Partitions(m, batch - 1))
-            {
-                yield return new[]
-                {
-                    new []{e}
-                 }.Concat(p).ToArray();
-            }
-            foreach (var p in Partitions(m, batch))
-            {
-                for (var i = 0; i < p.Length; i++)
-                {
-                    yield return p[..i]
-                    .Concat(new[] { new[] { e }.Concat(p[i]).ToArray() })
-                    .Concat(p[(i + 1)..])
-                    .ToArray();
-                }
-            }
-        }
     }
 
     private static void Combinations(ICollection<int> numbers)
