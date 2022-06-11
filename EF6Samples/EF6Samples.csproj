@@ -15,8 +15,8 @@
     <Using Include="WeihanLi.Extensions"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0-rc.1.21452.10" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.46" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.52" />
   </ItemGroup>
 
 </Project>
