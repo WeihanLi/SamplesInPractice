@@ -35,7 +35,7 @@ namespace KubernetesClientSample
                 {
                     try
                     {
-                        var response = await httpClient.GetAsync("http://localhost:8000/api/notice", cts.Token);
+                        using var response = await httpClient.GetAsync("http://localhost:8000/api/notice", cts.Token);
                         Console.WriteLine(response.StatusCode);
                         if (response.IsSuccessStatusCode)
                         {

@@ -8,9 +8,10 @@ var services = new ServiceCollection()
         .AddSingleton<IKubernetes>(_ => new Kubernetes(KubernetesClientConfiguration.BuildDefaultConfig()))
         .BuildServiceProvider();
 
-services.GetRequiredService<InspectSample>().MainTest();
+// services.GetRequiredService<InspectSample>().MainTest();
 // await services.GetRequiredService<CreatePodSample>().MainTest();
 // await services.GetRequiredService<PortForwardSample>().MainTest();
+await services.GetRequiredService<CopyFileSample>().MainTest();
 
 Console.WriteLine("Completed");
 Console.ReadLine();
