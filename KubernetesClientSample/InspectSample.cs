@@ -14,12 +14,12 @@ namespace KubernetesClientSample
         }
         public void MainTest()
         {
-            var namespaces = _kubernetes.ListNamespace();
+            var namespaces = _kubernetes.CoreV1.ListNamespace();
             foreach (var ns in namespaces.Items)
             {
                 var namespaceName = ns.Metadata.Name;
                 Console.WriteLine($"Namespace:{namespaceName}");
-                var pods = _kubernetes.ListNamespacedPod(namespaceName);
+                var pods = _kubernetes.CoreV1.ListNamespacedPod(namespaceName);
                 foreach (var pod in pods.Items)
                 {
                     var podName = pod.Metadata.Name;

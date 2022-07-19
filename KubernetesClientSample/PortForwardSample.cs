@@ -22,7 +22,7 @@ namespace KubernetesClientSample
         
         public async Task MainTest()
         {
-            var pod = (await _kubernetes.ListNamespacedPodAsync("default")).Items
+            var pod = (await _kubernetes.CoreV1.ListNamespacedPodAsync("default")).Items
                 .First(x => x.Name().Equals("reservation", StringComparison.Ordinal));
 
             using var cts = new CancellationTokenSource();

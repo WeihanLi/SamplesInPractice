@@ -55,13 +55,13 @@ namespace KubernetesClientSample
                     }
                 }),
             };
-            await _kubernetes.CreateNamespacedPodAsync(pod, namespaceName);
+            await _kubernetes.CoreV1.CreateNamespacedPodAsync(pod, namespaceName);
             
             await ListPods();
 
             async Task ListPods()
             {
-                var pods = await _kubernetes.ListNamespacedPodAsync(namespaceName);
+                var pods = await _kubernetes.CoreV1.ListNamespacedPodAsync(namespaceName);
                 foreach (var item in pods.Items)
                 {
                     Console.WriteLine($"{item.Metadata.Name}, {item.Metadata.Labels.ToJson()}");
