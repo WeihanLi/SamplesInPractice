@@ -1,8 +1,8 @@
 ﻿using k8s;
 using System;
-using System.Buffers.Text;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,27 +45,73 @@ public class CopyFileSample
             File.Delete(destFilePath);
         }
         // copy file from pod to local
-        var exitCode = await _kubernetes.NamespacedPodExecAsync
+        var exitCode = await CopyFileFromPod(_kubernetes, pod.Metadata.Name, pod.Metadata.NamespaceProperty, container,
+            filePath, destFilePath, cts.Token);
+        Console.WriteLine($"CopyFileFromPod ExitCode: {exitCode}");
+
+        // copy file from local to pod
+        var exitCode1 = await CopyFileToPod(_kubernetes, pod.Metadata.Name, pod.Metadata.NamespaceProperty, container,
+            @"C:\projects\sources\dotnet-exec\tests\IntegrationTest\CodeSamples\DumpAssemblyInfoSample.cs", 
+            "/app/DumpAssemblyInfoSample.cs", cts.Token);
+        Console.WriteLine($"CopyFileToPod exitCode: {exitCode1}");
+
+        cts.Cancel();
+    }
+    
+    public static async Task<int> CopyFileFromPod(IKubernetes kubernetes,
+        string pod,
+        string @namespace,
+        string container,
+        string srcPath,
+        string destPath,
+        CancellationToken cancellationToken = default)
+    {
+        var exitCode = await kubernetes.NamespacedPodExecAsync
         (
-            pod.Metadata.Name,
-            pod.Metadata.NamespaceProperty,
+            pod,
+            @namespace,
             container,
-            new[]{ "sh", "-c", $"cat {filePath} | base64" },
+            new[]{ "sh", "-c", $"cat {srcPath} | base64" },
             true,
             async (_, stdout, _) =>
             {
-                using var reader = new StreamReader(stdout);
-                var base64 = await reader.ReadToEndAsync();
-                var bytes = Convert.FromBase64String(base64);
-                
-                await using var fs = new FileStream(destFilePath, FileMode.CreateNew);
-                await fs.WriteAsync(bytes,0, bytes.Length, cts.Token).ConfigureAwait(false);   
-                await fs.FlushAsync(cts.Token);
-            },
-            cts.Token
-        ).ConfigureAwait(false);
-        Console.WriteLine($"ExitCode: {exitCode}");
+                // using var reader = new StreamReader(stdout);
+                // var base64 = await reader.ReadToEndAsync();
+                // var bytes = Convert.FromBase64String(base64);
 
-        cts.Cancel();
+                // https://stackoverflow.com/questions/12901705/decoding-base64-stream-to-image
+                await using var stream = new CryptoStream(stdout, new FromBase64Transform(), CryptoStreamMode.Read);
+                
+                await using var fs = new FileStream(destPath, FileMode.Create);
+                await stream.CopyToAsync(fs, cancellationToken);
+                
+                await fs.FlushAsync(cancellationToken);
+            },
+            cancellationToken
+        ).ConfigureAwait(false);
+        return exitCode;
+    }
+
+    public static async Task<int> CopyFileToPod(IKubernetes kubernetes, 
+        string pod,
+        string @namespace,
+        string container,
+        string srcPath,
+        string destPath,
+        CancellationToken cancellationToken = default)
+    {
+        var fileBytes = await File.ReadAllBytesAsync(srcPath, cancellationToken);
+        var base64String = Convert.ToBase64String(fileBytes);
+        var exitCode = await kubernetes.NamespacedPodExecAsync
+        (
+            pod,
+            @namespace,
+            container,
+            new[]{ "sh", "-c", $"echo {base64String} | base64 --decode > {destPath}" },
+            true,
+            (_, _, _) => Task.CompletedTask,
+            cancellationToken
+        ).ConfigureAwait(false);
+        return exitCode;
     }
 }
