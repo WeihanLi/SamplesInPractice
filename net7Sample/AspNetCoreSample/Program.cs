@@ -8,7 +8,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.Map("/", () => "Hello MinimalAPI").AddFilter<OutputDotNetVersionFilter>();
+app.Map("/", () => "Hello MinimalAPI").AddRouteHandlerFilter<OutputDotNetVersionFilter>();
 
 var hello = app.MapGroup("/hello");
 hello.Map("/test", () => "test");
