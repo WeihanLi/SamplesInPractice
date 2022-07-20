@@ -3,23 +3,23 @@ public class NullCheckOperator
 {    
     public static void MainTest()
     {
-        Hello("World");
+//         Hello("World");
 
-        try
-        {
-            Hello(null!);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
+//         try
+//         {
+//             Hello(null!);
+//         }
+//         catch (Exception ex)
+//         {
+//             Console.WriteLine(ex);
+//         }
 
     }
 
-    static void Hello(string name!!)
-    {
-        Console.WriteLine($"Hello, {name}!");
-    }
+//     static void Hello(string name!!)
+//     {
+//         Console.WriteLine($"Hello, {name}!");
+//     }
 
     // void Hello1(string name!!) => Console.WriteLine($"Hello, {name}!");
 
