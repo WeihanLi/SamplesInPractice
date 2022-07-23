@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Yarp.ReverseProxy.Transforms;
+﻿using Yarp.ReverseProxy.Transforms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +6,7 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
     .AddTransforms(context =>
     {
-        if (context.Cluster?.ClusterId == "githubImages")
+        if (context.Route.ClusterId == "githubImages")
         {
             context.AddRequestTransform(transformContext =>
             {
