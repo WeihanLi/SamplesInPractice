@@ -12,7 +12,7 @@ builder.Services.AddReverseProxy()
             const string imageRegex = @".+\.(jpg|png|gif|jpeg)$";
             var requestPath = transformContext.HttpContext.Request.Path.Value ?? "/";
             if (context.Cluster?.ClusterId != "githubImages" &&
-                !Regex.IsMatch(requestPath, imageRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase))
+                !Regex.IsMatch(requestPath, imageRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
             {
                 return default;
             }
