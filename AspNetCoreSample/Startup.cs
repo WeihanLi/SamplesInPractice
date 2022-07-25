@@ -44,6 +44,8 @@ namespace AspNetCoreSample
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.Map("/test1/{*any}", (string any) => $"test1 {any}");
+                endpoints.Map("/test2/{**any}", (string any) => $"test2 {any}");
                 endpoints.MapControllers();
             });
         }
