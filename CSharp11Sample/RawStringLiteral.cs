@@ -1,4 +1,4 @@
-// https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md
+﻿// https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md
 // https://github.com/dotnet/csharplang/issues/4304
 public class RawStringLiteral
 {
@@ -32,10 +32,15 @@ X-dotnet-HTTPie-ResponseTimestamp: 2022/3/23 22:05:03 +08:00
 }
 """;
         Console.WriteLine(interpolatedString);
-                
+
         var oh = """"
           Ok to use """ here
           """";
         Console.WriteLine(oh);
+
+        var ohMy = """"
+          Ok to use """ here
+"""";
+        Console.WriteLine(ohMy);
     }
 }
