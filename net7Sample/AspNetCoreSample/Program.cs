@@ -8,7 +8,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.Map("/", () => "Hello MinimalAPI").AddRouteHandlerFilter<OutputDotNetVersionFilter>();
+app.Map("/", () => "Hello MinimalAPI").AddEndpointFilter<OutputDotNetVersionFilter>();
 
 var hello = app.MapGroup("/hello");
 hello.Map("/test", () => "test");
@@ -18,9 +18,9 @@ app.MapControllers();
 
 app.Run();
 
-internal sealed class OutputDotNetVersionFilter : IRouteHandlerFilter
+internal sealed class OutputDotNetVersionFilter : IEndpointFilter
 {
-    public async ValueTask<object?> InvokeAsync(RouteHandlerInvocationContext context, RouteHandlerFilterDelegate next)
+    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
         context.HttpContext.Response.Headers["X-NET-Version"] = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription;
         return await next(context);
