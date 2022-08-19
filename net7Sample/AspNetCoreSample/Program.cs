@@ -10,6 +10,17 @@ var app = builder.Build();
 
 app.Map("/", () => "Hello MinimalAPI").AddEndpointFilter<OutputDotNetVersionFilter>();
 
+app.Map("/hhh", () => "Minimal API")
+    .AddEndpointFilter(async (context, next) =>
+    {
+        if (context.HttpContext.Request.QueryString.HasValue)
+        {
+            return await next(context);
+        }
+        return Results.Ok(new { Name = "test", Date = DateTime.Today });
+    });
+
+
 var hello = app.MapGroup("/hello");
 hello.Map("/test", () => "test");
 hello.Map("/test2", () => "test2");
