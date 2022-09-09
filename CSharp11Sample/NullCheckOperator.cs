@@ -1,5 +1,5 @@
 // https://github.com/dotnet/csharplang/blob/main/proposals/param-nullchecking.md
-public class NullCheckOperator
+public static class NullCheckOperator
 {    
     public static void MainTest()
     {

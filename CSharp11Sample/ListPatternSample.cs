@@ -1,6 +1,6 @@
 ﻿namespace CSharp11Sample;
 
-public class ListPatternSample
+public static class ListPatternSample
 {
     public static void MainTest()
     {

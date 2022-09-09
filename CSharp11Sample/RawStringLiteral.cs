@@ -1,6 +1,8 @@
 ﻿// https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md
 // https://github.com/dotnet/csharplang/issues/4304
-public class RawStringLiteral
+namespace CSharp11Sample;
+
+public static class RawStringLiteral
 {
     public static void MainTest()
     {
