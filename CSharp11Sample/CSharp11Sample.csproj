@@ -9,6 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Include="CSharp11Sample" />
+    <Using Include="System.Text" />
   </ItemGroup>
 
 </Project>
