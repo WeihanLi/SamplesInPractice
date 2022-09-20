@@ -1,5 +1,5 @@
 ﻿namespace CSharp11Sample;
-class FileLocalTypeSample
+public class FileLocalTypeSample
 {
     public static void MainTest()
     {
