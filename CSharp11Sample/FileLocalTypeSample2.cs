@@ -12,3 +12,12 @@ file struct FileLocalStruct
 }
 
 file record struct FileLocalRecordStruct { }
+
+file interface IAnimal
+{
+    string Name => GetType().Name;
+}
+
+file class Cat : IAnimal { }
+
+class Dog : IAnimal { }
