@@ -11,8 +11,8 @@ public sealed class IpAddressComparer: IComparer<IPAddress>
         if (ReferenceEquals(null, y)) return 1;
         if (ReferenceEquals(null, x)) return -1;
 
-        var bytes1 = x.MapToIPv4().ToString().SplitArray<byte>();
-        var bytes2 = y.MapToIPv4().ToString().SplitArray<byte>();
+        var bytes1 = x.MapToIPv4().ToString().SplitArray<byte>(new []{ '.' });
+        var bytes2 = y.MapToIPv4().ToString().SplitArray<byte>(new []{ '.' });
         for (var i = 0; i < bytes1.Length; i++)
         {
             if (bytes1[i] != bytes2[i])
