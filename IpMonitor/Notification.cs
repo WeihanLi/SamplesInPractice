@@ -21,6 +21,7 @@ public sealed class GoogleChatNotification: INotification
     
     public async Task<bool> SendNotification(string text)
     {
+        // https://developers.google.com/chat/api/guides/message-formats/basic
         using var response = await _httpClient.PostAsJsonAsync(_webhookUrl, new { text });
         return response.IsSuccessStatusCode;
     }

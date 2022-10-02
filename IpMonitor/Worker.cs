@@ -31,7 +31,8 @@ public class Worker : BackgroundService
             {
                 var host = Dns.GetHostName();
                 var ips = await Dns.GetHostAddressesAsync(host, stoppingToken);
-                var ipInfo = $"{Environment.MachineName} - {host}\n {ips.Order(new IpAddressComparer()).Select(x => x.MapToIPv4().ToString()).StringJoin(", ")}";
+                var ipInfo = $"{Environment.MachineName} - {host}\n {ips.Order(new IpAddressComparer())
+                    .Select(x => x.MapToIPv4().ToString()).StringJoin(", ")}";
                 if (_previousIpInfo == ipInfo)
                 {
                     _logger.LogDebug("IpInfo not changed");
