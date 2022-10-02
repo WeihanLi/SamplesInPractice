@@ -3,7 +3,7 @@ using WeihanLi.Extensions;
 
 namespace IpMonitor;
 
-public class Worker : BackgroundService
+public sealed class Worker : BackgroundService
 {
     private readonly TimeSpan _period;
     private readonly INotification _notification;
