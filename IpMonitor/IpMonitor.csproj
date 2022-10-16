@@ -7,13 +7,14 @@
     <OutputType>exe</OutputType>
     <LangVersion>preview</LangVersion>
     <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
+    <!-- <PublishAot Condition="'$(Configuration)' == 'Release'">true</PublishAot> -->
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-rc.1.22426.10" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.0-rc.1.22426.10" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.53" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-rc.2.22472.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.0-rc.2.22472.3" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.54" />
   </ItemGroup>
 </Project>
