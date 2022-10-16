@@ -40,7 +40,7 @@ public sealed class Worker : BackgroundService
                 }
 
                 _logger.LogInformation("Ip info: {IpInfo}", ipInfo);
-                await _notification.SendNotification(ipInfo);
+                await _notification.SendNotification($"[IpMonitor]\n{ipInfo}");
                 _previousIpInfo = ipInfo;
             }
             catch (Exception e)

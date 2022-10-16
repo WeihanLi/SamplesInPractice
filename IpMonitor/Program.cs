@@ -6,7 +6,7 @@ Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>();
         services.AddSingleton<HttpClient>();
         services.AddSingleton<GoogleChatNotification>();
-        services.AddSingleton<DingBotNotification>();
+        services.AddSingleton<DingTalkNotification>();
         services.AddSingleton<INotificationSelector, NotificationSelector>();
     })
 #if !DEBUG

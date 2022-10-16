@@ -36,12 +36,12 @@ public sealed class GoogleChatNotification: INotification
     }
 }
 
-public sealed class DingBotNotification : INotification
+public sealed class DingTalkNotification : INotification
 {
     private readonly HttpClient _httpClient;
     private readonly string _webhookUrl;
 
-    public DingBotNotification(HttpClient httpClient, IConfiguration configuration)
+    public DingTalkNotification(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
         _webhookUrl = Guard.NotNullOrEmpty(configuration.GetAppSetting("WebhookUrl"));
@@ -57,7 +57,7 @@ public sealed class DingBotNotification : INotification
                 msgtype = "text", 
                 text = new
                 {
-                    content = $"[IpMonitor]\n{text}"
+                    content = text
                 }
             });
         return response.IsSuccessStatusCode;
@@ -75,9 +75,11 @@ public sealed class NotificationSelector : INotificationSelector
     
     public INotification SelectNotification(string type)
     {
-        if ("DingDing".EqualsIgnoreCase(type) || "DingBot".EqualsIgnoreCase(type))
+        if ("DingDing".EqualsIgnoreCase(type) 
+            || "DingTalk".EqualsIgnoreCase(type)
+            || "DingBot".EqualsIgnoreCase(type))
         {
-            return _serviceProvider.GetServiceOrCreateInstance<GoogleChatNotification>(); 
+            return _serviceProvider.GetServiceOrCreateInstance<DingTalkNotification>(); 
         }
         return _serviceProvider.GetServiceOrCreateInstance<GoogleChatNotification>();
     }
