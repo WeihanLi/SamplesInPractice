@@ -11,11 +11,11 @@ public sealed class Worker : BackgroundService
 
     private volatile string _previousIpInfo = string.Empty;
 
-    public Worker(IConfiguration configuration, INotification notification, ILogger<Worker> logger)
+    public Worker(IConfiguration configuration, INotificationSelector notificationSelector, ILogger<Worker> logger)
     {
-        _notification = notification;
         _logger = logger;
         _period = configuration.GetAppSetting<TimeSpan>("MonitorPeriod");
+        _notification = notificationSelector.SelectNotification(configuration.GetAppSetting("NotificationType") ?? string.Empty);
         if (_period <= TimeSpan.Zero)
         {
             _period = TimeSpan.FromMinutes(10);

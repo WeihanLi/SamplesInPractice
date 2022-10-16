@@ -5,7 +5,9 @@ Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<Worker>();
         services.AddSingleton<HttpClient>();
-        services.AddSingleton<INotification, GoogleChatNotification>();
+        services.AddSingleton<GoogleChatNotification>();
+        services.AddSingleton<DingBotNotification>();
+        services.AddSingleton<INotificationSelector, NotificationSelector>();
     })
 #if !DEBUG
     // https://learn.microsoft.com/en-us/dotnet/core/extensions/windows-service
