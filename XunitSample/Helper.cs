@@ -1,9 +1,22 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace XunitSample
 {
-    internal class Helper
+    public class Helper
     {
+        private readonly ILogger<Helper> _logger;
+
+        public Helper(ILogger<Helper> logger)
+        {
+            _logger = logger;
+        }
+
+        public void LogMessage(string message, LogLevel logLevel = LogLevel.Information, Exception exception = null, object[] args = null)
+        {
+            _logger.Log(logLevel, exception, message, args ?? Array.Empty<object>());
+        }
+        
         public static int Add(int x, int y)
         {
             return x + y;
