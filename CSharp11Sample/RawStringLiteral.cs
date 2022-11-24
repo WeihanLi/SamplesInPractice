@@ -1,4 +1,4 @@
-﻿// https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md
+﻿// https://github.com/dotnet/csharplang/blob/4f1157ef958e798ee012d6f0d409b4c732415306/proposals/csharp-11.0/raw-string-literal.md
 // https://github.com/dotnet/csharplang/issues/4304
 namespace CSharp11Sample;
 
