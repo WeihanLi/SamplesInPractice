@@ -4,8 +4,7 @@ public class Utf8StringLiteralSample
 {
     public static void MainTest()
     {
-        var helloBytes = "Hello"u8;
-        Console.WriteLine(helloBytes.GetType().FullName);
+        var helloBytes = "Hello"u8;        
         Console.WriteLine(Encoding.UTF8.GetString(helloBytes));
 
         var authStringLiteral = "AUTH "u8.ToArray();
