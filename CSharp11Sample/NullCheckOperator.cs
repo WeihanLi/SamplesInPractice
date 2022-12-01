@@ -1,4 +1,5 @@
-// https://github.com/dotnet/csharplang/blob/main/proposals/param-nullchecking.md
+// https://github.com/dotnet/csharplang/blob/4f1157ef958e798ee012d6f0d409b4c732415306/proposals/rejected/param-nullchecking.md
+// dropped in formal C# 11 release
 public static class NullCheckOperator
 {    
     public static void MainTest()
