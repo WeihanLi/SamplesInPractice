@@ -12,6 +12,7 @@
     <PackageTags>dotnet-tool;upgrade</PackageTags>
     <Description>update all dotnet-tool in a command</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WeihanLi/SamplesInPractice/tree/master/CommandLineAppSamples/UpgradeAllTools</PackageProjectUrl>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
