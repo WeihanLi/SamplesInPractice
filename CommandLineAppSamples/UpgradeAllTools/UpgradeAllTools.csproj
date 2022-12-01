@@ -11,6 +11,7 @@
     <ToolCommandName>dotnet-update-all-tools</ToolCommandName>
     <PackageTags>dotnet-tool;upgrade</PackageTags>
     <Description>update all dotnet-tool in a command</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Version>1.0.0</Version>
   </PropertyGroup>
 
