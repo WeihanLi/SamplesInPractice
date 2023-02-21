@@ -286,19 +286,19 @@ public class Startup
 
 `dotnet run` 运行一下看一下效果吧：
 
-![](C:\Users\Weiha\AppData\Roaming\Typora\typora-user-images\image-20210514004400342.png)
+![](./images/image-20210514004400342.png)
 
 首先访问 `/api/users`，输出结果如下
 
-![](C:\Users\Weiha\AppData\Roaming\Typora\typora-user-images\image-20210514002103308.png)
+![](./images/image-20210514002103308.png)
 
 访问 `/api/users/1`
 
-![](C:\Users\Weiha\AppData\Roaming\Typora\typora-user-images\image-20210514002125273.png)
+![](./images/image-20210514002125273.png)
 
 以上两个 endpoint 都是自动生成的，我们再访问 `/api/users/test` 来测试一下分部类中的接口
 
-![](C:\Users\Weiha\AppData\Roaming\Typora\typora-user-images\image-20210514002228053.png)
+![](./images/image-20210514002228053.png)
 
 可以看到，无论是自动生成的代码还是分部类中自定义的接口都是工作的了
 
