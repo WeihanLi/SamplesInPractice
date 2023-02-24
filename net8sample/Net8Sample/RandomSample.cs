@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography;
+using System.Text.Json;
 
 namespace Net8Sample;
 
@@ -21,8 +22,10 @@ public static class RandomSample
     public static void MainTest()
     {
         GetItems();
-        
         Shuffle();
+        
+        GetString();
+        GetHexString();
     }
 
     public static void GetItems()
@@ -44,5 +47,21 @@ public static class RandomSample
         var nums = Enumerable.Range(1, 10).ToArray();
         Random.Shared.Shuffle(nums);
         Console.WriteLine($"Numbers shuffled:\n {JsonSerializer.Serialize(nums)}");
+    }
+
+    public static void GetString()
+    {
+        var randomCode = RandomNumberGenerator.GetString(ConstantNumbers, 6);
+        Console.WriteLine(randomCode);
+    }
+    
+    public static void GetHexString()
+    {
+        var randomHexString = RandomNumberGenerator.GetHexString(6);
+        Console.WriteLine(randomHexString);
+
+        var charArray = new char[6];
+        RandomNumberGenerator.GetHexString(charArray, true);
+        Console.WriteLine(new string(charArray));
     }
 }
