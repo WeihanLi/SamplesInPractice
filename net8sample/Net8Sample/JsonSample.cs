@@ -25,7 +25,7 @@ public static class JsonSample
         try
         {
             var p = JsonSerializer.Deserialize<Person>(personJsonWithoutId);
-            Console.WriteLine(p.ToString());
+            Console.WriteLine(p?.ToString());
         }
         catch (Exception e)
         {
@@ -36,7 +36,7 @@ public static class JsonSample
         {
             var p = JsonSerializer.Deserialize<Person>(personJsonWithoutId,
                 new JsonSerializerOptions() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow });
-            Console.WriteLine(p.ToString());
+            Console.WriteLine(p?.ToString());
         }
         catch (Exception e)
         {
@@ -46,7 +46,7 @@ public static class JsonSample
         try
         {
             var p = JsonSerializer.Deserialize<Person2>(personJsonWithoutId);
-            Console.WriteLine(p.ToString());
+            Console.WriteLine(p?.ToString());
         }
         catch (Exception e)
         {
@@ -131,9 +131,9 @@ file record Person(int Id, string Name);
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 file record Person2
 {
-    public int Id { get; init; }
-    public string Name { get; init; }
-    public string JobTitle { get; set; }
+    public required int Id { get; init; }
+    public required string Name { get; init; }
+    public string? JobTitle { get; set; }
 }
 
 file interface IBase
