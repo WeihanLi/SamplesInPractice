@@ -52,6 +52,17 @@ public static class JsonSample
         {
             Console.WriteLine(e);
         }
+
+        try
+        {
+            var p = JsonSerializer.Deserialize<PersonWithExtensionData>(personJsonWithoutId,
+                new JsonSerializerOptions() { UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow });
+            Console.WriteLine(JsonSerializer.Serialize(p));
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     private static void InterfaceHierarchyTest()
@@ -134,6 +145,14 @@ file record Person2
     public required int Id { get; init; }
     public required string Name { get; init; }
     public string? JobTitle { get; set; }
+}
+
+file record PersonWithExtensionData
+{
+    public required int Id { get; init; }
+    public required string Name { get; init; }
+    [JsonExtensionData]
+    public Dictionary<string,object>? Extensions { get; set; }
 }
 
 file interface IBase
