@@ -15,7 +15,7 @@ public static class JsonSample
         SnakeCaseNamingTest();
         KebabCaseNamingTest();
 
-        JsonSerializationOptionReadOnlyTest();
+        JsonSerializerOptionsReadOnlyTest();
     }
 
     private static void MissingMemberHandlingTest()
@@ -113,7 +113,7 @@ public static class JsonSample
         Console.WriteLine(kebabCaseUpperJson);
     }
 
-    private static void JsonSerializationOptionReadOnlyTest()
+    private static void JsonSerializerOptionsReadOnlyTest()
     {
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
         {
