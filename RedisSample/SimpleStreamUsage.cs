@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WeihanLi.Common.Helpers;
 using WeihanLi.Extensions;
+using WeihanLi.Extensions.Dump;
 
 namespace RedisSample
 {
