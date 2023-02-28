@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Collections.Frozen;
+﻿using System.Collections.Frozen;
 
 namespace Net8Sample;
 
