@@ -14,7 +14,9 @@ public static class CorrelationIdSample
         SerilogHelper.LogInit(configuration =>
         {
             configuration.Enrich.With<CorrelationIdEnricher>();
-            configuration.WriteTo.Console(LogEventLevel.Information, "[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}");
+            configuration.WriteTo.Console(LogEventLevel.Information
+                 , "[{Timestamp:HH:mm:ss} {Level:u3}] ({CorrelationId} - {CorrelationId2}) {Message:lj}{NewLine}{Exception}"
+            );
         });
 
         var serviceCollection = new ServiceCollection()
@@ -42,6 +44,8 @@ public static class CorrelationIdSample
         {
             logger.LogInformation("Correlation 2-1");
 
+            await Task.Delay(100);
+
             var httpClient = provider.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("test");
             using var response = await httpClient.GetAsync("/health");
@@ -62,12 +66,14 @@ file static class ServiceScopeExtensions
         var scope = serviceProvider.CreateScope();
         try
         {
-            var correlationId = Guid.NewGuid().ToString();
-            CorrelationContextAccessor.Context = new CorrelationContext();
-            action.Invoke(scope, correlationId);
+            var correlationContext = new CorrelationContext();
+            CorrelationContextAccessor.Context = correlationContext;
+            CorrelationIdAccessor.CorrelationId = correlationContext.CorrelationId;
+            action.Invoke(scope, correlationContext.CorrelationId);
         }
         finally
         {
+            CorrelationIdAccessor.CorrelationId = null;
             CorrelationContextAccessor.Context = null;
             scope.Dispose();
         }
@@ -80,11 +86,13 @@ file static class ServiceScopeExtensions
         {
             var correlationContext = new CorrelationContext();
             CorrelationContextAccessor.Context = correlationContext;
+            CorrelationIdAccessor.CorrelationId = correlationContext.CorrelationId;
             await action.Invoke(scope, correlationContext.CorrelationId);
         }
         finally
         {
             CorrelationContextAccessor.Context = null;
+            CorrelationIdAccessor.CorrelationId = null;
             scope.Dispose();
         }
     }
@@ -101,39 +109,24 @@ file sealed class CorrelationContext
 }
 file sealed class CorrelationContextAccessor
 {
-    public const string Name = "CorrelationId";
-    
-    private static readonly AsyncLocal<ContextHolder> ContextCurrent = new();
-    
+    private static readonly AsyncLocal<CorrelationContext> ContextCurrent = new();
+
     public static CorrelationContext? Context
     {
-        get
-        {
-            return ContextCurrent.Value?.Value;
-        }
-        set
-        {
-            var holder = ContextCurrent.Value;
-            if (holder != null)
-            {
-                // Clear current Value trapped in the AsyncLocals, as its done.
-                holder.Value = null;
-            }
-            if (value != null)
-            {
-                // Use an object indirection to hold the Value in the AsyncLocal,
-                // so it can be cleared in all ExecutionContexts when its cleared.
-                ContextCurrent.Value = new ContextHolder
-                {
-                    Value = value
-                };
-            }
-        }
+        get => ContextCurrent.Value;
+        set => ContextCurrent.Value = value;
     }
-    
-    private sealed class ContextHolder
+}
+
+
+file sealed class CorrelationIdAccessor
+{
+    private static readonly AsyncLocal<string> ContextCurrent = new();
+
+    public static string? CorrelationId
     {
-        public CorrelationContext Value;
+        get => ContextCurrent.Value;
+        set => ContextCurrent.Value = value;
     }
 }
 
@@ -169,6 +162,16 @@ file sealed class CorrelationIdEnricher : ILogEventEnricher
                     nameof(CorrelationContext.CorrelationId), 
                     correlationContext.CorrelationId)
                 );
+        }
+        
+        //
+        if (CorrelationIdAccessor.CorrelationId != null)
+        {
+            logEvent.AddPropertyIfAbsent(
+                propertyFactory.CreateProperty(
+                    "CorrelationId2", 
+                    CorrelationIdAccessor.CorrelationId)
+            );
         }
     }
 }
