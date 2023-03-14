@@ -71,7 +71,7 @@ var mdContent = prList.GroupBy(g => new
 })
 .OrderBy(g => g.Key.RepoName)
 .Select(g => $@"- [{g.Key.RepoName}]({g.Key.RepoUrl})
-{g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title} <{x.Url}>").StringJoin(Environment.NewLine)}
+{g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title}({x.ClosedAt:yyyyMMdd}) <{x.Url}>").StringJoin(Environment.NewLine)}
 ")
 .StringJoin(Environment.NewLine);
 
