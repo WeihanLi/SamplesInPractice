@@ -1,5 +1,6 @@
 ﻿using Net8Sample;
 
-JsonSample.MainTest();
+// JsonSample.MainTest();
+DataAnnotationSample.MainTest();
 
 Console.WriteLine("Hello, World!");
