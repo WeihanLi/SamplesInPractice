@@ -22,26 +22,26 @@ public class ParamsSample
 
         InvokeHelper.TryInvoke(() =>
         {
-            var str = string.Format(format, new[]{1, 2});
+            var str = string.Format(format, new[] { "1", "2" });
             Console.WriteLine(str);
         });
-        
+
         InvokeHelper.TryInvoke(() =>
         {
-            var str = string.Format(format,  new []{"1", "2"});
-            Console.WriteLine(str); 
+            var str = string.Format(format, new[] { 1, 2 });
+            Console.WriteLine(str);
         });
-        
+
         InvokeHelper.TryInvoke(() =>
         {
-            var str = string.Format(format,  new []{1, 2}.Cast<object>().ToArray());
-            Console.WriteLine(str); 
+            var str = string.Format(format, new[] { 1, 2 }.Cast<object>().ToArray());
+            Console.WriteLine(str);
         });
-        
+
         InvokeHelper.TryInvoke(() =>
         {
-            var str = string.Format(format, new object[]{1, 2});
-            Console.WriteLine(str); 
+            var str = string.Format(format, new object[] { 1, 2 });
+            Console.WriteLine(str);
         });
     }
 
@@ -49,8 +49,8 @@ public class ParamsSample
     {
         ParamsMethod(1, 2, 3);
         ParamsMethod(new[] { 1, 2, 3 });
-        ParamsMethod(new[]{"1","2","3"});
-        ParamsMethod(new object[]{1, 2, 3});
+        ParamsMethod(new[] { "1", "2", "3" });
+        ParamsMethod(new object[] { 1, 2, 3 });
     }
 
     private static void ParamsMethod(params object[] args)
@@ -60,6 +60,7 @@ public class ParamsSample
             Console.WriteLine("Empty");
             return;
         }
+
         Console.WriteLine(args.Length);
     }
 }
