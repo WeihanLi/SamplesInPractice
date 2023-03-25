@@ -13,6 +13,11 @@ public class ParamsSample
 
     private static void StringFormatTest()
     {
+        InvokeHelper.OnInvokeException = ex =>
+        {
+            ConsoleHelper.InvokeWithConsoleColor(() => Console.WriteLine(ex), ConsoleColor.Red);
+        };
+        
         var format = "{0} 123 {1}";
         InvokeHelper.TryInvoke(() =>
         {
@@ -32,11 +37,11 @@ public class ParamsSample
             Console.WriteLine(str);
         });
 
-        InvokeHelper.TryInvoke(() =>
-        {
-            var str = string.Format(format, new[] { 1, 2 }.Cast<object>().ToArray());
-            Console.WriteLine(str);
-        });
+        // InvokeHelper.TryInvoke(() =>
+        // {
+        //     var str = string.Format(format, new[] { 1, 2 }.Cast<object>().ToArray());
+        //     Console.WriteLine(str);
+        // });
 
         InvokeHelper.TryInvoke(() =>
         {
@@ -55,12 +60,6 @@ public class ParamsSample
 
     private static void ParamsMethod(params object[] args)
     {
-        if (args is null)
-        {
-            Console.WriteLine("Empty");
-            return;
-        }
-
         Console.WriteLine(args.Length);
     }
 }
