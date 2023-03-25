@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using WeihanLi.Common.Logging.Serilog;
+using WeihanLi.Extensions;
 
 namespace BalabalaSample;
 
@@ -15,7 +16,7 @@ public static class CorrelationIdSample
         {
             configuration.Enrich.With<CorrelationIdEnricher>();
             configuration.WriteTo.Console(LogEventLevel.Information
-                 , "[{Timestamp:HH:mm:ss} {Level:u3}] ({CorrelationId} - {CorrelationId2}) {Message:lj}{NewLine}{Exception}"
+                 , "[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}"
             );
         });
 
@@ -49,6 +50,13 @@ public static class CorrelationIdSample
             var httpClient = provider.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("test");
             using var response = await httpClient.GetAsync("/health");
+            var httpRequestId = string.Empty;
+            if(response.RequestMessage?.Headers.Contains(CorrelationIdHttpHandler.RequestIdHeaderName) == true);
+            {
+                httpRequestId = 
+                    response.RequestMessage.Headers.GetValues(CorrelationIdHttpHandler.RequestIdHeaderName).StringJoin(",");
+            }
+            Console.WriteLine($"HttpRequestId: {httpRequestId}");
             var responseText = await response.Content.ReadAsStringAsync();
             logger.LogInformation("ApiResponse: {responseStatus} {responseText}", response.StatusCode.ToString(), responseText);
             
@@ -68,12 +76,10 @@ file static class ServiceScopeExtensions
         {
             var correlationContext = new CorrelationContext();
             CorrelationContextAccessor.Context = correlationContext;
-            CorrelationIdAccessor.CorrelationId = correlationContext.CorrelationId;
             action.Invoke(scope, correlationContext.CorrelationId);
         }
         finally
         {
-            CorrelationIdAccessor.CorrelationId = null;
             CorrelationContextAccessor.Context = null;
             scope.Dispose();
         }
@@ -86,13 +92,11 @@ file static class ServiceScopeExtensions
         {
             var correlationContext = new CorrelationContext();
             CorrelationContextAccessor.Context = correlationContext;
-            CorrelationIdAccessor.CorrelationId = correlationContext.CorrelationId;
             await action.Invoke(scope, correlationContext.CorrelationId);
         }
         finally
         {
             CorrelationContextAccessor.Context = null;
-            CorrelationIdAccessor.CorrelationId = null;
             scope.Dispose();
         }
     }
@@ -118,7 +122,6 @@ file sealed class CorrelationContextAccessor
     }
 }
 
-
 file sealed class CorrelationIdAccessor
 {
     private static readonly AsyncLocal<string> ContextCurrent = new();
@@ -132,7 +135,7 @@ file sealed class CorrelationIdAccessor
 
 public sealed class CorrelationIdHttpHandler : DelegatingHandler
 {
-    private const string RequestIdHeaderName = "x-request-id";
+    public const string RequestIdHeaderName = "x-request-id";
     private const string OriginalRequestIdHeaderName = "x-request-id-original";
     
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -162,16 +165,6 @@ file sealed class CorrelationIdEnricher : ILogEventEnricher
                     nameof(CorrelationContext.CorrelationId), 
                     correlationContext.CorrelationId)
                 );
-        }
-        
-        //
-        if (CorrelationIdAccessor.CorrelationId != null)
-        {
-            logEvent.AddPropertyIfAbsent(
-                propertyFactory.CreateProperty(
-                    "CorrelationId2", 
-                    CorrelationIdAccessor.CorrelationId)
-            );
         }
     }
 }
