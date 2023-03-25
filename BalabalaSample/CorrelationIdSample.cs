@@ -14,21 +14,19 @@ public static class CorrelationIdSample
     {
         SerilogHelper.LogInit(configuration =>
         {
-            configuration.Enrich.With<CorrelationIdEnricher>();
+            configuration.Enrich.With<CorrelationEnricher>();
             configuration.WriteTo.Console(LogEventLevel.Information
-                 , "[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}"
+                , "[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}"
             );
         });
 
         var serviceCollection = new ServiceCollection()
-            .AddLogging(builder => builder.AddSerilog())
-            .AddTransient<CorrelationIdHttpHandler>()
+                .AddLogging(builder => builder.AddSerilog())
+                .AddTransient<CorrelationHttpHandler>()
             ;
-        serviceCollection.AddHttpClient("test", client =>
-            {
-                client.BaseAddress = new Uri("https://reservation.weihanli.xyz");
-            })
-            .AddHttpMessageHandler<CorrelationIdHttpHandler>();
+        serviceCollection.AddHttpClient("test",
+                client => { client.BaseAddress = new Uri("https://reservation.weihanli.xyz"); })
+            .AddHttpMessageHandler<CorrelationHttpHandler>();
         await using var provider = serviceCollection.BuildServiceProvider();
 
         var logger = provider.GetRequiredService<ILoggerFactory>().CreateLogger(typeof(CorrelationIdSample));
@@ -47,29 +45,32 @@ public static class CorrelationIdSample
 
             await Task.Delay(100);
 
-            var httpClient = provider.GetRequiredService<IHttpClientFactory>()
+            var httpClient = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>()
                 .CreateClient("test");
             using var response = await httpClient.GetAsync("/health");
             var httpRequestId = string.Empty;
-            if(response.RequestMessage?.Headers.Contains(CorrelationIdHttpHandler.RequestIdHeaderName) == true);
+            if (response.RequestMessage?.Headers.Contains(CorrelationHttpHandler.RequestIdHeaderName) == true)
             {
-                httpRequestId = 
-                    response.RequestMessage.Headers.GetValues(CorrelationIdHttpHandler.RequestIdHeaderName).StringJoin(",");
+                httpRequestId =
+                    response.RequestMessage.Headers.GetValues(CorrelationHttpHandler.RequestIdHeaderName)
+                        .StringJoin(",");
             }
             Console.WriteLine($"HttpRequestId: {httpRequestId}");
             var responseText = await response.Content.ReadAsStringAsync();
-            logger.LogInformation("ApiResponse: {responseStatus} {responseText}", response.StatusCode.ToString(), responseText);
-            
+            logger.LogInformation("ApiResponse: {responseStatus} {responseText}", response.StatusCode.ToString(),
+                responseText);
+
             logger.LogInformation("Correlation 2-2");
         });
-        
+
         logger.LogInformation("Hello 4567");
     }
 }
 
 file static class ServiceScopeExtensions
 {
-    public static void ExecuteWithCorrelationScope(this IServiceProvider serviceProvider, Action<IServiceScope, string> action)
+    public static void ExecuteWithCorrelationScope(this IServiceProvider serviceProvider,
+        Action<IServiceScope, string> action)
     {
         var scope = serviceProvider.CreateScope();
         try
@@ -84,8 +85,9 @@ file static class ServiceScopeExtensions
             scope.Dispose();
         }
     }
-    
-    public static async Task ExecuteWithCorrelationScopeAsync(this IServiceProvider serviceProvider, Func<IServiceScope, string, Task> action)
+
+    public static async Task ExecuteWithCorrelationScopeAsync(this IServiceProvider serviceProvider,
+        Func<IServiceScope, string, Task> action)
     {
         var scope = serviceProvider.CreateScope();
         try
@@ -108,9 +110,10 @@ file sealed class CorrelationContext
     {
         CorrelationId = Guid.NewGuid().ToString();
     }
-    
+
     public string CorrelationId { get; }
 }
+
 file sealed class CorrelationContextAccessor
 {
     private static readonly AsyncLocal<CorrelationContext> ContextCurrent = new();
@@ -133,12 +136,13 @@ file sealed class CorrelationIdAccessor
     }
 }
 
-public sealed class CorrelationIdHttpHandler : DelegatingHandler
+public sealed class CorrelationHttpHandler : DelegatingHandler
 {
     public const string RequestIdHeaderName = "x-request-id";
     private const string OriginalRequestIdHeaderName = "x-request-id-original";
-    
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
         if (CorrelationContextAccessor.Context != null)
         {
@@ -148,12 +152,15 @@ public sealed class CorrelationIdHttpHandler : DelegatingHandler
                 request.Headers.Add(OriginalRequestIdHeaderName, originalRequestId);
                 request.Headers.Remove(RequestIdHeaderName);
             }
+
             request.Headers.Add(RequestIdHeaderName, correlationId);
         }
+
         return base.SendAsync(request, cancellationToken);
     }
 }
-file sealed class CorrelationIdEnricher : ILogEventEnricher
+
+file sealed class CorrelationEnricher : ILogEventEnricher
 {
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
@@ -162,9 +169,9 @@ file sealed class CorrelationIdEnricher : ILogEventEnricher
         {
             logEvent.AddPropertyIfAbsent(
                 propertyFactory.CreateProperty(
-                    nameof(CorrelationContext.CorrelationId), 
+                    nameof(CorrelationContext.CorrelationId),
                     correlationContext.CorrelationId)
-                );
+            );
         }
     }
 }
