@@ -31,14 +31,13 @@ public static class SourceGeneratorSample
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
 
         var assemblyName = $"MyApp.{Guid.NewGuid()}";
-
-        // Add a reference to the System.Text.RegularExpressions assembly
         IEnumerable<PortableExecutableReference> references = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => !a.IsDynamic)
                 .Select(a => MetadataReference.CreateFromFile(a.Location))
                 .ToArray();
-
+        // Add a reference to the System.Text.RegularExpressions assembly
         var regexReference = MetadataReference.CreateFromFile(typeof(GeneratedRegexAttribute).Assembly.Location);
+        System.Console.WriteLine(regexReference.FilePath);
 
         references = references.Append(regexReference);
 
@@ -53,11 +52,12 @@ public static class SourceGeneratorSample
 
 
         var generator = generatorAssembly.GetType("System.Text.RegularExpressions.Generator.RegexGenerator");
+        ArgumentNullException.ThrowIfNull(generator);
 
         var generatorInstance = generator.CreateInstance<IIncrementalGenerator>();
 
+        ArgumentNullException.ThrowIfNull(generatorInstance);
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generatorInstance);
-
 
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
 
