@@ -8,7 +8,7 @@ InvokeHelper.OnInvokeException = ex =>
 // ListForEachSample.MainTest();
 // await ListForEachSample.MainTestAsync();
 
-await CorrelationIdSample.MainTest();
+await CorrelationIdSampleV2.MainTest();
 
 // ParamsSample.MainTest();
 
