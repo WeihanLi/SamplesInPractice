@@ -18,9 +18,10 @@ public static class CorrelationIdSampleV2
     {
         using var tracerProvider = Sdk.CreateTracerProviderBuilder()
             .ConfigureResource(x => x.AddService("BalabalaSample"))
-            .AddSource("System.*")
-            .AddSource("Microsoft.*")
+            // .AddSource("System.*")
+            // .AddSource("Microsoft.*")
             .AddSource(ServiceScopeExtensions.ActivitySource.Name)
+            .AddHttpClientInstrumentation()
             .AddConsoleExporter()
             .Build();
 
