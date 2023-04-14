@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
 using NuGet.Repositories;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -37,19 +38,17 @@ public static class SourceGeneratorSample
                 .ToArray();
         // Add a reference to the System.Text.RegularExpressions assembly
         var regexReference = MetadataReference.CreateFromFile(typeof(GeneratedRegexAttribute).Assembly.Location);
-        System.Console.WriteLine(regexReference.FilePath);
-
+        Console.WriteLine(regexReference.FilePath);
+        
         references = references.Append(regexReference);
-
-        var inputCompilation = CSharpCompilation.Create(
-            assemblyName,
-            syntaxTrees: new[] { syntaxTree },
-            references: references,
-            options: new CSharpCompilationOptions(OutputKind.ConsoleApplication));
-
+        
         var generatorAssemblyPath = @"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.0-preview.3.23174.8\analyzers\dotnet\cs\System.Text.RegularExpressions.Generator.dll";
-        var generatorAssembly = Assembly.LoadFile(generatorAssemblyPath);
+        
+        var analyzerReference = new AnalyzerFileReference(generatorAssemblyPath, new AnalyzerAssemblyLoader());
+        var generators = analyzerReference.GetGenerators(LanguageNames.CSharp);
+        Console.WriteLine(generators.Select(x=>x.ToString()).StringJoin(", "));
 
+        var generatorAssembly = Assembly.LoadFile(generatorAssemblyPath);
 
         var generator = generatorAssembly.GetType("System.Text.RegularExpressions.Generator.RegexGenerator");
         ArgumentNullException.ThrowIfNull(generator);
@@ -57,6 +56,11 @@ public static class SourceGeneratorSample
         var generatorInstance = generator.CreateInstance<IIncrementalGenerator>();
 
         ArgumentNullException.ThrowIfNull(generatorInstance);
+        var inputCompilation = CSharpCompilation.Create(
+            assemblyName,
+            syntaxTrees: new[] { syntaxTree },
+            references: references,
+            options: new CSharpCompilationOptions(OutputKind.ConsoleApplication));
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generatorInstance);
 
         driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
@@ -79,5 +83,17 @@ public static class SourceGeneratorSample
                 Console.WriteLine(diagnostic.ToString());
             }
         }
+    }
+}
+
+file class AnalyzerAssemblyLoader : IAnalyzerAssemblyLoader
+{
+    public Assembly LoadFromPath(string fullPath)
+    {
+        return Assembly.LoadFile(fullPath);
+    }
+
+    public void AddDependencyLocation(string fullPath)
+    {
     }
 }
