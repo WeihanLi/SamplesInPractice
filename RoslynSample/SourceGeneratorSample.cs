@@ -1,6 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using NuGet.Repositories;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using WeihanLi.Extensions;
 
 namespace RoslynSample;
 
@@ -30,31 +33,43 @@ public static class SourceGeneratorSample
         var assemblyName = $"MyApp.{Guid.NewGuid()}";
 
         // Add a reference to the System.Text.RegularExpressions assembly
-        var references = new MetadataReference[]
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(System.Text.RegularExpressions.Regex).Assembly.Location),
-        };
+        IEnumerable<PortableExecutableReference> references = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => !a.IsDynamic)
+                .Select(a => MetadataReference.CreateFromFile(a.Location))
+                .ToArray();
 
-        // Add a reference to the project that contains the source generator
-        var generatorProjectPath = @"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.0-preview.3.23174.8\analyzers\dotnet\cs\System.Text.Json.SourceGeneration.dll";
-        var projectReference = MetadataReference.CreateFromFile(generatorProjectPath);
+        var regexReference = MetadataReference.CreateFromFile(typeof(GeneratedRegexAttribute).Assembly.Location);
 
-        var compilation = CSharpCompilation.Create(
+        references = references.Append(regexReference);
+
+        var inputCompilation = CSharpCompilation.Create(
             assemblyName,
             syntaxTrees: new[] { syntaxTree },
-            references: references.Append(projectReference),
+            references: references,
             options: new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
+        var generatorAssemblyPath = @"C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.0-preview.3.23174.8\analyzers\dotnet\cs\System.Text.RegularExpressions.Generator.dll";
+        var generatorAssembly = Assembly.LoadFile(generatorAssemblyPath);
+
+
+        var generator = generatorAssembly.GetType("System.Text.RegularExpressions.Generator.RegexGenerator");
+
+        var generatorInstance = generator.CreateInstance<IIncrementalGenerator>();
+
+        GeneratorDriver driver = CSharpGeneratorDriver.Create(generatorInstance);
+
+
+        driver = driver.RunGeneratorsAndUpdateCompilation(inputCompilation, out var outputCompilation, out var diagnostics);
+
+
         using var ms = new MemoryStream();
-        var result = compilation.Emit(ms);
+        var result = outputCompilation.Emit(ms);
 
         if (result.Success)
         {
             ms.Seek(0, System.IO.SeekOrigin.Begin);
             var assembly = Assembly.Load(ms.ToArray());
-            assembly.EntryPoint?.Invoke(null, Array.Empty<object>());
+            assembly.EntryPoint?.Invoke(null, new[] { new string[] { } });
         }
         else
         {
