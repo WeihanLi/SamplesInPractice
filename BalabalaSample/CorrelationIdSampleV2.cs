@@ -16,6 +16,21 @@ public static class CorrelationIdSampleV2
 {
     public static async Task MainTest()
     {
+        // using var activityListener = new ActivityListener();
+        // activityListener.ShouldListenTo = _ => true;
+        // activityListener.ActivityStarted = activity =>
+        // {
+        //     Console.WriteLine($"activity {activity.DisplayName} started, activityId: {activity.Id}, traceId: {activity.TraceId}");
+        // };
+        // activityListener.ActivityStopped = activity =>
+        // {
+        //     Console.WriteLine($"activity {activity.DisplayName} stopped, activityId: {activity.Id}, traceId: {activity.TraceId}");
+        // };
+        // activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData;
+        // ActivitySource.AddActivityListener(activityListener);
+        // Console.WriteLine(ServiceScopeExtensions.ActivitySource.HasListeners());
+        // Console.ReadLine();
+
         using var tracerProvider = Sdk.CreateTracerProviderBuilder()
             .ConfigureResource(x => x.AddService("BalabalaSample"))
             // .AddSource("System.*")
