@@ -100,7 +100,6 @@ file static class ServiceScopeExtensions
         var activity = ActivitySource.StartActivity();
         try
         {
-            activity?.Start();
             action.Invoke(scope, activity?.TraceId.ToString() ?? Guid.NewGuid().ToString());
         }
         finally
@@ -117,7 +116,6 @@ file static class ServiceScopeExtensions
         var activity = ActivitySource.StartActivity();
         try
         {
-            activity?.Start();
             await action.Invoke(scope, activity?.TraceId.ToString() ?? Guid.NewGuid().ToString());
         }
         finally
