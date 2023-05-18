@@ -36,18 +36,18 @@ file sealed class Request
     public Guid CustomerId { get; set; }
 
     [AllowedValues("Dev", "Test", "Production")]
-    public string RequestType { get; set; }
+    public string? RequestType { get; set; }
 
     [DeniedValues("Admin", "Administrator")]
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     [Range(0d, 1d, MaximumIsExclusive = true, MinimumIsExclusive = false)]
     public double LuckyRate { get; set; }
     
     [Required]
     [Base64String]
-    public string Image { get; set; }
+    public string? Image { get; set; }
 
     [Length(1, 10)]
-    public string[] Items { get; set; }
+    public string[]? Items { get; set; }
 }
