@@ -5,6 +5,6 @@ public class UsingAliasAnyTypeSample
     public static void MainTest()
     {
         Point point = (3, 4);
-        Console.WriteLine(point);
+        Console.WriteLine($"({point.X}, {point.Y})");
     }
 }
