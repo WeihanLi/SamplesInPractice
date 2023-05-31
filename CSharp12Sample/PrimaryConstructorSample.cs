@@ -1,6 +1,8 @@
-﻿namespace CSharp12Sample;
+﻿using WeihanLi.Common;
 
-public class PrimaryConstructorSample
+namespace CSharp12Sample;
+
+public static class PrimaryConstructorSample
 {
     public static void MainTest()
     {
@@ -11,6 +13,10 @@ public class PrimaryConstructorSample
 
         var point = new Point(2, 2);
         Console.WriteLine(point);
+
+        var helper = new CrudHelper<int>();
+        var result = helper.Create(1);
+        Console.WriteLine(result);
     }
 }
 
@@ -27,4 +33,16 @@ file struct Point(int x, int y)
     public int Y => y;
 
     public override string ToString() => $"({X}, {Y})";
+}
+
+file sealed class CrudHelper<T>(IIdGenerator idGenerator)
+{
+    public CrudHelper(): this(GuidIdGenerator.Instance)
+    {
+    }
+    public string Create(T t)
+    {
+        // Biu...
+        return idGenerator.NewId();
+    }
 }
