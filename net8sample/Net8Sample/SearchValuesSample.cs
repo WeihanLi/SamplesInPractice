@@ -11,7 +11,7 @@ public class IndexOfAnyValueSample
         var i = "Hello".IndexOfAny(chars);
         Console.WriteLine(i);
         
-        var chars2 = IndexOfAnyValues.Create("-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz");
+        var chars2 = SearchValues.Create("-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz");
         var i2 = "Hello".AsSpan().IndexOfAny(chars2);
         Console.WriteLine(i2);
     }

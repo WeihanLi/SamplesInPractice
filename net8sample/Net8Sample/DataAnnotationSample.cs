@@ -32,7 +32,7 @@ public static class DataAnnotationSample
 
 file sealed class Request
 {
-    [Required(DisallowAllDefaultValues = true)]
+    [Required]
     public Guid CustomerId { get; set; }
 
     [AllowedValues("Dev", "Test", "Production")]
