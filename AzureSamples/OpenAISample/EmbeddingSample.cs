@@ -59,7 +59,7 @@ public static class EmbeddingSample
 
     private static async Task QuestionAnswerDemo(IOpenAIService openAIService)
     {
-        var input = GetInput();
+        var input = Helpers.GetInput();
         while (input.IsNotNullOrEmpty() && input != "q")
         {
             var question = input.Replace("\r\n", " ").Replace("\n", " ").Trim();
@@ -94,7 +94,7 @@ public static class EmbeddingSample
                     
                 }
 
-                input = GetInput();
+                input = Helpers.GetInput();
             }
             else
             {
@@ -104,15 +104,6 @@ public static class EmbeddingSample
             }
         }
         Console.WriteLine("Completed");
-    }
-
-    private static string? GetInput(string? prompt = null)
-    {
-        Console.WriteLine();
-        Console.WriteLine(prompt ?? "Press your questions here");
-        var input = Console.ReadLine();
-        Console.WriteLine();
-        return input;
     }
 
     private static async Task<string[]> VectorSearchInMemory(List<double> inputVector, int n)
