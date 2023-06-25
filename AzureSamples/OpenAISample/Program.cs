@@ -18,6 +18,12 @@ services.AddOpenAIService(options =>
     options.DeploymentId = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_ID");
     options.ApiVersion = Environment.GetEnvironmentVariable("AZURE_OPENAI_API_VERSION") ?? "2023-03-15-preview";
 });
+// services.AddOpenAIService(options =>
+// {
+//     options.ProviderType = ProviderType.OpenAi;
+//     options.ApiKey = Guard.NotNull(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY"));
+//     options.BaseDomain = "https://aoai-proxy.weihanli.xyz";
+// });
 await using var applicationServices = services.BuildServiceProvider();
 
 await EmbeddingSample.MainTest(applicationServices.GetRequiredService<IOpenAIService>());
