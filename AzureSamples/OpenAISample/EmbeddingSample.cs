@@ -9,8 +9,6 @@ namespace OpenAISample;
 
 public static class EmbeddingSample
 {
-    private const string QAPrompt = @"";
-    
     public static async Task MainTest(IOpenAIService openAIService)
     {
         // await GenerateEmbedding(openAIService);
@@ -79,19 +77,21 @@ public static class EmbeddingSample
                 var answers = await VectorSearchInMemory(questionVector, 3);
                 if (answers.IsNullOrEmpty())
                 {
-                    Console.WriteLine("No related answer found");
+                    Console.WriteLine("No answer found");
                 }
                 else
                 {
-                    Console.WriteLine("Answers found here");
-                    foreach (var answer in answers)
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine(answer);
-                    }
-                    
                     // chatgpt
-                    
+                    var answerSelected = await GetSemanticAnswer(question, answers, openAIService);
+                    if (string.IsNullOrEmpty(answerSelected) || "No answer found".Equals(answerSelected))
+                    {
+                        Console.WriteLine("No related answer found");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Here's the answers found:");
+                        Console.WriteLine(answerSelected);
+                    }
                 }
 
                 input = Helpers.GetInput();
@@ -131,6 +131,40 @@ public static class EmbeddingSample
         // return sum;
         
         return Distance.Cosine(p1.ToArray(), p2.ToArray());
+    }
+    
+    private const string QuestionPromptFormat = """
+                                    Please help choose one answer from the following candidates according to the question
+                                    {0}
+                                    If all the candidates are not applicatable, please return "No answer found"
+                                    Answer candidates are as follows:
+                                    {1}
+                                    """;
+    private static async Task<string> GetSemanticAnswer(string question, string[] answerCandidates, IOpenAIService openAIService)
+    {
+        var prompt = QuestionPromptFormat.FormatWith(question, answerCandidates.Select((a, i) => $"{i}: {a}"))
+            .StringJoin(Environment.NewLine);
+        
+        var response = await openAIService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest()
+        {
+            Model = Models.ChatGpt3_5Turbo,
+            Messages = new List<ChatMessage>()
+            {
+                ChatMessage.FromUser(prompt)
+            }
+        });
+        if (response.Successful)
+        {
+            var answer = response.Choices.First().Message.Content;
+            // Console.WriteLine(answer);
+            return answer;
+        }
+        else
+        {
+            Console.WriteLine("Errored:");
+            Console.WriteLine(response.Error.ToJson());
+            return string.Empty;
+        }
     }
 }
 

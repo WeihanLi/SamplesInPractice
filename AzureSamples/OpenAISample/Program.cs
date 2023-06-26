@@ -27,7 +27,7 @@ services.AddOpenAIService(options =>
 await using var applicationServices = services.BuildServiceProvider();
 var openAIService = applicationServices.GetRequiredService<IOpenAIService>();
 
-await ChatCompletionSample.MainTest(openAIService);
-// await EmbeddingSample.MainTest(openAIService);
+// await ChatCompletionSample.MainTest(openAIService);
+await EmbeddingSample.MainTest(openAIService);
 
 Console.WriteLine("Hello, World!");

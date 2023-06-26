@@ -33,7 +33,6 @@ public static class ChatCompletionSample
             {
                 ChatMessage.FromSystem(
                     "You're an excellent content creator, you would help generate a post from a topic"),
-                ChatMessage.FromAssistant("Sure"),
                 ChatMessage.FromUser($"Please generate a post with about 300 words from the topic: {prompt}")
             }
         });
