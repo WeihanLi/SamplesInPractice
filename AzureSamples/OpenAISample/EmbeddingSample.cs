@@ -3,6 +3,7 @@ using OpenAI.Interfaces;
 using OpenAI.ObjectModels;
 using OpenAI.ObjectModels.RequestModels;
 using System.Text.Json;
+using WeihanLi.Common;
 using WeihanLi.Extensions;
 
 namespace OpenAISample;
@@ -11,7 +12,12 @@ public static class EmbeddingSample
 {
     public static async Task MainTest(IOpenAIService openAIService)
     {
-        // await GenerateEmbedding(openAIService);
+        if (!File.Exists("./data/text-sample-with-embeddings.json"))
+        {
+            Console.WriteLine("embeddings not found, generate embeddings now");
+            await GenerateEmbedding(openAIService);
+        }
+        
         await QuestionAnswerDemo(openAIService);
     }
 
@@ -81,7 +87,6 @@ public static class EmbeddingSample
                 }
                 else
                 {
-                    // chatgpt
                     var answerSelected = await GetSemanticAnswer(question, answers, openAIService);
                     if (string.IsNullOrEmpty(answerSelected) || "No answer found".Equals(answerSelected))
                     {
@@ -108,8 +113,9 @@ public static class EmbeddingSample
 
     private static async Task<string[]> VectorSearchInMemory(List<double> inputVector, int n)
     {
-        using var fs = File.OpenRead("./data/text-sample-with-embeddings.json");
+        await using var fs = File.OpenRead("./data/text-sample-with-embeddings.json");
         var dataList = await JsonSerializer.DeserializeAsync<SampleTextData[]>(fs);
+        Guard.NotNull(dataList);
         var selectedAnswers = dataList.Where(x => x.ContentVector != null)
             .Select(x => new { x.Content, Distance = GetDistance(x.ContentVector!, inputVector) })
             .OrderBy(x => x.Distance)
