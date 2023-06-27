@@ -142,7 +142,7 @@ public static class EmbeddingSample
     private const string QuestionPromptFormat = """
                                     Please help choose one answer from the following candidates according to the question
                                     {0}
-                                    If all the candidates are not applicatable, please return "No answer found"
+                                    If all the candidates do not make sense, please just say "No answer found"
                                     Answer candidates are as follows:
                                     {1}
                                     """;
