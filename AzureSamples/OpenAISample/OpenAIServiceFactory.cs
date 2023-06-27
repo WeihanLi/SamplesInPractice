@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OpenAI;
-using OpenAI.Interfaces;
 using OpenAI.Managers;
 using System.Collections.Concurrent;
 
@@ -11,15 +10,15 @@ namespace OpenAISample;
 
 public interface IOpenAIServiceFactory
 {
-    IOpenAIService GetService(string name);
+    IOpenAIServiceWrapper GetService(string name);
 
-    IOpenAIService GetService();
+    IOpenAIServiceWrapper GetService();
 }
 
 public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
 {
     private static readonly HashSet<string> ServicesRegistered = new();
-    private readonly ConcurrentDictionary<string, OpenAIService> _services = new();
+    private readonly ConcurrentDictionary<string, OpenAIServiceWrapper> _services = new();
 
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOptionsMonitor<OpenAiOptions> _openAIOptionsMonitor;
@@ -33,17 +32,17 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         _openAIOptionsMonitor = openAIOptionsMonitor;
     }
 
-    public IOpenAIService GetService(string name)
+    public IOpenAIServiceWrapper GetService(string name)
     {
         return _services.GetOrAdd(name, _ =>
         {
             var httpClient = _httpClientFactory.CreateClient(GetHttpClientName(_));
             var options = _openAIOptionsMonitor.Get(_);
-            return new OpenAIService(options, httpClient);
+            return new OpenAIServiceWrapper(_, new OpenAIService(options, httpClient));
         });
     }
 
-    public IOpenAIService GetService()
+    public IOpenAIServiceWrapper GetService()
     {
         if (ServicesRegistered.Count == 0) throw new InvalidOperationException("No service registered");
 

@@ -10,7 +10,7 @@ var services = new ServiceCollection();
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("openai-config.json")
-    .AddEnvironmentVariables("OpenAISample")
+    .AddEnvironmentVariables("OpenAISample_")
     .Build();
 services.RegisterOpenAIServices(configuration);
 // services.AddOpenAIService(options =>
@@ -22,7 +22,7 @@ services.RegisterOpenAIServices(configuration);
 await using var applicationServices = services.BuildServiceProvider();
 
 var openAIServiceFactory = applicationServices.GetRequiredService<IOpenAIServiceFactory>();
-var openAIService = openAIServiceFactory.GetService("default");
+var openAIService = openAIServiceFactory.GetService("Default");
 
 // await ChatCompletionSample.MainTest(openAIService);
 await EmbeddingSample.MainTest(openAIService);
