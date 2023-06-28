@@ -5,12 +5,14 @@ namespace OpenAISample;
 public interface IOpenAIServiceWrapper: IOpenAIService
 {
     string Name { get; }
+    bool IsRestricted { get; }
     IOpenAIService Service { get; }
 }
 
 public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
 {
     public string Name { get; }
+    public bool IsRestricted { get; set; }
     public IOpenAIService Service { get; }
 
     public OpenAIServiceWrapper(string name, IOpenAIService openAIService)
@@ -19,10 +21,7 @@ public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
         Service = openAIService;
     }
 
-    public void SetDefaultModelId(string modelId)
-    {
-        Service.SetDefaultModelId(modelId);
-    }
+    public void SetDefaultModelId(string modelId) => Service.SetDefaultModelId(modelId);
 
     public IModelService Models => Service.Models;
 

@@ -1,6 +1,7 @@
 ﻿using dotenv.net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenAISample;
 
 // load .env
@@ -12,6 +13,7 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("openai-config.json")
     .AddEnvironmentVariables("OpenAISample_")
     .Build();
+services.AddMemoryCache();
 services.RegisterOpenAIServices(configuration);
 // services.AddOpenAIService(options =>
 // {
@@ -22,9 +24,8 @@ services.RegisterOpenAIServices(configuration);
 await using var applicationServices = services.BuildServiceProvider();
 
 var openAIServiceFactory = applicationServices.GetRequiredService<IOpenAIServiceFactory>();
-var openAIService = openAIServiceFactory.GetService("Default");
 
 // await ChatCompletionSample.MainTest(openAIService);
-await EmbeddingSample.MainTest(openAIService);
+await EmbeddingSample.MainTest(openAIServiceFactory);
 
 Console.WriteLine("Hello, World!");
