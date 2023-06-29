@@ -6,7 +6,7 @@ using Polly.Retry;
 
 namespace OpenAISample;
 
-public interface IOpenAIServiceWrapper: IOpenAIService
+public interface IOpenAIServiceWrapper
 {
     string Name { get; }
     IOpenAIService Service { get; }
@@ -22,28 +22,6 @@ public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
         Name = name;
         Service = openAIService;
     }
-
-    public void SetDefaultModelId(string modelId) => Service.SetDefaultModelId(modelId);
-
-    public IModelService Models => Service.Models;
-
-    public ICompletionService Completions => Service.Completions;
-
-    public IEmbeddingService Embeddings => Service.Embeddings;
-
-    public IFileService Files => Service.Files;
-
-    public IFineTuneService FineTunes => Service.FineTunes;
-
-    public IModerationService Moderation => Service.Moderation;
-
-    public IImageService Image => Service.Image;
-
-    public IEditService Edit => Service.Edit;
-
-    public IChatCompletionService ChatCompletion => Service.ChatCompletion;
-
-    public IAudioService Audio => Service.Audio;
 }
 
 public sealed class EmbeddingServiceWrapper : IEmbeddingService
@@ -69,7 +47,7 @@ public sealed class EmbeddingServiceWrapper : IEmbeddingService
                 return true;
             }
             return false;
-        }).RetryAsync(5);
+        }).RetryAsync(_openAIServiceFactory.ServiceCount);
     }
     
     public async Task<EmbeddingCreateResponse> CreateEmbedding(EmbeddingCreateRequest createEmbeddingModel,
@@ -78,7 +56,7 @@ public sealed class EmbeddingServiceWrapper : IEmbeddingService
         var result = await _retryPolicy.ExecuteAsync(async () =>
         {
             var service = _openAIServiceFactory.GetService();
-            return (service.Name, await service.Embeddings.CreateEmbedding(createEmbeddingModel, cancellationToken));
+            return (service.Name, await service.Service.Embeddings.CreateEmbedding(createEmbeddingModel, cancellationToken));
         });
         return result.Response;
     }
@@ -107,7 +85,7 @@ public sealed class ChatCompletionServiceWrapper : IChatCompletionService
                 return true;
             }
             return false;
-        }).RetryAsync(5);
+        }).RetryAsync(_openAIServiceFactory.ServiceCount);
     }
     
     public async Task<ChatCompletionCreateResponse> CreateCompletion(ChatCompletionCreateRequest chatCompletionCreate, string? modelId = null,
@@ -116,7 +94,7 @@ public sealed class ChatCompletionServiceWrapper : IChatCompletionService
         var result = await _retryPolicy.ExecuteAsync(async () =>
         {
             var service = _openAIServiceFactory.GetService();
-            return (service.Name, await service.ChatCompletion.CreateCompletion(chatCompletionCreate, modelId, cancellationToken));
+            return (service.Name, await service.Service.ChatCompletion.CreateCompletion(chatCompletionCreate, modelId, cancellationToken));
         });
         return result.Response;
     }
@@ -124,6 +102,7 @@ public sealed class ChatCompletionServiceWrapper : IChatCompletionService
     public IAsyncEnumerable<ChatCompletionCreateResponse> CreateCompletionAsStream(ChatCompletionCreateRequest chatCompletionCreate, string? modelId = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        throw new NotImplementedException();
+        return _openAIServiceFactory.GetService().Service.ChatCompletion
+            .CreateCompletionAsStream(chatCompletionCreate, modelId, cancellationToken);
     }
 }

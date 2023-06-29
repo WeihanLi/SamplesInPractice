@@ -14,6 +14,8 @@ namespace OpenAISample;
 
 public interface IOpenAIServiceFactory : IOpenAIService
 {
+    int ServiceCount { get; }
+    
     IOpenAIServiceWrapper GetService();
 
     void RateLimited(string name, TimeSpan expiresIn);
@@ -44,24 +46,15 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         _httpClientFactory = httpClientFactory;
         _openAIOptionsMonitor = openAIOptionsMonitor;
         _memoryCache = memoryCache;
+        
+        EnsureInitialized();
     }
+
+    public int ServiceCount => _services.Count;
 
     public IOpenAIServiceWrapper GetService()
     {
         if (ServicesRegistered.Count == 0) throw new InvalidOperationException("No service registered");
-
-        if (_services.IsEmpty)
-        {
-            foreach (var name in ServicesRegistered)
-            {
-                _services.GetOrAdd(name, _ =>
-                {
-                    var httpClient = _httpClientFactory.CreateClient(GetHttpClientName(_));
-                    var options = _openAIOptionsMonitor.Get(_);
-                    return new OpenAIServiceWrapper(_, new OpenAIService(options, httpClient));
-                });
-            }
-        }
 
         var service = GetServiceInternal();
         if (service != null) return service;
@@ -96,18 +89,44 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
 
     public static void RegisterService(string name) => ServicesRegistered.Add(name);
 
-    public void SetDefaultModelId(string modelId) => throw new NotSupportedException();
+    #region OpenAI Service
+    
+    public void SetDefaultModelId(string modelId)
+    {
+        foreach (var serviceWrapper in _services.Values)
+        {
+            serviceWrapper.Service.SetDefaultModelId(modelId);
+        }
+    }
 
-    public IModelService Models => GetService().Models;
-    public ICompletionService Completions  => GetService().Completions;
+    public IModelService Models => GetService().Service.Models;
+    public ICompletionService Completions  => GetService().Service.Completions;
     public IEmbeddingService Embeddings  => new EmbeddingServiceWrapper(this);
-    public IFileService Files  => GetService().Files;
-    public IFineTuneService FineTunes  => GetService().FineTunes;
-    public IModerationService Moderation  => GetService().Moderation;
-    public IImageService Image  => GetService().Image;
-    public IEditService Edit  => GetService().Edit;
+    public IFileService Files  => GetService().Service.Files;
+    public IFineTuneService FineTunes  => GetService().Service.FineTunes;
+    public IModerationService Moderation  => GetService().Service.Moderation;
+    public IImageService Image  => GetService().Service.Image;
+    public IEditService Edit  => GetService().Service.Edit;
     public IChatCompletionService ChatCompletion  => new ChatCompletionServiceWrapper(this);
-    public IAudioService Audio  => GetService().Audio;
+    public IAudioService Audio  => GetService().Service.Audio;
+    
+    #endregion OpenAI Service
+    
+    private void EnsureInitialized()
+    {
+        if (_services.IsEmpty)
+        {
+            foreach (var name in ServicesRegistered)
+            {
+                _services.GetOrAdd(name, n =>
+                {
+                    var httpClient = _httpClientFactory.CreateClient(GetHttpClientName(n));
+                    var options = _openAIOptionsMonitor.Get(n);
+                    return new OpenAIServiceWrapper(n, new OpenAIService(options, httpClient));
+                });
+            }
+        }
+    }
 }
 
 public static class DependencyInjectionExtensions
@@ -120,7 +139,7 @@ public static class DependencyInjectionExtensions
         {
             services.AddOptions<OpenAiOptions>(name).Bind(config);
             services.AddHttpClient(OpenAIServiceFactory.GetHttpClientName(name))
-                .AddHttpMessageHandler(_ => new CustomRateLimitedHttpHandler(name, _.GetRequiredService<IOpenAIServiceFactory>()));
+                .AddHttpMessageHandler(sp => new CustomRateLimitedHttpHandler(name, sp.GetRequiredService<IOpenAIServiceFactory>()));
 
             OpenAIServiceFactory.RegisterService(name);
         }
