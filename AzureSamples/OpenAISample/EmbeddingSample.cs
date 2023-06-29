@@ -81,6 +81,7 @@ public static class EmbeddingSample
                 var questionVector = response.Data.FirstOrDefault()?.Embedding;
                 ArgumentNullException.ThrowIfNull(questionVector);
                 Console.WriteLine("Question embeddings generated");
+                Console.WriteLine();
                 var answers = await VectorSearchInMemory(questionVector, 3);
                 if (answers.IsNullOrEmpty())
                 {
@@ -164,7 +165,8 @@ public static class EmbeddingSample
             Messages = new List<ChatMessage>()
             {
                 ChatMessage.FromUser(prompt)
-            }
+            },
+            Temperature = 0
         });
         if (response.Successful)
         {

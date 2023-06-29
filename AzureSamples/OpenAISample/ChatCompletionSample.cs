@@ -9,19 +9,17 @@ public static class ChatCompletionSample
 {
     public static async Task MainTest(IOpenAIService openAIService)
     {
-        var input = Helpers.GetInput();
-        while (input.IsNotNullOrEmpty() && input != "q")
+        await Helpers.HandleInputLoopAsync(async input =>
         {
             input = input.Replace("\r\n", " ").Replace("\n", " ").Trim();
             if (string.IsNullOrEmpty(input))
             {
-                break;
+                return false;
             }
 
             await GeneratePost(input, openAIService);
-
-            input = Helpers.GetInput();
-        }
+            return true;
+        }, "Please input your topic to generate a blog post");
     }
 
     private static async Task GeneratePost(string prompt, IOpenAIService openAIService)
@@ -34,7 +32,8 @@ public static class ChatCompletionSample
                 ChatMessage.FromSystem(
                     "You're an excellent content creator, you would help generate a post from a topic"),
                 ChatMessage.FromUser($"Please generate a post with about 300 words from the topic: {prompt}")
-            }
+            },
+            Temperature = 1
         });
         if (response.Successful)
         {
