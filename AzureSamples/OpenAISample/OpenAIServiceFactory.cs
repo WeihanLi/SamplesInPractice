@@ -7,6 +7,7 @@ using OpenAI;
 using OpenAI.Interfaces;
 using OpenAI.Managers;
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Net;
 
 namespace OpenAISample;
@@ -27,6 +28,13 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
     private readonly IOptionsMonitor<OpenAiOptions> _openAIOptionsMonitor;
     private readonly IMemoryCache _memoryCache;
 
+    private static readonly ImmutableArray<TimeSpan> RestrictedDelay = new[]
+    {
+        TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10), 
+        TimeSpan.FromSeconds(15), TimeSpan.FromSeconds(20),
+        TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(40),
+    }.ToImmutableArray();
+    
     public OpenAIServiceFactory(
         IHttpClientFactory httpClientFactory,
         IOptionsMonitor<OpenAiOptions> openAIOptionsMonitor,
@@ -57,17 +65,12 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
 
         var service = GetServiceInternal();
         if (service != null) return service;
-        var delay = new List<TimeSpan>(4)
+
+        var retry = 0;
+        while (service is null && retry < RestrictedDelay.Length)
         {
-            TimeSpan.FromSeconds(5),
-            TimeSpan.FromSeconds(10),
-            TimeSpan.FromSeconds(20),
-            TimeSpan.FromSeconds(30),
-        };
-        while (service is null && delay.Count > 0)
-        {
-            Thread.Sleep(delay[0]);
-            delay.RemoveAt(0);
+            Thread.Sleep(RestrictedDelay[retry]);
+            retry++;
             service = GetServiceInternal();
         }
         return service ?? throw new InvalidOperationException("No valid service found");
@@ -140,9 +143,18 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var responseMessage = await base.SendAsync(request, cancellationToken);
-        if (responseMessage.StatusCode == HttpStatusCode.TooManyRequests)
+        // https://help.openai.com/en/articles/6891839-api-error-code-guidance
+        // https://help.openai.com/en/articles/7416438-rate-limits
+        TimeSpan? expiresIn = responseMessage.StatusCode switch
         {
-            _openAIServiceFactory.RateLimited(_serviceName, TimeSpan.FromMinutes(1));
+            HttpStatusCode.TooManyRequests => TimeSpan.FromMinutes(1),
+            HttpStatusCode.Unauthorized => TimeSpan.MaxValue,
+            HttpStatusCode.NotFound => TimeSpan.MaxValue,
+            _ => null
+        };
+        if (expiresIn.HasValue)
+        {
+            _openAIServiceFactory.RateLimited(_serviceName, expiresIn.Value);   
         }
         return responseMessage;
     }
