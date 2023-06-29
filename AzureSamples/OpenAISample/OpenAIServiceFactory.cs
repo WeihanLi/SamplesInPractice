@@ -55,8 +55,33 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
             }
         }
 
-        return _services.Values.Where(s=> IsRestricted(s.Name)).MinBy(_ => Random.Shared.Next(ServicesRegistered.Count * 10))
-               ?? throw new InvalidOperationException("No valid service found");
+        var service = GetServiceInternal();
+        if (service != null) return service;
+        var delay = new List<TimeSpan>(4)
+        {
+            TimeSpan.FromSeconds(5),
+            TimeSpan.FromSeconds(10),
+            TimeSpan.FromSeconds(20),
+            TimeSpan.FromSeconds(30),
+        };
+        while (service is null && delay.Count > 0)
+        {
+            Thread.Sleep(delay[0]);
+            delay.RemoveAt(0);
+            service = GetServiceInternal();
+        }
+        return service ?? throw new InvalidOperationException("No valid service found");
+
+        IOpenAIServiceWrapper? GetServiceInternal()
+        {
+            var availableServices = _services.Values.Where(s => !IsRestricted(s.Name)).ToArray();
+            return availableServices.Length switch
+            {
+                0 => null,
+                1 => availableServices[0],
+                _ => availableServices[Random.Shared.Next(availableServices.Length)]
+            };
+        }
     }
 
     public void RateLimited(string name, TimeSpan expiresIn) => _memoryCache.Set(GetRestrictedCacheKey(name), string.Empty, expiresIn);
