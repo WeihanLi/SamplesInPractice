@@ -38,19 +38,6 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         _memoryCache = memoryCache;
     }
 
-    public IOpenAIServiceWrapper GetService(string name)
-    {
-        return _services.GetOrAdd(name, _ =>
-        {
-            var httpClient = _httpClientFactory.CreateClient(GetHttpClientName(_));
-            var options = _openAIOptionsMonitor.Get(_);
-            return new OpenAIServiceWrapper(_, new OpenAIService(options, httpClient))
-            {
-                IsRestricted = IsRestricted(_)
-            };
-        });
-    }
-
     public IOpenAIServiceWrapper GetService()
     {
         if (ServicesRegistered.Count == 0) throw new InvalidOperationException("No service registered");
@@ -59,11 +46,16 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         {
             foreach (var name in ServicesRegistered)
             {
-                GetService(name);
+                _services.GetOrAdd(name, _ =>
+                {
+                    var httpClient = _httpClientFactory.CreateClient(GetHttpClientName(_));
+                    var options = _openAIOptionsMonitor.Get(_);
+                    return new OpenAIServiceWrapper(_, new OpenAIService(options, httpClient));
+                });
             }
         }
 
-        return _services.Values.Where(s=> !s.IsRestricted).MinBy(_ => Random.Shared.Next(ServicesRegistered.Count * 10))
+        return _services.Values.Where(s=> IsRestricted(s.Name)).MinBy(_ => Random.Shared.Next(ServicesRegistered.Count * 10))
                ?? throw new InvalidOperationException("No valid service found");
     }
 
@@ -74,10 +66,7 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
     private static string GetRestrictedCacheKey(string name) => $"OpenAIService:RestrictedService:{name}";
     public static string GetHttpClientName(string? name = null) => $"OpenAIService_{name}";
 
-    public static void RegisterService(string name)
-    {
-        ServicesRegistered.Add(name);
-    }
+    public static void RegisterService(string name) => ServicesRegistered.Add(name);
 
     public void SetDefaultModelId(string modelId) => throw new NotSupportedException();
 

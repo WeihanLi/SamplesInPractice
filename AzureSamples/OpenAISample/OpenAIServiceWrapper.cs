@@ -9,14 +9,12 @@ namespace OpenAISample;
 public interface IOpenAIServiceWrapper: IOpenAIService
 {
     string Name { get; }
-    bool IsRestricted { get; }
     IOpenAIService Service { get; }
 }
 
 public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
 {
     public string Name { get; }
-    public bool IsRestricted { get; set; }
     public IOpenAIService Service { get; }
 
     public OpenAIServiceWrapper(string name, IOpenAIService openAIService)
