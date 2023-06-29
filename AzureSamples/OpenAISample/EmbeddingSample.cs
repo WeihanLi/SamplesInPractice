@@ -64,13 +64,12 @@ public static class EmbeddingSample
 
     private static async Task QuestionAnswerDemo(IOpenAIService openAIService)
     {
-        var input = Helpers.GetInput();
-        while (input.IsNotNullOrEmpty() && input != "q")
+        await Helpers.HandleInputLoopAsync(async input =>
         {
             var question = input.Replace("\r\n", " ").Replace("\n", " ").Trim();
             if (string.IsNullOrEmpty(question))
             {
-                break;
+                return false;
             }
 
             var response = await openAIService.Embeddings.CreateEmbedding(new EmbeddingCreateRequest()
@@ -81,6 +80,7 @@ public static class EmbeddingSample
             {
                 var questionVector = response.Data.FirstOrDefault()?.Embedding;
                 ArgumentNullException.ThrowIfNull(questionVector);
+                Console.WriteLine("Question embeddings generated");
                 var answers = await VectorSearchInMemory(questionVector, 3);
                 if (answers.IsNullOrEmpty())
                 {
@@ -88,6 +88,13 @@ public static class EmbeddingSample
                 }
                 else
                 {
+                    Console.WriteLine("Found some possible answers");
+                    foreach (var answer in answers)
+                    {
+                        Console.WriteLine(answer);
+                        Console.WriteLine();
+                    }
+
                     var answerSelected = await GetSemanticAnswer(question, answers, openAIService);
                     if (string.IsNullOrEmpty(answerSelected) || "No answer found".Equals(answerSelected))
                     {
@@ -99,17 +106,14 @@ public static class EmbeddingSample
                         Console.WriteLine(answerSelected);
                     }
                 }
+                
+                return true;
+            }
 
-                input = Helpers.GetInput();
-            }
-            else
-            {
-                Console.WriteLine("Error:");
-                Console.WriteLine(response.Error.ToJson());
-                break;
-            }
-        }
-        Console.WriteLine("Completed");
+            Console.WriteLine("Error:");
+            Console.WriteLine(response.Error.ToJson());
+            return false;
+        });
     }
 
     private static async Task<string[]> VectorSearchInMemory(List<double> inputVector, int n)
@@ -142,15 +146,17 @@ public static class EmbeddingSample
     
     private const string QuestionPromptFormat = """
                                     Please help choose one answer from the following candidates according to the question
-                                    {0}
-                                    If all the candidates do not make sense, please do not reply anything imagined, just say "No answer found"
-                                    Answer candidates are as follows:
+                                    If all the answers do not make sense, please do not reply anything imagined, just say "No answer found", and please make sure just return the original answer without any modification
+                                    
+                                    The question is: {0}
+                                    Answer candidates are as follows, they are separated with newline:
                                     {1}
                                     """;
     private static async Task<string> GetSemanticAnswer(string question, string[] answerCandidates, IOpenAIService openAIService)
     {
-        var prompt = QuestionPromptFormat.FormatWith(question, answerCandidates.Select((a, i) => $"{i}: {a}"))
-            .StringJoin(Environment.NewLine);
+        var prompt = QuestionPromptFormat.FormatWith(question,
+            answerCandidates.Select((a, i) => $"{a}").StringJoin(Environment.NewLine)
+        ).Trim();
         
         var response = await openAIService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest()
         {
@@ -158,21 +164,17 @@ public static class EmbeddingSample
             Messages = new List<ChatMessage>()
             {
                 ChatMessage.FromUser(prompt)
-            },
-            Temperature = 0
+            }
         });
         if (response.Successful)
         {
             var answer = response.Choices.First().Message.Content;
-            // Console.WriteLine(answer);
             return answer;
         }
-        else
-        {
-            Console.WriteLine("Errored:");
-            Console.WriteLine(response.Error.ToJson());
-            return string.Empty;
-        }
+
+        Console.WriteLine("Errored:");
+        Console.WriteLine(response.Error.ToJson());
+        return string.Empty;
     }
 }
 
