@@ -13,8 +13,6 @@ namespace OpenAISample;
 
 public interface IOpenAIServiceFactory : IOpenAIService
 {
-    IOpenAIServiceWrapper GetService(string name);
-
     IOpenAIServiceWrapper GetService();
 
     void RateLimited(string name, TimeSpan expiresIn);
@@ -85,13 +83,13 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
 
     public IModelService Models => GetService().Models;
     public ICompletionService Completions  => GetService().Completions;
-    public IEmbeddingService Embeddings  => GetService().Embeddings;
+    public IEmbeddingService Embeddings  => new EmbeddingServiceWrapper(this);
     public IFileService Files  => GetService().Files;
     public IFineTuneService FineTunes  => GetService().FineTunes;
     public IModerationService Moderation  => GetService().Moderation;
     public IImageService Image  => GetService().Image;
     public IEditService Edit  => GetService().Edit;
-    public IChatCompletionService ChatCompletion  => GetService().ChatCompletion;
+    public IChatCompletionService ChatCompletion  => new ChatCompletionServiceWrapper(this);
     public IAudioService Audio  => GetService().Audio;
 }
 

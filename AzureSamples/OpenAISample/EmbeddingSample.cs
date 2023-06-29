@@ -2,6 +2,8 @@
 using OpenAI.Interfaces;
 using OpenAI.ObjectModels;
 using OpenAI.ObjectModels.RequestModels;
+using OpenAI.ObjectModels.ResponseModels;
+using Polly;
 using System.Text.Json;
 using WeihanLi.Common;
 using WeihanLi.Extensions;
@@ -10,6 +12,7 @@ namespace OpenAISample;
 
 public static class EmbeddingSample
 {
+    
     public static async Task MainTest(IOpenAIService openAIService)
     {
         if (!File.Exists("./data/text-sample-with-embeddings.json"))

@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using OpenAI.Interfaces;
 using OpenAISample;
+using WeihanLi.Common.Aspect;
 
 // load .env
 DotEnv.Fluent().Load();
