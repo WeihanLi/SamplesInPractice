@@ -62,7 +62,7 @@ public sealed class EmbeddingServiceWrapper : IEmbeddingService
             {
                 if (x.Response.Error is
                     {
-                        Code: "insufficient_quota"
+                        Type: "insufficient_quota"
                     })
                 {
                     _openAIServiceFactory.RateLimited(x.ServiceName, TimeSpan.FromDays(1));
@@ -100,7 +100,7 @@ public sealed class ChatCompletionServiceWrapper : IChatCompletionService
             {
                 if (x.Response.Error is
                     {
-                        Code: "insufficient_quota"
+                        Type: "insufficient_quota"
                     })
                 {
                     _openAIServiceFactory.RateLimited(x.ServiceName, TimeSpan.FromDays(1));
