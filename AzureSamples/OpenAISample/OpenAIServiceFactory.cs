@@ -144,7 +144,7 @@ public static class DependencyInjectionExtensions
             OpenAIServiceFactory.RegisterService(name);
         }
         services.TryAddSingleton<IOpenAIServiceFactory, OpenAIServiceFactory>();
-        services.TryAddSingleton(sp => sp.GetRequiredService<IOpenAIServiceFactory>().GetService());
+        services.TryAddSingleton<IOpenAIService>(sp => sp.GetRequiredService<IOpenAIServiceFactory>());
     }
 }
 
