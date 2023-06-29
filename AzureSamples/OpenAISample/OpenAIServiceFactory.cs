@@ -8,6 +8,7 @@ using OpenAI.Interfaces;
 using OpenAI.Managers;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Net;
 
 namespace OpenAISample;
@@ -46,16 +47,15 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         _httpClientFactory = httpClientFactory;
         _openAIOptionsMonitor = openAIOptionsMonitor;
         _memoryCache = memoryCache;
-        
-        EnsureInitialized();
     }
 
-    public int ServiceCount => _services.Count;
+    public int ServiceCount => ServicesRegistered.Count;
 
     public IOpenAIServiceWrapper GetService()
     {
         if (ServicesRegistered.Count == 0) throw new InvalidOperationException("No service registered");
-
+        EnsureInitialized();
+        
         var service = GetServiceInternal();
         if (service != null) return service;
 
@@ -80,7 +80,11 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         }
     }
 
-    public void RateLimited(string name, TimeSpan expiresIn) => _memoryCache.Set(GetRestrictedCacheKey(name), string.Empty, expiresIn);
+    public void RateLimited(string name, TimeSpan expiresIn)
+    {
+        _memoryCache.Set(GetRestrictedCacheKey(name), string.Empty, expiresIn);
+        Debug.WriteLine($"OpenAI service rate limited, serviceName: {name}, expiresIn: {expiresIn}");
+    }
 
     private bool IsRestricted(string name) => _memoryCache.TryGetValue(GetRestrictedCacheKey(name), out _);
     
@@ -173,7 +177,7 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
         };
         if (expiresIn.HasValue)
         {
-            _openAIServiceFactory.RateLimited(_serviceName, expiresIn.Value);   
+            _openAIServiceFactory.RateLimited(_serviceName, expiresIn.Value);
         }
         return responseMessage;
     }
