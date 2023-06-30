@@ -1,6 +1,7 @@
 ﻿using OpenAI.Interfaces;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI.ObjectModels.ResponseModels;
+using System.Diagnostics;
 
 namespace OpenAISample;
 
@@ -10,6 +11,7 @@ public interface IOpenAIServiceWrapper
     IOpenAIService Service { get; }
 }
 
+[DebuggerDisplay("{Name} OpenAIService")]
 public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
 {
     public string Name { get; }
