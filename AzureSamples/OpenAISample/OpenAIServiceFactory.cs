@@ -193,10 +193,17 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
         TimeSpan? expiresIn = responseMessage.StatusCode switch
         {
             HttpStatusCode.TooManyRequests => TimeSpan.FromMinutes(1),
+            HttpStatusCode.GatewayTimeout => TimeSpan.FromMinutes(1),
             HttpStatusCode.Unauthorized => TimeSpan.MaxValue,
             HttpStatusCode.NotFound => TimeSpan.MaxValue,
             _ => null
         };
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            var responseText = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+            Debug.WriteLine(responseMessage.StatusCode);
+            Debug.WriteLine(responseText);
+        }
         if (expiresIn.HasValue)
         {
             _openAIServiceFactory.RateLimited(_serviceName, expiresIn.Value);
