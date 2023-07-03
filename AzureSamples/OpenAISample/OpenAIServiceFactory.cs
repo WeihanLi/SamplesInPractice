@@ -200,9 +200,17 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
         };
         if (!responseMessage.IsSuccessStatusCode)
         {
-            var responseText = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
             Debug.WriteLine(responseMessage.StatusCode);
-            Debug.WriteLine(responseText);
+            try
+            {
+                var responseText = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+                Debug.WriteLine(responseText);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("TryRead ResponseContent Exception:");
+                Debug.WriteLine(e);
+            }
         }
         if (expiresIn.HasValue)
         {
