@@ -193,7 +193,10 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
         TimeSpan? expiresIn = responseMessage.StatusCode switch
         {
             HttpStatusCode.TooManyRequests => TimeSpan.FromMinutes(1),
-            HttpStatusCode.GatewayTimeout => TimeSpan.FromMinutes(1),
+            HttpStatusCode.ServiceUnavailable => TimeSpan.FromMinutes(1),
+            HttpStatusCode.GatewayTimeout => TimeSpan.FromSeconds(10),
+            HttpStatusCode.BadGateway => TimeSpan.FromSeconds(10),
+            HttpStatusCode.Forbidden => TimeSpan.MaxValue,
             HttpStatusCode.Unauthorized => TimeSpan.MaxValue,
             HttpStatusCode.NotFound => TimeSpan.MaxValue,
             _ => null
