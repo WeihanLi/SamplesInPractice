@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using OpenAI;
 using OpenAI.Interfaces;
 using OpenAI.Managers;
+using OpenAI.ObjectModels.ResponseModels;
+using Polly;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -15,11 +17,11 @@ namespace OpenAISample;
 
 public interface IOpenAIServiceFactory : IOpenAIService
 {
-    int ServiceCount { get; }
-    
     IOpenAIServiceWrapper GetService();
 
     void RateLimited(string name, TimeSpan expiresIn);
+    
+    AsyncPolicy<(string ServiceName, TResponse Response)> GetExecutePolicy<TResponse>() where TResponse: BaseResponse;
 }
 
 public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
@@ -48,9 +50,7 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
         _openAIOptionsMonitor = openAIOptionsMonitor;
         _memoryCache = memoryCache;
     }
-
-    public int ServiceCount => ServicesRegistered.Count;
-
+    
     public IOpenAIServiceWrapper GetService()
     {
         if (ServicesRegistered.Count == 0) throw new InvalidOperationException("No service registered");
@@ -84,6 +84,28 @@ public sealed class OpenAIServiceFactory : IOpenAIServiceFactory
     {
         _memoryCache.Set(GetRestrictedCacheKey(name), string.Empty, expiresIn);
         Debug.WriteLine($"OpenAI service rate limited, serviceName: {name}, expiresIn: {expiresIn}");
+    }
+
+    public AsyncPolicy<(string ServiceName, TResponse Response)> GetExecutePolicy<TResponse>() where TResponse : BaseResponse
+    {
+        return Policy<(string ServiceName, TResponse Response)>
+            .HandleResult(x =>
+            {
+                if (x.Response.Error != null)
+                {
+                    if (x.Response.Error is
+                        {
+                            Type: "insufficient_quota"
+                        })
+                    {
+                        RateLimited(x.ServiceName, TimeSpan.FromDays(1));
+                    }
+
+                    return true;
+                }
+                return false;
+            })
+            .RetryAsync(ServicesRegistered.Count);
     }
 
     private bool IsRestricted(string name) => _memoryCache.TryGetValue(GetRestrictedCacheKey(name), out _);
@@ -171,10 +193,28 @@ public sealed class CustomRateLimitedHttpHandler : DelegatingHandler
         TimeSpan? expiresIn = responseMessage.StatusCode switch
         {
             HttpStatusCode.TooManyRequests => TimeSpan.FromMinutes(1),
+            HttpStatusCode.ServiceUnavailable => TimeSpan.FromMinutes(1),
+            HttpStatusCode.GatewayTimeout => TimeSpan.FromSeconds(10),
+            HttpStatusCode.BadGateway => TimeSpan.FromSeconds(10),
+            HttpStatusCode.Forbidden => TimeSpan.MaxValue,
             HttpStatusCode.Unauthorized => TimeSpan.MaxValue,
             HttpStatusCode.NotFound => TimeSpan.MaxValue,
             _ => null
         };
+        if (!responseMessage.IsSuccessStatusCode)
+        {
+            Debug.WriteLine(responseMessage.StatusCode);
+            try
+            {
+                var responseText = await responseMessage.Content.ReadAsStringAsync(cancellationToken);
+                Debug.WriteLine(responseText);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("TryRead ResponseContent Exception:");
+                Debug.WriteLine(e);
+            }
+        }
         if (expiresIn.HasValue)
         {
             _openAIServiceFactory.RateLimited(_serviceName, expiresIn.Value);

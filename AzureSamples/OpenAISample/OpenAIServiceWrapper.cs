@@ -1,8 +1,7 @@
 ﻿using OpenAI.Interfaces;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI.ObjectModels.ResponseModels;
-using Polly;
-using Polly.Retry;
+using System.Diagnostics;
 
 namespace OpenAISample;
 
@@ -12,6 +11,7 @@ public interface IOpenAIServiceWrapper
     IOpenAIService Service { get; }
 }
 
+[DebuggerDisplay("{Name} OpenAIService")]
 public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
 {
     public string Name { get; }
@@ -27,33 +27,16 @@ public sealed class OpenAIServiceWrapper : IOpenAIServiceWrapper
 public sealed class EmbeddingServiceWrapper : IEmbeddingService
 {
     private readonly IOpenAIServiceFactory _openAIServiceFactory;
-    private readonly AsyncRetryPolicy<(string ServiceName, EmbeddingCreateResponse Response)> _retryPolicy;
 
     public EmbeddingServiceWrapper(IOpenAIServiceFactory openAIServiceFactory)
     {
         _openAIServiceFactory = openAIServiceFactory;
-        _retryPolicy = Policy<(string ServiceName, EmbeddingCreateResponse Response)>.HandleResult(x =>
-        {
-            if (x.Response.Error != null)
-            {
-                if (x.Response.Error is
-                    {
-                        Type: "insufficient_quota"
-                    })
-                {
-                    _openAIServiceFactory.RateLimited(x.ServiceName, TimeSpan.FromDays(1));
-                }
-
-                return true;
-            }
-            return false;
-        }).RetryAsync(_openAIServiceFactory.ServiceCount);
     }
     
     public async Task<EmbeddingCreateResponse> CreateEmbedding(EmbeddingCreateRequest createEmbeddingModel,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var result = await _retryPolicy.ExecuteAsync(async () =>
+        var result = await _openAIServiceFactory.GetExecutePolicy<EmbeddingCreateResponse>().ExecuteAsync(async () =>
         {
             var service = _openAIServiceFactory.GetService();
             return (service.Name, await service.Service.Embeddings.CreateEmbedding(createEmbeddingModel, cancellationToken));
@@ -65,33 +48,16 @@ public sealed class EmbeddingServiceWrapper : IEmbeddingService
 public sealed class ChatCompletionServiceWrapper : IChatCompletionService
 {
     private readonly IOpenAIServiceFactory _openAIServiceFactory;
-    private readonly AsyncRetryPolicy<(string ServiceName, ChatCompletionCreateResponse Response)> _retryPolicy;
 
     public ChatCompletionServiceWrapper(IOpenAIServiceFactory openAIServiceFactory)
     {
         _openAIServiceFactory = openAIServiceFactory;
-        _retryPolicy = Policy<(string ServiceName, ChatCompletionCreateResponse Response)>.HandleResult(x =>
-        {
-            if (x.Response.Error != null)
-            {
-                if (x.Response.Error is
-                    {
-                        Type: "insufficient_quota"
-                    })
-                {
-                    _openAIServiceFactory.RateLimited(x.ServiceName, TimeSpan.FromDays(1));
-                }
-
-                return true;
-            }
-            return false;
-        }).RetryAsync(_openAIServiceFactory.ServiceCount);
     }
     
     public async Task<ChatCompletionCreateResponse> CreateCompletion(ChatCompletionCreateRequest chatCompletionCreate, string? modelId = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var result = await _retryPolicy.ExecuteAsync(async () =>
+        var result = await _openAIServiceFactory.GetExecutePolicy<ChatCompletionCreateResponse>().ExecuteAsync(async () =>
         {
             var service = _openAIServiceFactory.GetService();
             return (service.Name, await service.Service.ChatCompletion.CreateCompletion(chatCompletionCreate, modelId, cancellationToken));
