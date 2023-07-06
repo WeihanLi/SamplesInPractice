@@ -2,14 +2,5 @@
   "Default": {
     "ApiKey": "",
     "BaseDomain": "https://aoai-proxy.weihanli.xyz"
-  },
-  "OpenAI_Suzy": {
-    "ApiKey": ""
-  },
-  "OpenAI_Jojo": {
-    "ApiKey": ""
-  },
-  "OpenAI_Harry": {
-    "ApiKey": ""
   }
 }
