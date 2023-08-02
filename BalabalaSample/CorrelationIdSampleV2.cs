@@ -36,6 +36,7 @@ public static class CorrelationIdSampleV2
             // .AddSource("System.*")
             // .AddSource("Microsoft.*")
             .AddSource(ServiceScopeExtensions.ActivitySource.Name)
+            // .SetSampler(new TraceIdRatioBasedSampler(0.0))
             .AddHttpClientInstrumentation()
             .AddConsoleExporter()
             .Build();
@@ -47,6 +48,16 @@ public static class CorrelationIdSampleV2
                 , "[{Timestamp:HH:mm:ss} {Level:u3}] {TraceId} {SpanId} {Message:lj}{NewLine}{Exception}"
             );
         });
+        
+        // var nullCounter = 0;
+        // for (var i = 0; i < 10_000; i++)
+        // {
+        //     using var activity = ServiceScopeExtensions.ActivitySource.CreateActivity("Test", ActivityKind.Consumer);
+        //     if (activity is null) nullCounter++;
+        // }
+        // Console.WriteLine(nullCounter);
+        // Console.WriteLine("Press enter to continue");
+        // Console.ReadLine();
 
         var serviceCollection = new ServiceCollection()
             .AddLogging(builder => builder.AddSerilog());

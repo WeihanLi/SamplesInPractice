@@ -19,6 +19,12 @@ var configuration = new ConfigurationBuilder()
 services.AddMemoryCache();
 // services.RegisterOpenAIServices(configuration);
 
+// OpenAI
+// services.AddOpenAIService(options =>
+// {
+//     options.ApiKey = Guard.NotNull(Environment.GetEnvironmentVariable("OPENAI_API_KEY"));
+// });
+
 // OpenAI proxy
 // services.AddOpenAIService(options =>
 // {

@@ -170,7 +170,10 @@ namespace XUnitDependencyInjectionSample
 
 大家快去 [Github](https://github.com/pengweiqhca) follow 他吧
 
+更多示例可以参考：<https://github.com/WeihanLi/XunitDependencyInjection.Samples>
+
 ## Reference
 
 - <https://github.com/pengweiqhca/Xunit.DependencyInjection>
 - <https://github.com/WeihanLi/SamplesInPractice/tree/master/XUnitDependencyInjectionSample>
+- <https://github.com/WeihanLi/XunitDependencyInjection.Samples>
