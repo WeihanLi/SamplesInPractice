@@ -53,9 +53,9 @@ file sealed class MockTimeProvider : TimeProvider
         return _dateTimeOffset;
     }
 
-    public override long TimestampFrequency => Stopwatch.Frequency * 3;
-
     public override TimeZoneInfo LocalTimeZone => TimeZoneInfo.Utc;
+
+    public override long TimestampFrequency => Stopwatch.Frequency * 3;    
 
     public override ITimer CreateTimer(TimerCallback callback, object? state, TimeSpan dueTime, TimeSpan period)
     {
