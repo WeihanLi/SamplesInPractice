@@ -10,7 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.59" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="8.0.0-preview.6.23329.7" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20230730-064409" />
   </ItemGroup>
 
 </Project>

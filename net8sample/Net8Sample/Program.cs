@@ -2,6 +2,8 @@
 
 // JsonSample.MainTest();
 // DataAnnotationSample.MainTest();
-TimeProviderSample.MainTest();
+// TimeProviderSample.MainTest();
+
+MetricsSample.MainTest();
 
 Console.WriteLine("Hello, World!");
