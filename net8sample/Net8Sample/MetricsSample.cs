@@ -15,6 +15,7 @@ public static class MetricsSample
         using var serviceProvider = services.BuildServiceProvider();
         var meterFactory = serviceProvider.GetRequiredService<IMeterFactory>();
         var meter = meterFactory.Create(nameof(MetricsSample));
+        // https://learn.microsoft.com/dotnet/core/diagnostics/metrics-instrumentation?WT.mc_id=DT-MVP-5004222#types-of-instruments
         var counter = meter.CreateCounter<int>("test-counter");
         // https://learn.microsoft.com/dotnet/core/diagnostics/metrics-collection?WT.mc_id=DT-MVP-5004222#create-a-custom-collection-tool-using-the-net--api
         using var meterListener = new MeterListener();
@@ -28,10 +29,10 @@ public static class MetricsSample
         meterListener.SetMeasurementEventCallback<int>(OnMeasurementRecorded);
         meterListener.Start();
 
-        while (true)
+        while (!Console.KeyAvailable)
         {
-            counter.Add(1, new KeyValuePair<string, object?>("host", Environment.MachineName));
-            Thread.Sleep(1000);
+            counter.Add(Random.Shared.Next(100), new KeyValuePair<string, object?>("host", Environment.MachineName));
+            Thread.Sleep(500);
         }
     }
     
