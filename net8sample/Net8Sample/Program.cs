@@ -4,6 +4,7 @@
 // DataAnnotationSample.MainTest();
 // TimeProviderSample.MainTest();
 
-MetricsSample.MainTest();
+// MetricsSample.MainTest();
+KeyedServiceSample.MainTest();
 
 Console.WriteLine("Hello, World!");
