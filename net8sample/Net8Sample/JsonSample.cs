@@ -18,6 +18,7 @@ public static class JsonSample
 
         JsonSerializerOptionsReadOnlyTest();
 
+        EnumerableTest();
         DeepCloneEqualsTest();
     }
 
@@ -139,6 +140,18 @@ public static class JsonSample
         }
     }
 
+    private static void EnumerableTest()
+    {
+        var jsonArray = new JsonArray(1, 2, 3, 2);
+        // With the proposed GetValues this is simpler:
+        var values = jsonArray.GetValues<int>()
+            .Where(i => i != 2);
+        foreach (var value in values)
+        {
+            Console.WriteLine(value);
+        }
+    }
+    
     private static void DeepCloneEqualsTest()
     {
         var node = JsonNode.Parse("""{"id": 1, "name": "test", "jobs": ["abc", "def"]}""");
