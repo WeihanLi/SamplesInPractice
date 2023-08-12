@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
@@ -16,6 +17,8 @@ public static class JsonSample
         KebabCaseNamingTest();
 
         JsonSerializerOptionsReadOnlyTest();
+
+        DeepCloneEqualsTest();
     }
 
     private static void MissingMemberHandlingTest()
@@ -134,6 +137,15 @@ public static class JsonSample
         {
             Console.WriteLine(e);
         }
+    }
+
+    private static void DeepCloneEqualsTest()
+    {
+        var node = JsonNode.Parse("""{"id": 1, "name": "test", "jobs": ["abc", "def"]}""");
+        ArgumentNullException.ThrowIfNull(node);
+        var node2 = node.DeepClone();
+        Console.WriteLine(node2.ToJsonString());
+        Console.WriteLine("JsonNode.DeepEquals(node, node2) ?? {0}", JsonNode.DeepEquals(node, node2));
     }
 }
 
