@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics" Version="8.0.0-preview.7.*" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20230809-005257" />
   </ItemGroup>

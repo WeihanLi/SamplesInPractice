@@ -9,6 +9,8 @@ InvokeHelper.OnInvokeException =
 // TimeProviderSample.MainTest();
 
 // MetricsSample.MainTest();
-InvokeHelper.TryInvoke(KeyedServiceSample.MainTest);
+InvokeHelper.TryInvoke(KeyedServiceSample.OptionsSample);
+// await InvokeHelper.TryInvokeAsync(KeyedServiceSample.WebApiSample);
 
+ConsoleHelper.ReadLineWithPrompt();
 Console.WriteLine("Hello, World!");

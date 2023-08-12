@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.Metrics;
 using System.Diagnostics.Metrics;
 using WeihanLi.Extensions;
 
