@@ -21,6 +21,8 @@ public static class JsonSample
 
         EnumerableTest();
         DeepCloneEqualsTest();
+
+        JsonNodeEnrichment();
     }
 
     private static void MissingMemberHandlingTest()
@@ -160,10 +162,17 @@ public static class JsonSample
         var node2 = node.DeepClone();
         Console.WriteLine(node2.ToJsonString());
         Console.WriteLine("JsonNode.DeepEquals(node, node2) ?? {0}", JsonNode.DeepEquals(node, node2));
-        
-        Console.WriteLine(node2.GetValueKind());
-        InvokeHelper.TryInvoke(() => Console.WriteLine(node2.GetElementIndex()));
-        InvokeHelper.TryInvoke(() => Console.WriteLine(node2.GetPropertyName()));
+    }
+
+    private static void JsonNodeEnrichment()
+    {
+        var node = JsonNode.Parse("""{"id": 1, "name": "test", "jobs": ["abc", "def"]}""");
+        ArgumentNullException.ThrowIfNull(node);
+        Console.WriteLine(node.GetValueKind());
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node.GetElementIndex()));
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node.GetPropertyName()));
+        Console.WriteLine(node["id"]?.GetPropertyName());
+        Console.WriteLine(node["jobs"]?.AsArray()[1]?.GetElementIndex());
     }
 }
 
