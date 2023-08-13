@@ -2,6 +2,7 @@
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using WeihanLi.Common.Helpers;
 
 namespace Net8Sample;
 
@@ -159,6 +160,10 @@ public static class JsonSample
         var node2 = node.DeepClone();
         Console.WriteLine(node2.ToJsonString());
         Console.WriteLine("JsonNode.DeepEquals(node, node2) ?? {0}", JsonNode.DeepEquals(node, node2));
+        
+        Console.WriteLine(node2.GetValueKind());
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node2.GetElementIndex()));
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node2.GetPropertyName()));
     }
 }
 
