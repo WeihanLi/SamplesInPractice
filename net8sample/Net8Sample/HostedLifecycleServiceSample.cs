@@ -11,6 +11,10 @@ public static class HostedLifecycleServiceSample
         var hostBuilder = Host.CreateApplicationBuilder();
         hostBuilder.Services.AddHostedService<MyHostedLifecycleService>();
         var host = hostBuilder.Build();
+        var hostAppLifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
+        hostAppLifetime.ApplicationStarted.Register(() => Console.WriteLine($"{nameof(IHostApplicationLifetime)} {nameof(hostAppLifetime.ApplicationStarted)}"));
+        hostAppLifetime.ApplicationStopping.Register(() => Console.WriteLine($"{nameof(IHostApplicationLifetime)} {nameof(hostAppLifetime.ApplicationStopping)}"));
+        hostAppLifetime.ApplicationStopped.Register(() => Console.WriteLine($"{nameof(IHostApplicationLifetime)} {nameof(hostAppLifetime.ApplicationStopped)}"));
         await host.RunAsync(cancellationToken);
     }
 }
