@@ -116,7 +116,7 @@ file sealed class CorrelationContext
 
 file sealed class CorrelationContextAccessor
 {
-    private static readonly AsyncLocal<CorrelationContext> ContextCurrent = new();
+    private static readonly AsyncLocal<CorrelationContext?> ContextCurrent = new();
 
     public static CorrelationContext? Context
     {
@@ -127,7 +127,7 @@ file sealed class CorrelationContextAccessor
 
 file sealed class CorrelationIdAccessor
 {
-    private static readonly AsyncLocal<string> ContextCurrent = new();
+    private static readonly AsyncLocal<string?> ContextCurrent = new();
 
     public static string? CorrelationId
     {
