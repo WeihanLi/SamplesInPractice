@@ -1,5 +1,4 @@
-﻿using Net8Sample;
-using WeihanLi.Common.Helpers;
+﻿using WeihanLi.Common.Helpers;
 
 InvokeHelper.OnInvokeException = e => ConsoleHelper.WriteLineWithColor(e.ToString(), ConsoleColor.Red);
 var exitToken = ConsoleHelper.GetExitToken();
@@ -10,7 +9,9 @@ var exitToken = ConsoleHelper.GetExitToken();
 // MetricsSample.MainTest();
 // InvokeHelper.TryInvoke(KeyedServiceSample.OptionsSample);
 
-await InvokeHelper.TryInvokeAsync(() => HostedLifecycleServiceSample.MainTest(exitToken));
-// await InvokeHelper.TryInvokeAsync(() => HostedServiceConcurrentSample.MainTest(exitToken));
+// await InvokeHelper.TryInvokeAsync(() => HostedLifecycleServiceSample.MainTest(exitToken));
+await InvokeHelper.TryInvokeAsync(() => HostedServiceConcurrentSample.MainTest(exitToken));
+
+// await InvokeHelper.TryInvokeAsync(() => WebAppSlimBuilderSample.MainTest(exitToken));
 
 Console.WriteLine("Hello, World!");

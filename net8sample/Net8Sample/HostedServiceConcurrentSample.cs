@@ -46,7 +46,7 @@ file sealed class ReportTimeService : BackgroundService
     }
 }
 
-file sealed class DelayService : IHostedService
+file class DelayService : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -59,16 +59,6 @@ file sealed class DelayService : IHostedService
     }
 }
 
-
-file sealed class Delay2Service : IHostedService
+file sealed class Delay2Service : DelayService
 {
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        await Task.Delay(TimeSpan.FromMilliseconds(60), cancellationToken);
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
 }
