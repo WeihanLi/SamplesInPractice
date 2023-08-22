@@ -10,6 +10,9 @@ public static class PrimaryConstructorSample
         Console.WriteLine(mouse.Name);
         var cat = new Cat("Tom");
         Console.WriteLine(cat.Name);
+        var dog = new Dog("Spike", 3);
+        Console.WriteLine(dog.Age);
+        dog.OneYearPassed();
 
         var point = new Point(2, 2);
         Console.WriteLine(point);
@@ -25,7 +28,18 @@ file class Animal(string name)
     public string Name => name;
 }
 
-file sealed class Cat(string Name) : Animal(Name){}
+file sealed class Cat(string name) : Animal(name){}
+
+file sealed class Dog(string name, int age) : Animal(name)
+{
+    public int Age => age;
+
+    public void OneYearPassed()
+    {
+        age++;
+        Console.WriteLine("One year passed, now age is: {0}", age);
+    }
+}
 
 file struct Point(int x, int y)
 {

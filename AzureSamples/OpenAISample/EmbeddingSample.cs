@@ -82,30 +82,16 @@ public static class EmbeddingSample
                 ArgumentNullException.ThrowIfNull(questionVector);
                 Console.WriteLine("Question embeddings generated");
                 Console.WriteLine();
-                var answers = await VectorSearchInMemory(questionVector, 3);
-                if (answers.IsNullOrEmpty())
+                var answer = await VectorSearchInMemory(questionVector, 1)
+                    .ContinueWith(r => r.Result.FirstOrDefault());
+                if (answer.IsNullOrEmpty())
                 {
                     Console.WriteLine("No answer found");
                 }
                 else
                 {
-                    Console.WriteLine("Found some possible answers");
-                    foreach (var answer in answers)
-                    {
-                        Console.WriteLine(answer);
-                        Console.WriteLine();
-                    }
-
-                    var answerSelected = await GetSemanticAnswer(question, answers, openAIService);
-                    if (string.IsNullOrEmpty(answerSelected) || "No answer found".Equals(answerSelected))
-                    {
-                        Console.WriteLine("No related answer found");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Here's the answers found:");
-                        Console.WriteLine(answerSelected);
-                    }
+                    Console.WriteLine("Here's the possible answer found:");
+                    Console.WriteLine(answer);
                 }
                 
                 return true;
@@ -143,40 +129,6 @@ public static class EmbeddingSample
         // return sum;
         
         return Distance.Cosine(p1.ToArray(), p2.ToArray());
-    }
-    
-    private const string QuestionPromptFormat = """
-                                    Please help choose one answer from the following candidates according to the question
-                                    If all the answers do not make sense, please do not reply anything imagined, just say "No answer found", and please make sure just return the original answer without any modification
-                                    
-                                    The question is: {0}
-                                    Answer candidates are as follows, they are separated with newline:
-                                    {1}
-                                    """;
-    private static async Task<string> GetSemanticAnswer(string question, string[] answerCandidates, IOpenAIService openAIService)
-    {
-        var prompt = QuestionPromptFormat.FormatWith(question,
-            answerCandidates.Select((a, i) => $"{a}").StringJoin(Environment.NewLine)
-        ).Trim();
-        
-        var response = await openAIService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest()
-        {
-            Model = Models.ChatGpt3_5Turbo,
-            Messages = new List<ChatMessage>()
-            {
-                ChatMessage.FromUser(prompt)
-            },
-            Temperature = 0
-        });
-        if (response.Successful)
-        {
-            var answer = response.Choices.First().Message.Content;
-            return answer;
-        }
-
-        Console.WriteLine("Errored:");
-        Console.WriteLine(response.Error.ToJson());
-        return string.Empty;
     }
 }
 

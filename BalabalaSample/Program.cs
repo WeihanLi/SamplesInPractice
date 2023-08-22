@@ -1,15 +1,14 @@
 ﻿using WeihanLi.Common.Helpers;
 
-InvokeHelper.OnInvokeException = ex =>
-{
-    ConsoleHelper.InvokeWithConsoleColor(() => Console.WriteLine(ex), ConsoleColor.Red);
-};
+InvokeHelper.OnInvokeException = ex => ConsoleHelper.WriteLineWithColor(ex.ToString(), ConsoleColor.Red);
 
 // ListForEachSample.MainTest();
 // await ListForEachSample.MainTestAsync();
 
-await CorrelationIdSampleV2.MainTest();
+// await CorrelationIdSampleV2.MainTest();
+
+InvokeHelper.TryInvoke(CorrelationIdSampleV3.MainTest);
 
 // ParamsSample.MainTest();
 
-Console.ReadLine();
+ConsoleHelper.ReadKeyWithPrompt();

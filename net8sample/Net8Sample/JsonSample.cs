@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using WeihanLi.Common.Helpers;
 
 namespace Net8Sample;
 
@@ -16,6 +18,11 @@ public static class JsonSample
         KebabCaseNamingTest();
 
         JsonSerializerOptionsReadOnlyTest();
+
+        EnumerableTest();
+        DeepCloneEqualsTest();
+
+        JsonNodeEnrichment();
     }
 
     private static void MissingMemberHandlingTest()
@@ -134,6 +141,38 @@ public static class JsonSample
         {
             Console.WriteLine(e);
         }
+    }
+
+    private static void EnumerableTest()
+    {
+        var jsonArray = new JsonArray(1, 2, 3, 2);
+        // With the proposed GetValues this is simpler:
+        var values = jsonArray.GetValues<int>()
+            .Where(i => i != 2);
+        foreach (var value in values)
+        {
+            Console.WriteLine(value);
+        }
+    }
+    
+    private static void DeepCloneEqualsTest()
+    {
+        var node = JsonNode.Parse("""{"id": 1, "name": "test", "jobs": ["abc", "def"]}""");
+        ArgumentNullException.ThrowIfNull(node);
+        var node2 = node.DeepClone();
+        Console.WriteLine(node2.ToJsonString());
+        Console.WriteLine("JsonNode.DeepEquals(node, node2) ?? {0}", JsonNode.DeepEquals(node, node2));
+    }
+
+    private static void JsonNodeEnrichment()
+    {
+        var node = JsonNode.Parse("""{"id": 1, "name": "test", "jobs": ["abc", "def"]}""");
+        ArgumentNullException.ThrowIfNull(node);
+        Console.WriteLine(node.GetValueKind());
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node.GetElementIndex()));
+        InvokeHelper.TryInvoke(() => Console.WriteLine(node.GetPropertyName()));
+        Console.WriteLine(node["id"]?.GetPropertyName());
+        Console.WriteLine(node["jobs"]?.AsArray()[1]?.GetElementIndex());
     }
 }
 
