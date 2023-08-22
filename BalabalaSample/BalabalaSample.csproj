@@ -14,9 +14,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.4.0" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.5.1" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.14" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="WeihanLi.Common.Logging.Serilog" Version="1.0.59" />
+    <PackageReference Include="WeihanLi.Common.Logging.Serilog" Version="1.0.60-preview-20230820-145922" />
   </ItemGroup>
 </Project>
