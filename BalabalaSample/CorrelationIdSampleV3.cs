@@ -14,21 +14,21 @@ public static class CorrelationIdSampleV3
         activityListener.ShouldListenTo = s => s.Name == activitySource.Name;
         activityListener.ActivityStarted = activity =>
         {
-            Console.WriteLine($"activity {activity.DisplayName} started, activityId: {activity.Id}, traceId: {activity.TraceId}");
+            Console.WriteLine($"activity {activity.DisplayName}({activity.Source.Name}) started (IsAllDataRequested: {activity.IsAllDataRequested}), activityId: {activity.Id}, traceId: {activity.TraceId}");
         };
         activityListener.ActivityStopped = activity =>
         {
             Console.WriteLine($"activity {activity.DisplayName} stopped, activityId: {activity.Id}, traceId: {activity.TraceId}");
         };
-        activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> _) => 
-            Random.Shared.Next(100) < 90 ? ActivitySamplingResult.None : ActivitySamplingResult.AllData;
-        
+        // activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> _) => 
+        //     Random.Shared.Next(100) < 90 ? ActivitySamplingResult.None : ActivitySamplingResult.AllData;
+        //
         // activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> options) => 
         //     options.Source.Name == activitySource.Name ? ActivitySamplingResult.AllData : ActivitySamplingResult.None;
         //
-        // activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> options) => options.Source.Name == activitySource.Name
-        //     ? Random.Shared.Next(100) < 90 ? ActivitySamplingResult.AllData : ActivitySamplingResult.AllDataAndRecorded
-        //     : ActivitySamplingResult.None;
+        activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> options) => options.Source.Name == activitySource.Name
+            ? Random.Shared.Next(100) < 90 ? ActivitySamplingResult.PropagationData : ActivitySamplingResult.AllDataAndRecorded
+            : ActivitySamplingResult.None;
         
         ActivitySource.AddActivityListener(activityListener);
         
