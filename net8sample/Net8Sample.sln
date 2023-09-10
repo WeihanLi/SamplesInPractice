@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net8Sample", "Net8Sample\Net8Sample.csproj", "{508B7E66-BE19-40E7-8C90-8092CF95BDCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore8Sample", "AspNetCore8Sample\AspNetCore8Sample.csproj", "{DAEF2C72-5FEB-4B10-96B2-4F37A3988AF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{508B7E66-BE19-40E7-8C90-8092CF95BDCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{508B7E66-BE19-40E7-8C90-8092CF95BDCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{508B7E66-BE19-40E7-8C90-8092CF95BDCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAEF2C72-5FEB-4B10-96B2-4F37A3988AF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAEF2C72-5FEB-4B10-96B2-4F37A3988AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAEF2C72-5FEB-4B10-96B2-4F37A3988AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAEF2C72-5FEB-4B10-96B2-4F37A3988AF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
