@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Using Include="AspNetCore8Sample" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-preview.7.23375.9"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
