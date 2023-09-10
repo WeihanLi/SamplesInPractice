@@ -12,6 +12,8 @@ public static class JsonSample
     {
         MissingMemberHandlingTest();
 
+        var baseModel = new DerivedImplement();
+        Console.WriteLine(JsonSerializer.Serialize(baseModel));
         InterfaceHierarchyTest();
         
         SnakeCaseNamingTest();
@@ -202,9 +204,12 @@ file interface IDerived : IBase
 {
     int Derived { get; set; }
 }
-file class DerivedImplement : IDerived
+file class BaseImplement: IBase
 {
     public int Base { get; set; }
+}
+file class DerivedImplement : BaseImplement, IDerived
+{
     public int Derived { get; set; }
 }
 
