@@ -1,1 +1,2 @@
-await RequestTimeoutsSample.MainTest(args);
+// await RequestTimeoutsSample.MainTest(args);
+await BasicSetupSample.MainTest();
