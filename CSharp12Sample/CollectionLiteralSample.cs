@@ -55,11 +55,11 @@ public class CollectionLiteralSample
         IList<string> emptyList = ["Hello", "dotnet"];
         System.Console.WriteLine(emptyList.GetType());
         
-        CustomNumberCollection customNumberCollection = [1, 2, 3];
-        System.Console.WriteLine(string.Join(",", customNumberCollection.Numbers));
+        // CustomNumberCollection customNumberCollection = [1, 2, 3];
+        // System.Console.WriteLine(string.Join(",", customNumberCollection.Numbers));
 
-        CustomCollection<string> customCollection = [ "Hello", "World" ];
-        System.Console.WriteLine(string.Join(",", customCollection.Elements));
+        // CustomCollection<string> customCollection = [ "Hello", "World" ];
+        // System.Console.WriteLine(string.Join(",", customCollection.Elements));
     }
 }
 
