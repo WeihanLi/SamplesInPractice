@@ -8,14 +8,13 @@ public class JobsController : ControllerBase
     [HttpGet]
     public async IAsyncEnumerable<Jobs> Jobs()
     {
-        for (var i = 0; i < 100; i++)
+        for (var i = 0; i < 10; i++)
         {
-            await Task.Delay(200);
-            yield return new Jobs() { Id = i + 1, Title = $"job_{i}" };
+            await Task.Delay(500);
+            yield return new Jobs() { Id = i + 1, Title = $"job_{i} --- {DateTimeOffset.Now}" };
         }
     }
 }
-
 
 public class Jobs
 {

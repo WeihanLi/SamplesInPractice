@@ -20,6 +20,7 @@ public static class HttpClientSample
         await foreach (var job in stream)
         {
             Console.WriteLine(job);
+            Console.WriteLine(DateTimeOffset.Now);
         }
     }
 }
