@@ -2,23 +2,41 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
     <PackageId>dotnet-update-all-tools</PackageId>
     <ToolCommandName>dotnet-update-all-tools</ToolCommandName>
-    <PackageTags>dotnet-tool;upgrade</PackageTags>
+    <PackageTags>dotnet-tool;upgrade</PackageTags>    
     <Description>update all dotnet-tool in a command</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/WeihanLi/SamplesInPractice/tree/master/CommandLineAppSamples/UpgradeAllTools</PackageProjectUrl>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows&WT.mc_id=DT-MVP-5004222 -->
+    <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/optimizing?WT.mc_id=DT-MVP-5004222 -->
+    <OptimizationPreference>Size</OptimizationPreference>
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?WT.mc_id=DT-MVP-5004222#trimming-framework-library-features -->
+    <DebuggerSupport>false</DebuggerSupport>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <EventSourceSupport>false</EventSourceSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <StackTraceSupport>false</StackTraceSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.58" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20230913-003854" />
   </ItemGroup>
 
 </Project>
