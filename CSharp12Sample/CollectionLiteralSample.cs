@@ -28,6 +28,7 @@ public class CollectionLiteralSample
         
         int[] nums = [1, 1, ..numArray, 2, 2];
         Console.WriteLine(string.Join(",", nums));
+        Console.ReadLine();
 
         int[] row0 = [1, 2, 3];
         int[] row1 = [4, 5, 6];
@@ -37,6 +38,7 @@ public class CollectionLiteralSample
         {
             Console.Write($"{element}, ");
         }
+        System.Console.WriteLine();
         System.Console.WriteLine();
         
         IEnumerable<string> enumerable = ["Hello", "dotnet"];
@@ -62,11 +64,13 @@ public class CollectionLiteralSample
         System.Console.WriteLine(emptyReadonlyCollection.GetType());
         ICollection<string> emptyCollection = [];
         System.Console.WriteLine(emptyCollection.GetType());
-        IReadOnlyList<string> emptyReadOnlyList = ["Hello", "dotnet"];
+        IReadOnlyList<string> emptyReadOnlyList = [];
         System.Console.WriteLine(emptyReadOnlyList.GetType());
-        IList<string> emptyList = ["Hello", "dotnet"];
+        IList<string> emptyList = [];
         System.Console.WriteLine(emptyList.GetType());
+        System.Console.WriteLine();
         
+        Console.ReadLine();
         CustomNumberCollection customNumberCollection = [1, 2, 3];
         System.Console.WriteLine(string.Join(",", customNumberCollection.Numbers));
 
