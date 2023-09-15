@@ -10,6 +10,7 @@ namespace CSharp12Sample;
 // https://github.com/dotnet/csharplang/blob/main/proposals/csharp-12.0/collection-expressions.md
 // https://github.com/dotnet/csharplang/issues/5354
 // https://github.com/dotnet/roslyn/issues/68785
+// https://github.com/dotnet/roslyn/issues/69950
 public class CollectionLiteralSample
 {
     public static void MainTest()
