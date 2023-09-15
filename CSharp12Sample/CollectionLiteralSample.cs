@@ -28,6 +28,16 @@ public class CollectionLiteralSample
         
         int[] nums = [1, 1, ..numArray, 2, 2];
         Console.WriteLine(string.Join(",", nums));
+
+        int[] row0 = [1, 2, 3];
+        int[] row1 = [4, 5, 6];
+        int[] row2 = [7, 8, 9];
+        int[] single = [..row0, ..row1, ..row2];
+        foreach (var element in single)
+        {
+            Console.Write($"{element}, ");
+        }
+        System.Console.WriteLine();
         
         IEnumerable<string> enumerable = ["Hello", "dotnet"];
         System.Console.WriteLine(enumerable.GetType());
