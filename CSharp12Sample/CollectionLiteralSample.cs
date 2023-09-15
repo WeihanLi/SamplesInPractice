@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
@@ -55,28 +56,45 @@ public class CollectionLiteralSample
         IList<string> emptyList = ["Hello", "dotnet"];
         System.Console.WriteLine(emptyList.GetType());
         
-        // CustomNumberCollection customNumberCollection = [1, 2, 3];
-        // System.Console.WriteLine(string.Join(",", customNumberCollection.Numbers));
+        CustomNumberCollection customNumberCollection = [1, 2, 3];
+        System.Console.WriteLine(string.Join(",", customNumberCollection.Numbers));
 
-        // CustomCollection<string> customCollection = [ "Hello", "World" ];
-        // System.Console.WriteLine(string.Join(",", customCollection.Elements));
+        CustomCollection<string> customCollection = [ "Hello", "World" ];
+        System.Console.WriteLine(string.Join(",", customCollection.Elements));
     }
 }
 
 [CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.CreateNumber))]
-file sealed class CustomNumberCollection
+file sealed class CustomNumberCollection : IEnumerable<int>
 {
     public required int[] Numbers { get; init; }
+    public IEnumerator<int> GetEnumerator()
+    {
+        return (IEnumerator<int>)Numbers.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return Numbers.GetEnumerator();
+    }
 }
 
 [CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.Create))]
 file sealed class CustomCollection<T>
 {
     public required T[] Elements { get; init; }
+
+    // public IEnumerator<T> GetEnumerator()
+    // {
+    //     return (IEnumerator<T>)Elements.GetEnumerator();
+    // }
 }
 
 file static class CustomCollectionBuilder
 {
+    public static IEnumerator<T> GetEnumerator<T>(this CustomCollection<T> collection) 
+        => (IEnumerator<T>)collection.Elements.GetEnumerator();
+    
     public static CustomNumberCollection CreateNumber(ReadOnlySpan<int> elements)
     {
         return new CustomNumberCollection()
