@@ -16,7 +16,7 @@ public static class HttpClientSample
     {
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5297");
-        using var response = await httpClient.GetAsync("api/Jobs", (HttpCompletionOption)1);
+        using var response = await httpClient.GetAsync("api/Jobs", HttpCompletionOption.ResponseHeadersRead);
         ArgumentNullException.ThrowIfNull(response.Content);
         var stream = response.Content.ReadFromJsonAsAsyncEnumerable<Job>();
         // var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>("api/Jobs", 
