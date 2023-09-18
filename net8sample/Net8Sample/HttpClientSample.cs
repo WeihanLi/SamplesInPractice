@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Security.AccessControl;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Net8Sample;
 
@@ -16,12 +18,17 @@ public static class HttpClientSample
     {
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5297");
-        using var response = await httpClient.GetAsync("api/Jobs", HttpCompletionOption.ResponseHeadersRead);
-        ArgumentNullException.ThrowIfNull(response.Content);
-        var stream = response.Content.ReadFromJsonAsAsyncEnumerable<Job>();
+        // using var response = await httpClient.GetAsync("api/Jobs", HttpCompletionOption.ResponseHeadersRead);
+        // ArgumentNullException.ThrowIfNull(response.Content);
+        // var stream = response.Content.ReadFromJsonAsAsyncEnumerable<Job>();
+
+        var jsonTypeInfo = GetJsonTypeInfo<Job>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var stream = httpClient.GetFromJsonAsAsyncEnumerable("api/Jobs", jsonTypeInfo);
+                
         // var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>("api/Jobs", 
         //     new JsonSerializerOptions(JsonSerializerDefaults.Web)
-        //     );
+        // );
+                
         await foreach (var job in stream)
         {
             Console.WriteLine(job);
@@ -40,6 +47,16 @@ public static class HttpClientSample
             Console.WriteLine(job);
             Console.WriteLine(DateTimeOffset.Now);
         }
+    }
+
+    private static JsonTypeInfo<TValue> GetJsonTypeInfo<TValue>(JsonSerializerOptions? options)
+    {
+        var type = typeof(TValue);
+        // Resolves JsonTypeInfo metadata using the appropriate JsonSerializerOptions configuration,
+        // following the semantics of the JsonSerializer reflection methods.
+        options ??= JsonSerializerOptions.Default;
+        options.MakeReadOnly(populateMissingResolver: true);
+        return (JsonTypeInfo<TValue>)options.GetTypeInfo(type);
     }
 }
 
