@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
     <EnablePreviewFeatures>true</EnablePreviewFeatures>
+    <Features>InterceptorsPreview</Features>
+<!--    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.AspNetCore.Http.Generated;CSharp12Sample.Generated</InterceptorsPreviewNamespaces>-->
   </PropertyGroup>
 
   <ItemGroup>
