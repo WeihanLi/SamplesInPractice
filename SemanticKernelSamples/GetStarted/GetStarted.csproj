@@ -20,9 +20,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="../.env">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
