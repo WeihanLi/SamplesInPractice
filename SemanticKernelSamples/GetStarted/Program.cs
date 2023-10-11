@@ -1,6 +1,4 @@
-﻿using dotenv.net;
-
-// load .env variables
-DotEnv.Load();
+﻿// load .env variables
+dotenv.net.DotEnv.Load();
 
 await MemorySample.MainTest();

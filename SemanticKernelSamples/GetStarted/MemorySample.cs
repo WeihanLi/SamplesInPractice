@@ -1,8 +1,6 @@
 using dotenv.net;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.AI.Embeddings;
-using Microsoft.SemanticKernel.Connectors.Memory.Redis;
-using Microsoft.SemanticKernel.Memory;
+using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
+using Microsoft.SemanticKernel.Plugins.Memory;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WeihanLi.Common;
@@ -15,24 +13,24 @@ public static class MemorySample
         DotEnv.Load();
         var apiEndpoint = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_ENDPOINT"));
         var apiKey = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY"));
-        var kernelBuilder = new KernelBuilder();
-        kernelBuilder.WithAzureChatCompletionService(Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_TEXT_COMPLETION_DEPLOY_ID")), apiEndpoint, apiKey);
-        kernelBuilder.WithAzureTextEmbeddingGenerationService(Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID")), apiEndpoint, apiKey);
-        // kernelBuilder.WithMemoryStorage(new VolatileMemoryStore());
-        kernelBuilder.WithMemoryStorage(new RedisMemoryStore("localhost:6379"));
-        var kernel = kernelBuilder.Build();
-        var collectionName = "Azure Products";
+
+        var memoryBuilder = new MemoryBuilder();
+        memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
+        memoryBuilder.WithMemoryStore(new Microsoft.SemanticKernel.Connectors.Memory.Redis.RedisMemoryStore("localhost:6379"));
+        memoryBuilder.WithAzureTextEmbeddingGenerationService(Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID")), apiEndpoint, apiKey);
+        var memory = memoryBuilder.Build();
+        var collectionName = "Azure-Products";
         await using var fs = File.OpenRead("text-sample.json");
         var list = await JsonSerializer.DeserializeAsync<Product[]>(fs);
         Guard.NotNull(list);
         foreach (var product in list)
         {
-            await kernel.Memory.SaveInformationAsync(collectionName, product.Description, product.Title, product.Description, product.Category);
+            await memory.SaveInformationAsync(collectionName, product.Description, product.Title, product.Description, product.Category);
         }
 
         await ConsoleHelper.HandleInputLoopAsync(async input =>
         {
-            var result = kernel.Memory.SearchAsync(collectionName, input, 3, 0.8);
+            var result = memory.SearchAsync(collectionName, input, 3, 0.8);
             await foreach (var item in result)
             {
                 Console.WriteLine($"{nameof(item.Relevance)}: {item.Relevance}");

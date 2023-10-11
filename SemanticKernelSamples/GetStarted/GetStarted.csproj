@@ -9,9 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="dotenv.net" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
     <PackageReference Include="Microsoft.SemanticKernel" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" />
   </ItemGroup>
 
   <ItemGroup>

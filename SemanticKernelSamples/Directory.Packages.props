@@ -4,9 +4,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="dotenv.net" Version="3.1.2" />
-    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0-rc.1.23419.4" />
-    <PackageVersion Include="Microsoft.SemanticKernel" Version="0.24.230918.1-preview" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="0.24.230918.1-preview" />
-    <PackageVersion Include="WeihanLi.Common" Version="1.0.60-preview-20230915-143829" />
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.0.0-beta1" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="1.0.0-beta1" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.0.0-beta1" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.0.0-beta1" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.60-preview-20231011-104232" />
   </ItemGroup>
 </Project>
