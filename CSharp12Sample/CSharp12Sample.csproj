@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="./gen.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+<!--    <ProjectReference Include="./gen.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />-->
   </ItemGroup>
 
   <ItemGroup>
