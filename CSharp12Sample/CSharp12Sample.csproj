@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Compile Include="CollectionLiteralSample.cs" />
+    <Compile Include="InlineArraySample.cs" />
     <Compile Include="InterceptorSample.cs" />
     <Compile Include="LambdaDefaultValueSample.cs" />
     <Compile Include="PrimaryConstructorSample.cs" />
