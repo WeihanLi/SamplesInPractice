@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace CSharp12Sample
+﻿namespace CSharp12Sample
 {
     public static class InterceptorSample
     {
@@ -20,47 +18,30 @@ namespace CSharp12Sample
     }
 }
 
-namespace System.Runtime.CompilerServices
-{
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute
-    {
-    }
-}
-
-namespace CSharp12Sample.Generated
-{
-    public static class D
-    {
-        // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
-        // public static void InterceptorMethod(this C c)
-        // {
-        //     Console.WriteLine($"interceptor");
-        // }
-        
-        [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
-        public static void LoggingInterceptorMethod(this C c)
-        {
-            Console.WriteLine("Before...");
-            c.InterceptableMethod();
-            Console.WriteLine("After...");
-        }        
-    }
-}
-
-// generated code:
-// namespace CSharp12Sample.Generated
+// namespace System.Runtime.CompilerServices
 // {
-//     public static partial class GeneratedLogging
+//     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+//     file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute
 //     {
-//         [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"C:\projects\source\magic\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", 10, 15)]
-//         public static void LoggingInterceptorMethod(this CSharp12Sample.C c)
-//         {
-//             System.Console.WriteLine("logging before...");
-//             c.InterceptableMethod();
-//             System.Console.WriteLine("logging after...");
-//         }
-
 //     }
 // }
 
+// namespace CSharp12Sample.Generated
+// {
+//     public static class D
+//     {
+//         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+//         // public static void InterceptorMethod(this C c)
+//         // {
+//         //     Console.WriteLine($"interceptor");
+//         // }
+//         
+//         [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+//         public static void LoggingInterceptorMethod(this C c)
+//         {
+//             Console.WriteLine("Before...");
+//             c.InterceptableMethod();
+//             Console.WriteLine("After...");
+//         }        
+//     }
+// }
