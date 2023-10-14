@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Operations;
 using System.Text;
 
 [Generator(LanguageNames.CSharp)]
-public class LoggingGenerator : IIncrementalGenerator
+public sealed class LoggingGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
