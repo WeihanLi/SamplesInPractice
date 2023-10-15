@@ -41,8 +41,19 @@ public static class InlineArraySample
         // if (arr is [0,1,..])
         //     Console.WriteLine("StartsWith 0, 1");
         
+        if (span is [0,1,..])
+            Console.WriteLine("StartsWith 0, 1");
+        
         // error CS9174: Cannot initialize type 'MyArray' with a collection expression because the type is not constructible.
         // arr = [1, 2, 3, 4, 5];
+        
+        // span = [1,2,3,4,5,1,2,3,4,5];
+        span = [1,2,3,4,5];
+        foreach (var item in span)
+        {
+            Console.Write(item);
+            Console.Write(",");
+        }
     }
 }
 
