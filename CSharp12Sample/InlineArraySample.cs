@@ -47,7 +47,6 @@ public static class InlineArraySample
         // error CS9174: Cannot initialize type 'MyArray' with a collection expression because the type is not constructible.
         // arr = [1, 2, 3, 4, 5];
         
-        // span = [1,2,3,4,5,1,2,3,4,5];
         span = [1,2,3,4,5];
         foreach (var item in span)
         {
