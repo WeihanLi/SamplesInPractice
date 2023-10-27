@@ -15,8 +15,12 @@ public static class IdentityApiSample
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddSqlite<AppDbContext>("Data Source=identity.db");
-        builder.Services.AddIdentityApiEndpoints<AppUser>()
-            .AddEntityFrameworkStores<AppDbContext>();
+        builder.Services.AddIdentityApiEndpoints<AppUser>() // .AddAuthentication() would be called internally
+            .AddEntityFrameworkStores<AppDbContext>()
+            ;
+        
+        builder.Services.AddAuthorization();
+        
         var app = builder.Build();
         if (app.Environment.IsDevelopment())
         {
