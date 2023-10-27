@@ -22,12 +22,10 @@ public static class HttpClientSample
         // ArgumentNullException.ThrowIfNull(response.Content);
         // var stream = response.Content.ReadFromJsonAsAsyncEnumerable<Job>();
 
-        var jsonTypeInfo = GetJsonTypeInfo<Job>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
-        var stream = httpClient.GetFromJsonAsAsyncEnumerable("api/Jobs", jsonTypeInfo);
+        // var jsonTypeInfo = GetJsonTypeInfo<Job>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        // var stream = httpClient.GetFromJsonAsAsyncEnumerable("api/Jobs", jsonTypeInfo);
                 
-        // var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>("api/Jobs", 
-        //     new JsonSerializerOptions(JsonSerializerDefaults.Web)
-        // );
+        var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>("api/Jobs");
                 
         await foreach (var job in stream)
         {
@@ -40,8 +38,9 @@ public static class HttpClientSample
     {
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5297");
-        await using var responseStream = await httpClient.GetStreamAsync("api/Jobs");
-        var stream = JsonSerializer.DeserializeAsyncEnumerable<Job>(responseStream, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        await using var responseStream = await httpClient.GetStreamAsync("/api/jobs");
+        var stream = JsonSerializer.DeserializeAsyncEnumerable<Job>(responseStream, 
+            new JsonSerializerOptions(JsonSerializerDefaults.Web));
         await foreach (var job in stream)
         {
             Console.WriteLine(job);
