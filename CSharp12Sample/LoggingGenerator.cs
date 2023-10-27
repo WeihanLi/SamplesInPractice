@@ -43,7 +43,7 @@ public sealed class LoggingGenerator : IIncrementalGenerator
                 foreach (var invocation in invocations)
                 {
                     var definition = $$"""
-                                               [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
+                                               [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation!.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
                                                public static void LoggingInterceptorMethod(this CSharp12Sample.C c)
                                                {
                                                    System.Console.WriteLine("logging before...");
@@ -72,7 +72,9 @@ public sealed class LoggingGenerator : IIncrementalGenerator
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute { }
+#pragma warning disable CS9113 // Parameter is unread.
+    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute {}
+#pragma warning restore CS9113 // Parameter is unread.
 }
 
 namespace CSharp12Sample.Generated
