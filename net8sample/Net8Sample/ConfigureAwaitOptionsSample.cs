@@ -12,6 +12,8 @@ public static class ConfigureAwaitOptionsSample
         await ForceYielding();
         await SuppressThrowing();
 
+        await ContinueOnCapturedContextOrNot();
+
         Console.ReadLine();
     }
 
@@ -68,8 +70,11 @@ public static class ConfigureAwaitOptionsSample
 
         try
         { 
+            
+#pragma warning disable CA2261
             // CA2261: The ConfigureAwaitOptions.SuppressThrowing is only supported with the non-generic Task
             await ThrowingTaskWithReturnValue().ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
+#pragma warning restore CA2261
         }
         catch (Exception e)
         {

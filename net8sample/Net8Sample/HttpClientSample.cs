@@ -1,9 +1,5 @@
-﻿using System.Security.AccessControl;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 namespace Net8Sample;
 
@@ -11,7 +7,8 @@ public static class HttpClientSample
 {
     public static async Task MainTest()
     {
-        
+        await HttpClientGetFromJsonAsAsyncEnumerableSample();
+        await HttpClientGetStreamDeserializeAsyncEnumerableSample();
     }
 
     public static async Task HttpClientGetFromJsonAsAsyncEnumerableSample()
@@ -46,16 +43,6 @@ public static class HttpClientSample
             Console.WriteLine(job);
             Console.WriteLine(DateTimeOffset.Now);
         }
-    }
-
-    private static JsonTypeInfo<TValue> GetJsonTypeInfo<TValue>(JsonSerializerOptions? options)
-    {
-        var type = typeof(TValue);
-        // Resolves JsonTypeInfo metadata using the appropriate JsonSerializerOptions configuration,
-        // following the semantics of the JsonSerializer reflection methods.
-        options ??= JsonSerializerOptions.Default;
-        options.MakeReadOnly(populateMissingResolver: true);
-        return (JsonTypeInfo<TValue>)options.GetTypeInfo(type);
     }
 }
 
