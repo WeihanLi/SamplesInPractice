@@ -12,7 +12,7 @@ var exitToken = ConsoleHelper.GetExitToken();
 // await InvokeHelper.TryInvokeAsync(() => HostedLifecycleServiceSample.MainTest(exitToken));
 // await InvokeHelper.TryInvokeAsync(() => HostedServiceConcurrentSample.MainTest(exitToken));
 
-await InvokeHelper.TryInvokeAsync(HttpClientSample.HttpClientGetStreamDeserializeAsyncEnumerableSample);
+await InvokeHelper.TryInvokeAsync(ConfigureAwaitOptionsSample.MainTest);
 
 // await InvokeHelper.TryInvokeAsync(() => WebAppSlimBuilderSample.MainTest(exitToken));
 
