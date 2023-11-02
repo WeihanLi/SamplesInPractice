@@ -23,7 +23,7 @@ public static class DotnetConfAgendaCrawler
             var group = new GroupModel()
             {
                 Day = Convert.ToInt32(dayGroupElements[groups.Count].GetAttribute("data-day")),
-                GroupTitle = dayGroupElements[groups.Count].TextContent.Trim()
+                GroupTitle = dayGroupElements[groups.Count].TextContent.Trim().Replace("\n", " - ")
             };
             var dateTitleElements = groupElement.QuerySelectorAll("p.agenda-group-title");
             foreach (var sessionElement in groupElement.QuerySelectorAll(".agenda-group-sessions-container"))
