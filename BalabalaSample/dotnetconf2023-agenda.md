@@ -1,4 +1,4 @@
-## dotnet conf 2023 Agenda
+# .NET Conf 2023 Agenda
 
 ### Welcome to .NET 8
 
@@ -1299,7 +1299,9 @@ While using Reflection is still a necessary tool for any developer. The Roslyn s
 
 对代码感兴趣的朋友可以在 Github 上看源码：https://github.com/WeihanLi/SamplesInPractice/blob/master/BalabalaSample/DotnetConfAgendaCrawler.cs
 
-同时生成了一个 JSON 供数据分析
+同时生成了一个 JSON 供数据分析，有需要的朋友可以直接用
+
+https://raw.githubusercontent.com/WeihanLi/SamplesInPractice/master/BalabalaSample/dotnetconf2023-agenda.json
 
 ```json
 [
@@ -1321,9 +1323,9 @@ While using Reflection is still a necessary tool for any developer. The Roslyn s
 
 `DescriptionInZh` 是翻译的中文，仅供参考，有一些校对的更新没有同步，需要做分析可以使用原文 Description
 
-有需要的朋友可以直接用
 
-以上信息仅供参考：以 dotnetconf 官网的日程安排为准 https://dotnetconf.com/agenda
+
+以上信息仅供参考：以 .NET Conf 官网的日程安排为准 https://dotnetconf.com/agenda
 
 ## References
 
