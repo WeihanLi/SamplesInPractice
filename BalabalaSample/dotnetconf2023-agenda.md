@@ -1323,7 +1323,7 @@ While using Reflection is still a necessary tool for any developer. The Roslyn s
 
 有需要的朋友可以直接用
 
-https://dotnetconf.com/agenda 可以看 dotnetconf 官网的日程安排
+以上信息仅供参考：以 dotnetconf 官网的日程安排为准 https://dotnetconf.com/agenda
 
 ## References
 
