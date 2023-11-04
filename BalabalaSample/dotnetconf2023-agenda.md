@@ -1,3 +1,5 @@
+## dotnet conf 2023 Agenda
+
 ### Welcome to .NET 8
 
 > 2023-11-15 00:00 -- 01:00
@@ -1288,3 +1290,43 @@ Learn about the latest advancements around hardware intrinsics and vectorization
 While using Reflection is still a necessary tool for any developer. The Roslyn source generators are a compelling way to write code while your users are writing their code. In this talk, Shawn will build a source generator from scratch to show you all the gory details.
 
 虽然使用 Reflection 仍然是任何开发人员的必备工具。Roslyn 源生成器是在用户编写代码时编写代码的一种引人注目的方法。在这次演讲中，Shawn 将从头开始构建一个源代码生成器，向您展示所有的细节。
+
+## More
+
+文中的时间已经转成了北京时间
+
+使用 dotnet 写了一个简单的爬虫爬取了一下日程安排，并用微软 translator API 将简介部分翻译为了中文，之后大概做了一下校对
+
+对代码感兴趣的朋友可以在 Github 上看源码：https://github.com/WeihanLi/SamplesInPractice/blob/master/BalabalaSample/DotnetConfAgendaCrawler.cs
+
+同时生成了一个 JSON 供数据分析
+
+```json
+[
+    {
+        "SessionId": 1,
+        "BeginDateTime": "2023-11-14T08:00:00-08:00",
+        "EndDateTime": "2023-11-14T09:00:00-08:00",
+        "BeginDateTimeInCST": "2023-11-15T00:00:00Z",
+        "EndDateTimeInCST": "2023-11-15T01:00:00Z",
+        "Title": "Welcome to .NET 8",
+        "Speaker": "Damian Edwards, Safia Abdalla, David Fowler, Gaurav Seth, Daniel Roth, Glenn Condron, Maddy Montaquila, Maria Naggaga",
+        "Description": ".NET 8 is here! Find out what is new for .NET developers across all workloads including cloud, mobile, desktop, web, AI, IoT, and so much more.",
+        "DescriptionInZh": ".NET 8 现已推出！了解适用于所有工作负载（包括云、移动、桌面、Web、AI、IoT 等）的 .NET 开发人员的新增功能。"
+    }
+]
+```
+
+`Begin/EndDateTimeInCST` 是转换后的北京时间（`CST` 这里代表的是 `China Standard Time`)
+
+`DescriptionInZh` 是翻译的中文，仅供参考，有一些校对的更新没有同步，需要做分析可以使用原文 Description
+
+有需要的朋友可以直接用
+
+https://dotnetconf.com/agenda 可以看 dotnetconf 官网的日程安排
+
+## References
+
+- https://dotnetconf.com/agenda
+- https://github.com/WeihanLi/SamplesInPractice/blob/master/BalabalaSample/DotnetConfAgendaCrawler.cs
+- https://raw.githubusercontent.com/WeihanLi/SamplesInPractice/master/BalabalaSample/dotnetconf2023-agenda.json
