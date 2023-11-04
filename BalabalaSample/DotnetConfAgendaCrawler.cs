@@ -67,18 +67,21 @@ public static class DotnetConfAgendaCrawler
             .ToList();
 
         var translationHelper = new TranslationHelper();
-        foreach (var session in sessions)
+        if (translationHelper.ApiKeyConfigured)
         {
-            try
+            foreach (var session in sessions)
             {
-                await RetryHelper.TryInvokeAsync(async () =>
+                try
                 {
-                    session.DescriptionInZh = await translationHelper.GetTranslation(session.Description);
-                }, 5, (i, _, ex)=>ConsoleHelper.WriteLineWithColor($"Exception, retry count: {i}, {ex}", ConsoleColor.Red), delayFunc: c => TimeSpan.FromSeconds(c * 5));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);   
+                    await RetryHelper.TryInvokeAsync(async () =>
+                    {
+                        session.DescriptionInZh = await translationHelper.GetTranslation(session.Description);
+                    }, 5, (i, _, ex)=>ConsoleHelper.WriteLineWithColor($"Exception, retry count: {i}, {ex}", ConsoleColor.Red), delayFunc: c => TimeSpan.FromSeconds(c * 5));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);   
+                }
             }
         }
         
@@ -132,6 +135,8 @@ file sealed class SessionModel: IComparable, IComparable<SessionModel>
     
     public string DescriptionInZh { get; set; }
 
+    public bool ShouldSerializeDescriptionInZh() => !string.IsNullOrEmpty(DescriptionInZh);
+
     public int CompareTo(object? obj)
     {
         return ((IComparable)BeginDateTime).CompareTo(obj);
@@ -166,9 +171,11 @@ file sealed class SessionModel: IComparable, IComparable<SessionModel>
     }
 }
 
+// https://learn.microsoft.com/zh-cn/azure/ai-services/translator/reference/v3-0-translate
 file sealed class TranslationHelper
 {
     private readonly HttpClient _httpClient;
+    private readonly string? _apiKey;
 
     public TranslationHelper()
     {
@@ -176,11 +183,12 @@ file sealed class TranslationHelper
         {
             BaseAddress = new Uri("https://api.cognitive.microsofttranslator.com")
         };
-        _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key",
-            Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_API_KEY"));
-        _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Region",
-            "southeastasia");
+        _apiKey = Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_API_KEY");
+        _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", _apiKey);
+        _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Region","southeastasia");
     }
+
+    public bool ApiKeyConfigured => string.IsNullOrEmpty(_apiKey);
     
     /// <summary>
     /// 
@@ -193,6 +201,9 @@ file sealed class TranslationHelper
     /// <returns></returns>
     public async Task<string> GetTranslation(string text, string toLanguage = "zh-Hans")
     {
+        text = text.Trim();
+        if (string.IsNullOrEmpty(text)) return string.Empty;
+        
         using var response = await _httpClient.PostAsJsonAsync($"/translate?api-version=3.0&to={toLanguage}", new[]
         {
             new
