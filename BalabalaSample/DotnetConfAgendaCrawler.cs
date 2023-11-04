@@ -38,7 +38,7 @@ public static class DotnetConfAgendaCrawler
                 ArgumentNullException.ThrowIfNull(startDateString);
                 var endDateString = dateElement?.GetAttribute("data-end");
                 ArgumentNullException.ThrowIfNull(endDateString);
-                var pstOffset = TimeSpan.FromHours(-7);
+                var pstOffset = TimeSpan.FromHours(-8);
                 var startDate = new DateTimeOffset(DateTime.Parse(startDateString.Replace("PST", "").Trim()), pstOffset);
                 var endDate = new DateTimeOffset(DateTime.Parse(endDateString.Replace("PST", "").Trim()), pstOffset);
                 var session = new SessionModel()
@@ -188,7 +188,7 @@ file sealed class TranslationHelper
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Region","southeastasia");
     }
 
-    public bool ApiKeyConfigured => string.IsNullOrEmpty(_apiKey);
+    public bool ApiKeyConfigured => !string.IsNullOrEmpty(_apiKey);
     
     /// <summary>
     /// 

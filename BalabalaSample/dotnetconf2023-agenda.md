@@ -1,6 +1,6 @@
 ### Welcome to .NET 8
 
-> 2023-11-14 23:00 -- 00:00
+> 2023-11-15 00:00 -- 01:00
 
 **Damian Edwards, Safia Abdalla, David Fowler, Gaurav Seth, Daniel Roth, Glenn Condron, Maddy Montaquila, Maria Naggaga**
 
@@ -10,7 +10,7 @@
 
 ### Full stack web UI with Blazor in .NET 8
 
-> 2023-11-15 00:00 -- 01:00
+> 2023-11-15 01:00 -- 02:00
 
 **Daniel Roth, Steve Sanderson**
 
@@ -20,13 +20,13 @@ In .NET 8 you can deliver the best web app experiences entirely in Blazor using 
 
 ### Building Cloud Native apps with .NET 8
 
-> 2023-11-15 01:00 -- 02:00
+> 2023-11-15 02:00 -- 03:00
 
 **Glenn Condron**
 
 ### Performance Improvements in .NET 8, ASP.NET Core, and .NET MAUI
 
-> 2023-11-15 02:00 -- 03:00
+> 2023-11-15 03:00 -- 04:00
 
 **David Fowler, Stephen Toub, Jonathan Peppers**
 
@@ -36,7 +36,7 @@ In .NET 8 you can deliver the best web app experiences entirely in Blazor using 
 
 ### What's New in C#  12
 
-> 2023-11-15 03:00 -- 03:45
+> 2023-11-15 04:00 -- 04:45
 
 **Mads Torgersen, Dustin Campbell**
 
@@ -46,7 +46,7 @@ A new .NET means a new C#! Dustin and Mads will take you through the new feature
 
 ### Packing light with VS Code and the C# Dev Kit
 
-> 2023-11-15 03:45 -- 04:30
+> 2023-11-15 04:45 -- 05:30
 
 **Burke Holland, Leslie Richardson**
 
@@ -64,7 +64,7 @@ Whether you're a seasoned developer or just starting with C#, this session will 
 
 ### Entity Framework Core 8: Improved JSON, queryable collections , and more…
 
-> 2023-11-15 04:30 -- 05:15
+> 2023-11-15 05:30 -- 06:15
 
 **Arthur Vickers, Shay Rojansky**
 
@@ -100,7 +100,7 @@ Entity Framework Core 8 （EF8） 引入了几项高度呼声很高的新功能�
 
 ### .NET 💖 AI
 
-> 2023-11-15 05:15 -- 06:00
+> 2023-11-15 06:15 -- 07:00
 
 **John Maeda, Scott Hanselman**
 
@@ -110,7 +110,7 @@ Want to add LLM AI easily to your app? That's what the open-source project "Sema
 
 ### Build Intelligent Apps with .NET and Azure
 
-> 2023-11-15 06:00 -- 06:45
+> 2023-11-15 07:00 -- 07:45
 
 **Luis Quintanilla, Maria Naggaga**
 
@@ -120,7 +120,7 @@ Join us for this exciting session and discover how you can leverage the power of
 
 ### What’s New in .NET MAUI
 
-> 2023-11-15 06:45 -- 07:30
+> 2023-11-15 07:45 -- 08:30
 
 **David Ortinau, Maddy Montaquila**
 
@@ -132,7 +132,7 @@ Companies worldwide are building mobile and desktop apps with .NET MAUI, and .NE
 
 ### Building and scaling cloud-native, intelligent applications on Azure and .NET
 
-> 2023-11-15 07:30 -- 08:15
+> 2023-11-15 08:30 -- 09:15
 
 **Scott Hunter**
 
@@ -142,7 +142,7 @@ Learn how to run cloud-native serverless and container applications in Azure usi
 
 ### Improving your application telemetry using .NET 8 and Open Telemetry
 
-> 2023-11-16 00:00 -- 00:30
+> 2023-11-16 01:00 -- 01:30
 
 **Noah Falk, Sam Spencer**
 
@@ -152,7 +152,7 @@ The 3 pillars of observability are Logging, Metrics and Distributed tracing. Lea
 
 ### Building resilient cloud services with .NET 8
 
-> 2023-11-16 00:30 -- 01:00
+> 2023-11-16 01:30 -- 02:00
 
 **Martin Tomka**
 
@@ -162,7 +162,7 @@ This is a deep dive into the .NET 8 resiliency features and integration with the
 
 ### App Service the best place to host your .NET 8 Web Apps
 
-> 2023-11-16 01:00 -- 01:30
+> 2023-11-16 02:00 -- 02:30
 
 **Byron Tardif**
 
@@ -176,7 +176,7 @@ Learn about some of the new exciting platform features that will take your .NET 
 
 ### In .NET 8, ASP.NET Ate
 
-> 2023-11-16 01:30 -- 02:00
+> 2023-11-16 02:30 -- 03:00
 
 **Safia Abdalla, Stephen Halter**
 
@@ -186,7 +186,7 @@ Learn all about new features coming to the ASP.NET stack, from metrics support t
 
 ### What's new in System.Text.Json
 
-> 2023-11-16 02:00 -- 02:30
+> 2023-11-16 03:00 -- 03:30
 
 **Eirik George Tsarpalis**
 
@@ -196,7 +196,7 @@ Our focus for System.Text.Json in this release has been to substantially improve
 
 ### Tiny, fast ASP.NET Core APIs with native AOT
 
-> 2023-11-16 02:30 -- 03:00
+> 2023-11-16 03:30 -- 04:00
 
 **Damian Edwards**
 
@@ -206,7 +206,7 @@ Our focus for System.Text.Json in this release has been to substantially improve
 
 ### Leveraging the power of the .NET platform in Azure Functions
 
-> 2023-11-16 03:30 -- 04:00
+> 2023-11-16 04:30 -- 05:00
 
 **Matthew Henderson, Fabio Cavalcante**
 
@@ -216,7 +216,7 @@ Azure Functions 的最新更新使在 .NET 中构建可缩放、事件驱动的�
 
 ### Visual Studio Updates for .NET Devs
 
-> 2023-11-16 04:00 -- 04:30
+> 2023-11-16 05:00 -- 05:30
 
 **Sayed Hashimi**
 
@@ -226,7 +226,7 @@ Visual Studio 中为 .NET 开发人员提供了许多新的好东西 - 终结点
 
 ### Everyday C# - A blend of modern and time tested features
 
-> 2023-11-16 04:30 -- 05:00
+> 2023-11-16 05:30 -- 06:00
 
 **Bill Wagner**
 
@@ -238,7 +238,7 @@ C# 创新速度很快。您的团队需要制定一个路线，以采用最适�
 
 ### ASP.NET Core Authentication Simplified
 
-> 2023-11-16 05:00 -- 05:30
+> 2023-11-16 06:00 -- 06:30
 
 **Stephen Halter, Jeremy Likness**
 
@@ -250,7 +250,7 @@ New features include: the new MapIdentityApi method which adds Identity HTTP API
 
 ### Accelerating migration of ASP.NET apps to the cloud with Azure AppCAT
 
-> 2023-11-16 05:30 -- 06:00
+> 2023-11-16 06:30 -- 07:00
 
 **Mike Rousos**
 
@@ -264,7 +264,7 @@ Azure AppCAT for .NET 可与 .NET Framework 和 .NET 6+ 配合使用，提供有
 
 ### .NET Containers advancements in .NET 8
 
-> 2023-11-16 06:00 -- 06:30
+> 2023-11-16 07:00 -- 07:30
 
 **Chet Husk, Richard Lander**
 
@@ -274,7 +274,7 @@ Azure AppCAT for .NET 可与 .NET Framework 和 .NET 6+ 配合使用，提供有
 
 ### Build hybrid apps with .NET MAUI
 
-> 2023-11-16 06:30 -- 07:00
+> 2023-11-16 07:30 -- 08:00
 
 **Beth Massi, Eilon Lipton**
 
@@ -284,7 +284,7 @@ In this session learn why you would choose a hybrid web approach to building nat
 
 ### What's new with WinForms
 
-> 2023-11-16 07:30 -- 08:00
+> 2023-11-16 08:30 -- 09:00
 
 **Merrie McGaw**
 
@@ -294,7 +294,7 @@ Since we added WinForms to .NET in .NET Core 3.0 we've been making a lot of impr
 
 ### Best Practices for Cross-Platform .NET 8 Applications
 
-> 2023-11-16 08:00 -- 08:30
+> 2023-11-16 09:00 -- 09:30
 
 **Nick Randolph**
 
@@ -312,7 +312,7 @@ Microsoft 在 ASP.NET 之外提取了大量功能，并通过 Microsoft 扩展�
 
 ### Vertical Slice Architecture: How Does it Compare to Clean Architecture
 
-> 2023-11-16 08:30 -- 09:00
+> 2023-11-16 09:30 -- 10:00
 
 **Luke Parker**
 
@@ -338,7 +338,7 @@ Join us and get ahead of the curve, and be the one driving innovation in your .N
 
 ### Generative AI for the .NET Developer
 
-> 2023-11-16 09:00 -- 09:30
+> 2023-11-16 10:00 -- 10:30
 
 **Aaron Powell**
 
@@ -404,7 +404,7 @@ Afer the session, attendees will get those takeaways:
 
 ### Create an enterprise Copilot extension for Visual Studio Code through Semantic Kernel
 
-> 2023-11-16 10:00 -- 10:30
+> 2023-11-16 11:00 -- 11:30
 
 **Kinfey Lo**
 
@@ -414,7 +414,7 @@ GitHub Copilot 非常受企业用户欢迎，但如何为企业注入企业编�
 
 ### Concurrent Hosted Service in Net 8
 
-> 2023-11-16 10:30 -- 11:00
+> 2023-11-16 11:30 -- 12:00
 
 **Saeed Esmaeelinejad**
 
@@ -424,7 +424,7 @@ Before .NET 8, hosted services were started and stopped sequentially, with each 
 
 ### We are not just a .NET Community, we run our community on .NET
 
-> 2023-11-16 11:00 -- 11:30
+> 2023-11-16 12:00 -- 12:30
 
 **Augustine Correa**
 
@@ -448,7 +448,7 @@ https://twitter.com/hackmum/status/1694780944778186885?s=20]。作为一个致�
 
 ### Understanding Role-Based Access Control with ASP.NET Web APIs
 
-> 2023-11-16 11:30 -- 12:00
+> 2023-11-16 12:30 -- 13:00
 
 **Aditya Oberai**
 
@@ -462,7 +462,7 @@ In this session, join in as we discuss the importance of API security and how yo
 
 ### Spatial Data with Entity Framework Core and .NET MAUI
 
-> 2023-11-16 12:00 -- 12:30
+> 2023-11-16 13:00 -- 13:30
 
 **Giorgi Dalakishvili**
 
@@ -484,7 +484,7 @@ Entity Framework Core 非常适合执行 crud 操作，但您知道 Entity Frame
 
 ### Building generative AI powered bots with Teams Toolkit and AI library for .NET
 
-> 2023-11-16 12:30 -- 13:00
+> 2023-11-16 13:30 -- 14:00
 
 **Ayca Bas, John Miller**
 
@@ -498,7 +498,7 @@ You'll also get introduced to the new Teams AI library for .NET and learn how yo
 
 ### Building Multi-Tenant ASP.NET Core Applications and ABP Framework
 
-> 2023-11-16 13:00 -- 13:30
+> 2023-11-16 14:00 -- 14:30
 
 **Alper Ebicoglu**
 
@@ -508,7 +508,7 @@ What's SaaS development? What are the multi-tenancy pros and challenges? Multite
 
 ### Reactive programming with .NET MAUI
 
-> 2023-11-16 13:30 -- 14:00
+> 2023-11-16 14:30 -- 15:00
 
 **Enis Necipoğlu**
 
@@ -518,7 +518,7 @@ Reactive programming is a paradigm that allows us to write asynchronous and non-
 
 ### From Zero to Million: How Amateur Developers and Infrastructure Engineers Built a Million-Dollar App
 
-> 2023-11-16 14:00 -- 14:30
+> 2023-11-16 15:00 -- 15:30
 
 **Werner Rall**
 
@@ -528,7 +528,7 @@ Join us for an exciting presentation as we dive deep into the journey of an unli
 
 ### Visual Studio updates for F#
 
-> 2023-11-16 14:30 -- 15:00
+> 2023-11-16 15:30 -- 16:00
 
 **Petr Semkin**
 
@@ -538,7 +538,7 @@ In this presentation, Petr will discuss the recent enhancements to Visual Studio
 
 ### From IL Weaving to Source Generators, the Realm story
 
-> 2023-11-16 15:00 -- 15:30
+> 2023-11-16 16:00 -- 16:30
 
 **Ferdinando Papale**
 
@@ -552,7 +552,7 @@ This talk will go through the reasons why IL Weaving was used in the first place
 
 ### Let’s catch up with C#! Exciting new features in C# 9, 10, 11 and 12!
 
-> 2023-11-16 15:30 -- 16:00
+> 2023-11-16 16:30 -- 17:00
 
 **Filip Ekberg**
 
@@ -588,7 +588,7 @@ We'll also take a look at what is new in C# 12!
 
 ### Two ways of migrating old ASP.NET web apps to .NET 7/8
 
-> 2023-11-16 16:00 -- 16:30
+> 2023-11-16 17:00 -- 17:30
 
 **Tomas Herceg**
 
@@ -608,7 +608,7 @@ I'll share a lot of practical examples and my personal experience with both meth
 
 ### Unleashing the Power of Cross-Platform Development with Avalonia UI
 
-> 2023-11-16 16:30 -- 17:00
+> 2023-11-16 17:30 -- 18:00
 
 **Mike James**
 
@@ -626,7 +626,7 @@ Whether you're an experienced .NET developer or just starting your journey, this
 
 ### Design UI agnostic cross-platform applications with .NET
 
-> 2023-11-16 17:00 -- 17:30
+> 2023-11-16 18:00 -- 18:30
 
 **Dan Ciprian Ardelean**
 
@@ -640,7 +640,7 @@ In this session I will show some strategies that you can use when you are develo
 
 ### Unlocking the power of the Fluent UI Blazor components
 
-> 2023-11-16 17:30 -- 18:00
+> 2023-11-16 18:30 -- 19:00
 
 **Vincent Baaij, Denis Voituron**
 
@@ -650,7 +650,7 @@ Dive into the world of Fluent UI and discover how to leverage its seamless integ
 
 ### Let none survive! - How to test our unit tests with mutation testing
 
-> 2023-11-16 18:00 -- 18:30
+> 2023-11-16 19:00 -- 19:30
 
 **Stefan Pölz**
 
@@ -666,7 +666,7 @@ Let's kill some mutants!
 
 ### Migrating  a React Application to Blazor
 
-> 2023-11-16 18:30 -- 19:00
+> 2023-11-16 19:30 -- 20:00
 
 **Samson Amaugo**
 
@@ -676,7 +676,7 @@ In this session, I would be discussing how I rewrote my open-source React Manife
 
 ### How to Achieve Optimistic Updates with Blazor and EF Core
 
-> 2023-11-16 19:00 -- 19:30
+> 2023-11-16 20:00 -- 20:30
 
 **Emanuele Bartolesi**
 
@@ -686,7 +686,7 @@ Optimistic updates are a technique for improving the user experience of web appl
 
 ### EF Core database model first - take it to the next level with Power Tools CLI
 
-> 2023-11-16 19:30 -- 20:00
+> 2023-11-16 20:30 -- 21:00
 
 **Erik Ejlskov Jensen**
 
@@ -700,7 +700,7 @@ In this demo-packed session you will see how easy it is to get started with EF C
 
 ### What's new in F# 8
 
-> 2023-11-16 20:00 -- 20:30
+> 2023-11-16 21:00 -- 21:30
 
 **Tomáš Grošup**
 
@@ -710,7 +710,7 @@ The session will bring an overview of new F# 8 language features, diagnostics an
 
 ### Modernizing Rx.NET
 
-> 2023-11-16 20:30 -- 21:00
+> 2023-11-16 21:30 -- 22:00
 
 **Ian Griffiths**
 
@@ -720,7 +720,7 @@ Reactive Extensions for .NET 是最成熟和广泛使用的开源 .NET 项目之
 
 ### Building next-gen applications with event-driven architectures
 
-> 2023-11-16 21:00 -- 21:30
+> 2023-11-16 22:00 -- 22:30
 
 **Teena Idnani**
 
@@ -734,7 +734,7 @@ In this talk, we will show how to use event-driven architecture to decouple and 
 
 ### Using .NET and Azure to build a green supercomputer for Vestas
 
-> 2023-11-16 21:30 -- 22:00
+> 2023-11-16 22:30 -- 23:00
 
 **Anders Lybecker, Tess Ferrandez-Norlander**
 
@@ -760,7 +760,7 @@ Vestas 是世界上最具可持续性的能源公司，他们希望通过优化�
 
 ### Lessons from a data science startup using F# and dotnet in a developing country
 
-> 2023-11-16 22:00 -- 22:30
+> 2023-11-16 23:00 -- 23:30
 
 **Eduardo Bellani**
 
@@ -793,7 +793,7 @@ What I promise with this talk is:
 
 ### Reverse proxying is easy with YARP
 
-> 2023-11-16 22:00 -- 22:30
+> 2023-11-16 23:00 -- 23:30
 
 **Sam Spencer**
 
@@ -803,7 +803,7 @@ YARP 与大多数其他反向代理有何不同，并使您能够轻松进行自
 
 ### Building beautiful Blazor apps with Tailwind CSS
 
-> 2023-11-16 22:30 -- 23:00
+> 2023-11-16 23:30 -- 00:00
 
 **Chris Sainty**
 
@@ -817,7 +817,7 @@ Tailwind CSS 已经流行了一段时间。它正迅速成为设置应用程序�
 
 ### Mobile Application Development with C# only: Unifying Markup and Business Logic
 
-> 2023-11-16 22:30 -- 23:00
+> 2023-11-16 23:30 -- 00:00
 
 **Pedro Jesus**
 
@@ -835,7 +835,7 @@ Join us to explore the future of mobile application development, where the power
 
 ### Blazor-testing from A to Z
 
-> 2023-11-16 23:00 -- 23:30
+> 2023-11-17 00:00 -- 00:30
 
 **Egil Hansen**
 
@@ -853,7 +853,7 @@ We will cover these topics with the goal of creating tests that protect against 
 
 ### Experimental C# Interceptors: AOT & Performance for free
 
-> 2023-11-16 23:00 -- 23:30
+> 2023-11-17 00:00 -- 00:30
 
 **Stefan Pölz**
 
@@ -863,7 +863,7 @@ C# 12.0 - 随 .NET 8.0 一起提供 - 为我们带来了一个新的实验性语
 
 ### It's C# All The Way Down! Using .NET for home automation with IoT devices
 
-> 2023-11-16 23:30 -- 00:00
+> 2023-11-17 00:30 -- 01:00
 
 **Sammo Gabay**
 
@@ -873,7 +873,7 @@ In this presentation, I demonstrate using .NET nanoFramework on a microcontrolle
 
 ### To the cloud with minimal changes: A pattern to make your app reliable
 
-> 2023-11-16 23:30 -- 00:00
+> 2023-11-17 00:30 -- 01:00
 
 **Matt Soucoup, Nish Anil**
 
@@ -883,7 +883,7 @@ Do you want to move your web app to the cloud without rewriting it from scratch?
 
 ### Community Toolkit Roundup
 
-> 2023-11-17 00:00 -- 00:30
+> 2023-11-17 01:00 -- 01:30
 
 **Michael Hawker, Gerald Versluis, Sergio Pedri**
 
@@ -897,7 +897,7 @@ Discover how you can get involved, contribute, and benefit from these amazing to
 
 ### Improve your ASP.NET core web app performance using Azure Cache for Redis
 
-> 2023-11-17 00:00 -- 00:30
+> 2023-11-17 01:00 -- 01:30
 
 **Catherine Wang, Marc Gravell**
 
@@ -907,7 +907,7 @@ Learn how to use Redis Cache to improve performance and resiliency with your ASP
 
 ### Blazor Puzzles and Answers
 
-> 2023-11-17 00:30 -- 01:00
+> 2023-11-17 01:30 -- 02:00
 
 **Jeffrey T. Fritz, Carl Franklin**
 
@@ -917,7 +917,7 @@ Carl Franklin 和 Jeff Fritz 的 Blazor Puzzle 播客团队在这个以代码为
 
 ### Make a template for your template; profit!
 
-> 2023-11-17 00:30 -- 01:00
+> 2023-11-17 01:30 -- 02:00
 
 **Rob Conery**
 
@@ -927,7 +927,7 @@ Ever wish you could create your own File | New template for your company or side
 
 ### Integrating Blazor with existing .NET web apps
 
-> 2023-11-17 01:00 -- 01:30
+> 2023-11-17 02:00 -- 02:30
 
 **Ed Charbeneau**
 
@@ -937,7 +937,7 @@ ASP.NET's RazorComponent model is intuitive and brings productivity to web devel
 
 ### Learn how to improve .NET application performance, leveraging Azure Code Optimizations
 
-> 2023-11-17 01:00 -- 01:30
+> 2023-11-17 02:00 -- 02:30
 
 **Manju Ramanathpura, Jan Kalis**
 
@@ -947,7 +947,7 @@ Join us to learn more about how Azure Diagnostics team can help you improve your
 
 ### .NET is the best backend for your JavaScript frontend
 
-> 2023-11-17 01:30 -- 02:00
+> 2023-11-17 02:30 -- 03:00
 
 **Jiayan Chen, Daniel Roth**
 
@@ -957,7 +957,7 @@ We will be talking about the removal of the old SPA templates from .NET 8 and th
 
 ### How to build a story generator application for children with .NET MAUI and Microsoft Azure
 
-> 2023-11-17 01:30 -- 02:00
+> 2023-11-17 02:30 -- 03:00
 
 **Héctor Uriel Pérez Rojas**
 
@@ -967,7 +967,7 @@ In this demo, I recount the process for using .NET MAUI to create a cross-platfo
 
 ### ASP.NET Basics for Experts
 
-> 2023-11-17 02:00 -- 02:30
+> 2023-11-17 03:00 -- 03:30
 
 **Layla Porter**
 
@@ -997,7 +997,7 @@ Join me and learn about the following topics and more!
 
 ### From databases to API: an efficient solution both on-premises and in Azure
 
-> 2023-11-17 02:00 -- 02:30
+> 2023-11-17 03:00 -- 03:30
 
 **Davide Mauri**
 
@@ -1007,7 +1007,7 @@ Data API builder turns Azure Databases into REST a GraphQL API so that you can h
 
 ### Integrating Third-party Services with .NET 8's Identity Framework
 
-> 2023-11-17 02:30 -- 03:00
+> 2023-11-17 03:30 -- 04:00
 
 **Kiah Imani**
 
@@ -1029,7 +1029,7 @@ So, whether you're a .NET veteran or someone just dipping their toes in, come al
 
 ### CoreWCF - Its not just for modernizing old WCF apps
 
-> 2023-11-17 02:30 -- 03:00
+> 2023-11-17 03:30 -- 04:00
 
 **Sam Spencer, Matt Connew**
 
@@ -1039,7 +1039,7 @@ Covers what's new in WCF to make it easier to incorporate into modern applicatio
 
 ### .NET App modernization and cloud migration: Cross Platform Enterprise focus
 
-> 2023-11-17 03:00 -- 03:30
+> 2023-11-17 04:00 -- 04:30
 
 **Ben Prejean**
 
@@ -1049,7 +1049,7 @@ A journey in modernizing and migrating .NET Applications to Private and Public C
 
 ### Dynamic PGO
 
-> 2023-11-17 03:00 -- 03:30
+> 2023-11-17 04:00 -- 04:30
 
 **Andy Ayers**
 
@@ -1059,7 +1059,7 @@ In .NET 8, Dynamic PGO is enabled by default, and we expect it will provide perf
 
 ### Clean Architecture with ASP.NET Core 8
 
-> 2023-11-17 03:30 -- 04:00
+> 2023-11-17 04:30 -- 05:00
 
 **Steve Smith**
 
@@ -1069,7 +1069,7 @@ Clean Architecture (aka Onion, Hexagonal, Ports-and-Adapters) organizes your cod
 
 ### Build .NET MAUI Apps with DevOps
 
-> 2023-11-17 03:30 -- 04:00
+> 2023-11-17 04:30 -- 05:00
 
 **Sweekriti Satpathy, David Ortinau**
 
@@ -1079,7 +1079,7 @@ In this session, we'll walk through DevOps pipelines to show how to build .NET M
 
 ### Introducing project Kiota a client generator for OpenAPI
 
-> 2023-11-17 04:00 -- 04:30
+> 2023-11-17 05:00 -- 05:30
 
 **Vincent Biret, Darrel Miller**
 
@@ -1089,7 +1089,7 @@ Integrating your application with APIs by manually implementing authentication, 
 
 ### Building planet scale .NET apps with Azure Cosmos DB
 
-> 2023-11-17 04:00 -- 04:30
+> 2023-11-17 05:00 -- 05:30
 
 **Justine Cocchi**
 
@@ -1103,7 +1103,7 @@ Learn how to build applications using the Azure Cosmos DB .NET SDK. We will cove
 
 ### Meadow.Cloud and Azure, putting the “I” in IoT
 
-> 2023-11-17 04:30 -- 05:00
+> 2023-11-17 05:30 -- 06:00
 
 **Bryan Costanich**
 
@@ -1117,7 +1117,7 @@ In this talk, we will show how developers can use a Meadow capable device to eas
 
 ### COM Source Generation: An evolution of COM interop in .Net
 
-> 2023-11-17 04:30 -- 05:00
+> 2023-11-17 05:30 -- 06:00
 
 **Jackson Schuster**
 
@@ -1127,7 +1127,7 @@ In .Net 8, the interop team created a source generator to enable you to easily t
 
 ### Uno Platform 5.0: Elevate Your Cross-Platform .NET Development with .NET 8
 
-> 2023-11-17 05:00 -- 05:30
+> 2023-11-17 06:00 -- 06:30
 
 **Nick Randolph, Francois Tanguay, Sasha Krsmanovic**
 
@@ -1141,7 +1141,7 @@ In .Net 8, the interop team created a source generator to enable you to easily t
 
 ### Use C# with Godot to make Games!
 
-> 2023-11-17 05:00 -- 05:30
+> 2023-11-17 06:00 -- 06:30
 
 **Michael Hawker**
 
@@ -1159,7 +1159,7 @@ Then we'll add a NuGet reference to the MVVM Toolkit for their amazing Messenger
 
 ### Azure API Center and ASP.NET Web API Integration: A Developer's Guide
 
-> 2023-11-17 05:30 -- 06:00
+> 2023-11-17 06:30 -- 07:00
 
 **Julia Kasper**
 
@@ -1173,7 +1173,7 @@ Follow a developer's journey and learn about how you can integrate your ASP.NET 
 
 ### Unleashing Cross-Platform Magic in .NET 8: Creating .NET MAUI Apps on Linux with Visual Studio Code
 
-> 2023-11-17 05:30 -- 06:00
+> 2023-11-17 06:30 -- 07:00
 
 **Bruno Capuano, Luis Beltran**
 
@@ -1187,7 +1187,7 @@ In this session, we'll demonstrate and explain the essentials for starting your 
 
 ### CQRS with Event Sourcing using the “Critter Stack”
 
-> 2023-11-17 06:00 -- 06:30
+> 2023-11-17 07:00 -- 07:30
 
 **Jeremy Miller**
 
@@ -1205,7 +1205,7 @@ Moving beyond basic command handling, I'll show you how to reliably subscribe to
 
 ### Monitoring of Containerized .NET Applications in Azure
 
-> 2023-11-17 06:00 -- 06:30
+> 2023-11-17 07:00 -- 07:30
 
 **Ye Gu, Scott Kinghorn**
 
@@ -1215,7 +1215,7 @@ At-scale monitoring of your .NET application infrastructure in real time is chal
 
 ### From Zero to Hero: Quickly Migrate Web Apps with Azure App Service
 
-> 2023-11-17 06:30 -- 07:00
+> 2023-11-17 07:30 -- 08:00
 
 **Gaurav Seth**
 
@@ -1225,7 +1225,7 @@ Learn directly from the Azure migration product experts how to migrate your appl
 
 ### Build an Azure OpenAI powered .NET 8 Chat Bot on your data from scratch
 
-> 2023-11-17 06:30 -- 07:00
+> 2023-11-17 07:30 -- 08:00
 
 **Chander Dhall**
 
@@ -1235,7 +1235,7 @@ In this session, you will learn how to build an Azure OpenAI Chat Bot that allow
 
 ### What's New in NuGet for .NET 8
 
-> 2023-11-17 07:00 -- 07:30
+> 2023-11-17 08:00 -- 08:30
 
 **Allie Barry**
 
@@ -1245,7 +1245,7 @@ This session will provide a description and walkthrough of all of the new featur
 
 ### .NET Configuration In Depth
 
-> 2023-11-17 07:00 -- 07:30
+> 2023-11-17 08:00 -- 08:30
 
 **Chris Ayers**
 
@@ -1271,7 +1271,7 @@ options 模式
 
 ### Hardware Intrinsics in .NET
 
-> 2023-11-17 07:30 -- 08:00
+> 2023-11-17 08:30 -- 09:00
 
 **Tanner Gooding**
 
@@ -1281,7 +1281,7 @@ Learn about the latest advancements around hardware intrinsics and vectorization
 
 ### All About C# Source Generators
 
-> 2023-11-17 07:30 -- 08:00
+> 2023-11-17 08:30 -- 09:00
 
 **Shawn Wildermuth**
 
