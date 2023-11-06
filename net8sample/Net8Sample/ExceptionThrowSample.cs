@@ -21,12 +21,12 @@ public static class ExceptionThrowSample
         ObjectDisposedExceptionSample();
     }
 
-    public static void ArgumentNullExceptionSample(string? value)
+    private static void ArgumentNullExceptionSample(string? value)
     {
         InvokeHelper.TryInvoke(() => ArgumentNullException.ThrowIfNull(value));
     }
-    
-    public static void ArgumentExceptionThrowIfNullOrEmptySample(string? value)
+
+    private static void ArgumentExceptionThrowIfNullOrEmptySample(string? value)
     {
         InvokeHelper.TryInvoke(() => ArgumentException.ThrowIfNullOrEmpty(value));
         
@@ -43,24 +43,28 @@ public static class ExceptionThrowSample
         //     throw new ArgumentException(SR.Argument_EmptyString, paramName);
         // }
     }
-    
-    public static void ArgumentExceptionThrowIfNullOrWhiteSpaceSample(string? value)
+
+    private static void ArgumentExceptionThrowIfNullOrWhiteSpaceSample(string? value)
     {
         InvokeHelper.TryInvoke(() => ArgumentException.ThrowIfNullOrWhiteSpace(value));
+        //
+        // public static void ThrowIfNullOrWhiteSpace([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+        // {
+        //     if (string.IsNullOrWhiteSpace(argument))
+        //     {
+        //         ThrowNullOrWhiteSpaceException(argument, paramName);
+        //     }
+        // }
+        //
+        // [DoesNotReturn]
+        // private static void ThrowNullOrWhiteSpaceException(string? argument, string? paramName)
+        // {
+        //     ArgumentNullException.ThrowIfNull(argument, paramName);
+        //     throw new ArgumentException(SR.Argument_EmptyOrWhiteSpaceString, paramName);
+        // }
     }
-    
-    public static void ArgumentOutOfRangeExceptionSample()
-    {
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfZero(0));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNegative(-1));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNegativeOrZero( 0));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfEqual(-1, -1));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNotEqual(-1, 0));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfGreaterThan(1, 0));
-        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfLessThan(-1, 0));
-    }
-    
-    public static void ObjectDisposedExceptionSample()
+
+    private static void ObjectDisposedExceptionSample()
     {
         InvokeHelper.TryInvoke(() => ObjectDisposedException.ThrowIf(true, typeof(BackgroundService)));
         InvokeHelper.TryInvoke(() => ObjectDisposedException.ThrowIf(true, new GuidIdGenerator()));
@@ -80,5 +84,28 @@ public static class ExceptionThrowSample
         //         return;
         //     ThrowHelper.ThrowObjectDisposedException(type);
         // }
+        //
+        // [DoesNotReturn]
+        // internal static void ThrowObjectDisposedException(object? instance)
+        // {
+        //     throw new ObjectDisposedException(instance?.GetType().FullName);
+        // }
+        //
+        // [DoesNotReturn]
+        // internal static void ThrowObjectDisposedException(Type? type)
+        // {
+        //     throw new ObjectDisposedException(type?.FullName);
+        // }
+    }
+
+    private static void ArgumentOutOfRangeExceptionSample()
+    {
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfZero(0));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNegative(-1));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNegativeOrZero( 0));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfEqual(-1, -1));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfNotEqual(-1, 0));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfGreaterThan(1, 0));
+        InvokeHelper.TryInvoke(() => ArgumentOutOfRangeException.ThrowIfLessThan(-1, 0));
     }
 }
