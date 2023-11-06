@@ -3,11 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="dotenv.net" Version="3.1.2" />
-    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.0.0-beta1" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="1.0.0-beta1" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.0.0-beta1" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.0.0-beta1" />
-    <PackageVersion Include="WeihanLi.Common" Version="1.0.60-preview-20231011-104232" />
+    <PackageVersion Include="dotenv.net" Version="3.1.3" />
+    <PackageVersion Include="Microsoft.ML" Version="2.0.1" />
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.0.0-beta4" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" Version="1.0.0-beta4" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Core" Version="1.0.0-beta4" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.0.0-beta4" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.60-preview-20231105-053855" />
   </ItemGroup>
 </Project>
