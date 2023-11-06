@@ -19,6 +19,8 @@ var exitToken = ConsoleHelper.GetExitToken();
 
 // InvokeHelper.TryInvoke(GCSample.MainTest);
 
-await InvokeHelper.TryInvokeAsync(ParallelSample.MainTest);
+// await InvokeHelper.TryInvokeAsync(ParallelSample.MainTest);
+
+InvokeHelper.TryInvoke(ExceptionThrowSample.MainTest);
 
 Console.WriteLine("Hello, World!");
