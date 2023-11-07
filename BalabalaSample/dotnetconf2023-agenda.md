@@ -24,7 +24,9 @@ In .NET 8 you can deliver the best web app experiences entirely in Blazor using 
 
 > 2023-11-15 02:00 -- 03:00
 
-**Glenn Condron**
+**Glenn Condron, David Fowler**
+
+Kickstart your Day 1 morning at .NET Conf by diving deep into the future of cloud-native development in .NET. Get the first look at what's new in .NET 8.0 for building high-performance, resilient services that shine on any cloud platform. See how Native AOT is a game-changer for app speed and size, and gain a new level of insight with Open Telemetry support. Don't miss live demos and a special reveal that promises to elevate your .NET development experience to new heights!
 
 ### Performance Improvements in .NET 8, ASP.NET Core, and .NET MAUI
 
@@ -206,6 +208,14 @@ Our focus for System.Text.Json in this release has been to substantially improve
 
 .NET 8 引入了将 ASP.NET Core 应用程序发布到本机 AOT 的支持，以实现闪电般的启动时间以及小型、独立的本机可执行文件和容器。此会话将概述何时可能需要考虑为 ASP.NET Core API 发布本机 AOT，并演示优势和兼容性注意事项。
 
+### Learning C# and .NET with freeCodeCamp!
+
+> 2023-11-16 04:00 -- 04:30
+
+**Scott Hanselman, Quincy Larson**
+
+Excited to learn C# and put a certificate on your LinkedIn? freeCodeCamp and Microsoft teamed up to release the new Foundational C# Certification. It’s absolutely free, so why don’t you join us in getting certified with Microsoft learn and freeCodeCamp. In this session, Scott Hanselman sits down with freeCodeCamp founder, Quincy Larson, to discuss the certification, the origin or freeCodeCamp, accessibility in computing education, and how to keep learning throughout your career.
+
 ### Leveraging the power of the .NET platform in Azure Functions
 
 > 2023-11-16 04:30 -- 05:00
@@ -358,7 +368,7 @@ And yes, this abstract was created using Bing's Chat 😀
 
 ### Bye ASP.NET WebForm, Welcome Blazor: Transform your ASP.NET  WebForm Chatbot in no time, and beyond!
 
-> 2023-11-16 09:30 -- 10:00
+> 2023-11-16 10:30 -- 11:00
 
 **Justin Yoo**
 
@@ -941,7 +951,7 @@ ASP.NET's RazorComponent model is intuitive and brings productivity to web devel
 
 > 2023-11-17 02:00 -- 02:30
 
-**Manju Ramanathpura, Jan Kalis**
+**Manju Ramanathpura, Jan Kalis, Ryan Kahng**
 
 Join us to learn more about how Azure Diagnostics team can help you improve your .NET application performance!  Azure Code-Optimizations is a AI-based service can identify performance issues and offer recommendations specifically tailored for .NET applications and cloud services.
 
