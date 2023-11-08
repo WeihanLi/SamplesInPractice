@@ -18,21 +18,25 @@ public class RefReadOnlySample
         Console.WriteLine(a);
         
         UpdateValueInternalWithIn(in a);
+        UpdateValueInternalWithIn(in a);
         Console.WriteLine(a);
         
-        
+        UpdateValueInternalWithRefReadOnly(in a);
+        UpdateValueInternalWithRefReadOnly(ref a);
+        Console.WriteLine(a);
     }
 
     private void UpdateValueInternal(int a)
     {
         a = 2;
-        Console.WriteLine(a);
+        Console.WriteLine($"{a}");
     }
     
     private void UpdateValueInternalWithRef(ref int a)
     {
         a = 2;
-        Console.WriteLine(a);
+        var b = a;
+        Console.WriteLine($"{a} {b}");
     }
     
     
@@ -40,13 +44,15 @@ public class RefReadOnlySample
     {
         // error CS8331: Cannot assign to variable 'a' or use it as the right hand side of a ref assignment because it is a readonly variable
         // a = 2;
-        Console.WriteLine(a);
+        var b = a;
+        Console.WriteLine($"{a} {b}");
     }
     
     private void UpdateValueInternalWithRefReadOnly(ref readonly int a)
     {
         // error CS8331: Cannot assign to variable 'a' or use it as the right hand side of a ref assignment because it is a readonly variable
         // a = 2;
-        Console.WriteLine(a);
+        var b = a;
+        Console.WriteLine($"{a} {b}");
     }
 }
