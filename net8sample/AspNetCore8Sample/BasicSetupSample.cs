@@ -18,8 +18,11 @@ public class BasicSetupSample
         // https://github.com/dotnet/aspnetcore/pull/46713
         // ShortCircuit
         app.MapGet("/short-circuit", () => "Short circuiting!").ShortCircuit();
+        app.MapGet("/short-circuit-status", () => "Short circuiting!")
+            .ShortCircuit(401);
         // MapShortCircuit
         app.MapShortCircuit(404, "robots.txt", "favicon.ico");
+        app.MapShortCircuit(403, "admin");
         
         app.MapControllers();
         await app.RunAsync();
