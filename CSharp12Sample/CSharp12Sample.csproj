@@ -25,6 +25,7 @@
     <Compile Include="LambdaDefaultValueSample.cs" />
     <Compile Include="PrimaryConstructorSample.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="RefReadOnlySample.cs" />
     <Compile Include="UsingAliasAnyTypeSample.cs" />
   </ItemGroup>
 
