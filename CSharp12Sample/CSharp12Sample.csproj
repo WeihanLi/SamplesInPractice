@@ -11,6 +11,7 @@
     <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);CSharp12Sample.Generated</InterceptorsPreviewNamespaces>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <NoWarn>$(NoWarn);EXP001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <Compile Include="CollectionLiteralSample.cs" />
+    <Compile Include="ExperimentalSample.cs" />
     <Compile Include="InlineArraySample.cs" />
     <Compile Include="InterceptorSample.cs" />
     <Compile Include="LambdaDefaultValueSample.cs" />
@@ -34,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Directory.Build.props" />
     <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
