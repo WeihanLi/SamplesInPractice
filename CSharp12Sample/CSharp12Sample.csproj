@@ -11,11 +11,12 @@
     <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);CSharp12Sample.Generated</InterceptorsPreviewNamespaces>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <NoWarn>$(NoWarn);EXP001</NoWarn>
+    <NoWarn>$(NoWarn);EXP001;EXP002</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <Using Include="CSharp12Sample" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20231105-053855" />
   </ItemGroup>
 
