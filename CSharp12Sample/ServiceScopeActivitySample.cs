@@ -8,8 +8,8 @@ public static class ServiceScopeActivitySample
     public static async Task MainTest()
     {
         using var activityListener = new ActivityListener();
-        activityListener.ShouldListenTo = s => s.Name == "Test";
-        activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> options) =>
+        activityListener.ShouldListenTo = s => s.Name == nameof(ActivityScope);
+        activityListener.Sample = (ref ActivityCreationOptions<ActivityContext> _) =>
             ActivitySamplingResult.PropagationData;
         ActivitySource.AddActivityListener(activityListener);
         
@@ -29,7 +29,7 @@ public static class ServiceScopeActivitySample
 
 public sealed class ActivityScope : IDisposable
 {
-    private static readonly ActivitySource ActivitySource = new("Test");
+    private static readonly ActivitySource ActivitySource = new(nameof(ActivityScope));
 
     private readonly Activity? _activity = ActivitySource.StartActivity(nameof(ActivityScope));
 
