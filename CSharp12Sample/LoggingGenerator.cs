@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Operations;
 using System.Text;
 
+namespace gen;
+
 [Generator(LanguageNames.CSharp)]
 public sealed class LoggingGenerator : IIncrementalGenerator
 {
@@ -91,7 +93,7 @@ namespace CSharp12Sample.Generated
 }
 
 
-file sealed class InterceptInvocation(IInvocationOperation invocationOperation)
+internal sealed class InterceptInvocation(IInvocationOperation invocationOperation)
 {
 
     public (string FilePath, int Line, int Column) Location { get; } = GetLocation(invocationOperation);
@@ -118,7 +120,7 @@ file sealed class InterceptInvocation(IInvocationOperation invocationOperation)
     }   
 }
 
-file static class Extensions
+internal static class Extensions
 {
     
     // Utilize the same logic used by the interceptors API for resolving the source mapped

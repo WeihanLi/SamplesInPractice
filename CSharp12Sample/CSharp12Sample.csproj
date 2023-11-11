@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <Using Include="CSharp12Sample" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20230913-003854" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20231105-053855" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
     <Compile Include="PrimaryConstructorSample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RefReadOnlySample.cs" />
+    <Compile Include="ServiceScopeActivitySample.cs" />
     <Compile Include="UsingAliasAnyTypeSample.cs" />
   </ItemGroup>
 
