@@ -1,4 +1,8 @@
-﻿namespace CSharp12Sample;
+﻿// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-12.0/experimental-attribute?WT.mc_id=DT-MVP-5004222
+// https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-12.0/ref-readonly-parameters?WT.mc_id=DT-MVP-5004222
+// https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12?WT.mc_id=DT-MVP-5004222#ref-readonly-parameters
+
+namespace CSharp12Sample;
 
 public class RefReadOnlySample
 {
@@ -19,6 +23,8 @@ public class RefReadOnlySample
         
         UpdateValueInternalWithIn(in a);
         UpdateValueInternalWithIn(in a);
+        // warning CS9191: The 'ref' modifier for argument 1 corresponding to 'in' parameter is equivalent to 'in'. Consider using 'in' instead.
+        // UpdateValueInternalWithIn(ref a);
         Console.WriteLine(a);
         
         UpdateValueInternalWithRefReadOnly(in a);
