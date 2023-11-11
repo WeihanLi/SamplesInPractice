@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Collections.Concurrent;
+using System.Threading.Channels;
 using WeihanLi.Common.Event;
 using WeihanLi.Common.Helpers;
 
@@ -8,6 +9,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
 {
     private readonly ILogger<EventHandler> _logger;
     private readonly IConfiguration _configuration;
+    private readonly ConcurrentBag<DeployHistory> _deployHistories;
 
     private readonly Channel<GithubPushEvent> _channel = 
         Channel.CreateBounded<GithubPushEvent>(new BoundedChannelOptions(5)
@@ -15,10 +17,11 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             FullMode = BoundedChannelFullMode.DropOldest 
         });
 
-    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration)
+    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration, ConcurrentBag<DeployHistory> deployHistories)
     {
         _logger = logger;
         _configuration = configuration;
+        _deployHistories = deployHistories;
     }
     
     public bool Publish<TEvent>(TEvent @event) where TEvent : class, IEventBase
@@ -43,13 +46,22 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         {
             if (_channel.Reader.TryRead(out var githubPushEvent))
             {
+                var beginTime = DateTimeOffset.Now;
                 var watch = ValueStopwatch.StartNew();
                 try
                 {
                     await HandleGithubPushEvent(githubPushEvent);
                     watch.Stop();
-                    _logger.LogInformation("{RepoName} Deploy done, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
-                        githubPushEvent.RepoName, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
+                    var endTime = DateTimeOffset.Now;
+                    _logger.LogInformation("{RepoName} Deploy done in {Elapsed}, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
+                        githubPushEvent.RepoName, watch.Elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
+                    var deployHistory = new DeployHistory
+                    {
+                        Event = githubPushEvent, 
+                        BeginTime = beginTime,
+                        EndTime = endTime
+                    };
+                    _deployHistories.Add(deployHistory);
                 }
                 catch (Exception e)
                 {
@@ -128,7 +140,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         foreach (var file in dir.GetFiles())
         {
             var targetFilePath = Path.Combine(destinationDir, file.Name);
-            file.CopyTo(targetFilePath);
+            file.CopyTo(targetFilePath, true);
         }
 
         // If recursive and copying subdirectories, recursively call this method
