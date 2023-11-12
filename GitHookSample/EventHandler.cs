@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using LibGit2Sharp;
+using LibGit2Sharp.Handlers;
+using System.Collections.Concurrent;
 using System.Threading.Channels;
 using WeihanLi.Common;
 using WeihanLi.Common.Event;
@@ -89,12 +91,36 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             throw new InvalidOperationException($"Repo({githubPushEvent.RepoName}) not exists in path {repoFolder}");
         }
 
-        var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
-        var pullExitCode = await CommandExecutor.ExecuteAsync(gitPath, "pull", repoFolder);
-        if (pullExitCode != 0)
+        using (var repo = new Repository(repoFolder))
         {
-            throw new InvalidOperationException($"Error when git pull, exitCode: {pullExitCode}");
+            // Credential information to fetch
+            var options = new PullOptions 
+            { 
+                FetchOptions = new FetchOptions 
+                { 
+                    CredentialsProvider = (_, _, _) =>
+                        new UsernamePasswordCredentials()
+                        {
+                            Username = _configuration["GitCredential:Name"],
+                            Password = _configuration["GitCredential:Token"]
+                        }
+            } };
+
+            // User information to create a merge commit
+            var signature = new Signature(new Identity(_configuration["GitCredential:Name"], _configuration["GitCredential:Email"]), DateTimeOffset.Now);
+
+            // Pull
+            Commands.Pull(repo, signature, options);
         }
+        
+        // var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
+        // var gitPullResult = await CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder);
+        // if (gitPullResult.ExitCode != 0)
+        // {
+        //     _logger.LogError("Error when git pull, exitCode: {ExitCode}, output: {Output}, error: {Error}",
+        //         gitPullResult.ExitCode, gitPullResult.StandardOut, gitPullResult.StandardError);
+        //     throw new InvalidOperationException($"Error when git pull, exitCode: {gitPullResult.ExitCode}, {gitPullResult.StandardError}");
+        // }
         
         // cleanup previous dist folder
         var distFolder = Path.Combine(repoFolder, "dist");
