@@ -24,4 +24,18 @@ var app = builder.Build();
 app.MapGitHubWebhooks("/api/github/webhooks",app.Configuration.GetRequiredAppSetting("GithubWebhookSecret"));
 app.Map("/", () => "Hooks world");
 app.Map("/deploy-history", () => deployList.ToArray());
+app.MapPost("/deploy-test", async (IEventPublisher eventPublisher) =>
+{
+    var githubPushEvent = new GithubPushEvent
+    {
+        RepoName = "NetConfChina_Frontend",
+        RepoFullName = "NetConfChina_Frontend",
+        CommitId = "x",
+        CommitMsg = "test",
+        Timestamp = DateTimeOffset.Now,
+        PushByName = "Test",
+        PushByEmail = "weihanli@outlook.com"
+    };
+    await eventPublisher.PublishAsync(githubPushEvent);
+});
 await app.RunAsync();
