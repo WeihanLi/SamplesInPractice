@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading.Channels;
+using WeihanLi.Common;
 using WeihanLi.Common.Event;
 using WeihanLi.Common.Helpers;
 
@@ -87,7 +88,9 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         {
             throw new InvalidOperationException($"Repo({githubPushEvent.RepoName}) not exists in path {repoFolder}");
         }
-        var pullExitCode = await CommandExecutor.ExecuteCommandAsync("git pull", repoFolder);
+
+        var gitPath = Guard.NotNull(ApplicationHelper.ResolvePath("git"));
+        var pullExitCode = await CommandExecutor.ExecuteAsync(gitPath, "pull", repoFolder);
         if (pullExitCode != 0)
         {
             throw new InvalidOperationException($"Error when git pull, exitCode: {pullExitCode}");
@@ -97,14 +100,15 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         var distFolder = Path.Combine(repoFolder, "dist");
         Directory.Delete(distFolder, true);
         
+        var yarnPath = Guard.NotNull(ApplicationHelper.ResolvePath("yarn.cmd"));
         // exec yarn
-        await CommandExecutor.ExecuteCommandAsync("yarn.cmd", repoFolder, info =>
+        await CommandExecutor.ExecuteCommandAsync(yarnPath, repoFolder, info =>
         {
             info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
         });
         
         // exec yarn build
-        var result = await CommandExecutor.ExecuteAndCaptureAsync("yarn.cmd","build", repoFolder, info =>
+        var result = await CommandExecutor.ExecuteAndCaptureAsync(yarnPath, "build", repoFolder, info =>
         {
             info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
         });
