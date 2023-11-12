@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 using WeihanLi.Common.Event;
 
 var builder = WebApplication.CreateBuilder(args);
-var deployList = new ConcurrentBag<DeployHistory>();
+var deployList = new ConcurrentQueue<DeployHistory>();
 
 builder.Services.AddSingleton<WebhookEventProcessor, MyWebhookEventProcessor>();
 builder.Services.AddSingleton<GitHookSample.EventHandler>();
@@ -23,5 +23,5 @@ builder.Services.Configure<IISServerOptions>(options =>
 var app = builder.Build();
 app.MapGitHubWebhooks("/api/github/webhooks",app.Configuration.GetRequiredAppSetting("GithubWebhookSecret"));
 app.Map("/", () => "Hooks world");
-app.Map("/deploy-history", () => deployList);
+app.Map("/deploy-history", () => deployList.ToArray());
 await app.RunAsync();

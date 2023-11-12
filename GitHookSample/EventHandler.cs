@@ -9,7 +9,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
 {
     private readonly ILogger<EventHandler> _logger;
     private readonly IConfiguration _configuration;
-    private readonly ConcurrentBag<DeployHistory> _deployHistories;
+    private readonly ConcurrentQueue<DeployHistory> _deployHistories;
 
     private readonly Channel<GithubPushEvent> _channel = 
         Channel.CreateBounded<GithubPushEvent>(new BoundedChannelOptions(5)
@@ -17,7 +17,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             FullMode = BoundedChannelFullMode.DropOldest 
         });
 
-    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration, ConcurrentBag<DeployHistory> deployHistories)
+    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration, ConcurrentQueue<DeployHistory> deployHistories)
     {
         _logger = logger;
         _configuration = configuration;
@@ -59,9 +59,14 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
                     {
                         Event = githubPushEvent, 
                         BeginTime = beginTime,
-                        EndTime = endTime
+                        EndTime = endTime,
+                        Elapsed = watch.Elapsed
                     };
-                    _deployHistories.Add(deployHistory);
+                    _deployHistories.Enqueue(deployHistory);
+                    if (_deployHistories.Count > 100)
+                    {
+                        _deployHistories.TryDequeue(out _);
+                    }
                 }
                 catch (Exception e)
                 {
