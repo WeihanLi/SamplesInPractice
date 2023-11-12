@@ -89,7 +89,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             throw new InvalidOperationException($"Repo({githubPushEvent.RepoName}) not exists in path {repoFolder}");
         }
 
-        var gitPath = Guard.NotNull(ApplicationHelper.ResolvePath("git"));
+        var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
         var pullExitCode = await CommandExecutor.ExecuteAsync(gitPath, "pull", repoFolder);
         if (pullExitCode != 0)
         {
@@ -100,7 +100,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         var distFolder = Path.Combine(repoFolder, "dist");
         Directory.Delete(distFolder, true);
         
-        var yarnPath = Guard.NotNull(ApplicationHelper.ResolvePath("yarn.cmd"));
+        var yarnPath = ApplicationHelper.ResolvePath("yarn.cmd") ?? _configuration.GetRequiredAppSetting("YarnPath");
         // exec yarn
         await CommandExecutor.ExecuteCommandAsync(yarnPath, repoFolder, info =>
         {
