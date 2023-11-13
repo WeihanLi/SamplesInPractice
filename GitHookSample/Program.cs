@@ -3,6 +3,7 @@ using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
 using System.Collections.Concurrent;
 using WeihanLi.Common.Event;
+using WeihanLi.Common.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 var deployList = new ConcurrentQueue<DeployHistory>();
@@ -23,6 +24,7 @@ builder.Services.Configure<IISServerOptions>(options =>
 var app = builder.Build();
 app.MapGitHubWebhooks("/api/github/webhooks",app.Configuration.GetRequiredAppSetting("GithubWebhookSecret"));
 app.Map("/", () => "Hooks world");
+app.Map("/runtime-info", () => ApplicationHelper.RuntimeInfo);
 app.Map("/deploy-history", () => deployList.ToArray());
 app.MapPost("/deploy-test", async (IEventPublisher eventPublisher) =>
 {

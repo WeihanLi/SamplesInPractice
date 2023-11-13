@@ -5,6 +5,7 @@ using System.Threading.Channels;
 using WeihanLi.Common;
 using WeihanLi.Common.Event;
 using WeihanLi.Common.Helpers;
+using WeihanLi.Extensions;
 
 namespace GitHookSample;
 
@@ -91,8 +92,9 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             throw new InvalidOperationException($"Repo({githubPushEvent.RepoName}) not exists in path {repoFolder}");
         }
 
-        using (var repo = new Repository(repoFolder))
+        if (_configuration.GetAppSetting("PreferLibGit2Sharp", false))
         {
+            using var repo = new Repository(repoFolder);
             // Credential information to fetch
             var options = new PullOptions 
             { 
@@ -104,45 +106,82 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
                             Username = _configuration["GitCredential:Name"],
                             Password = _configuration["GitCredential:Token"]
                         }
-            } };
-
+                } };
+        
             // User information to create a merge commit
             var signature = new Signature(new Identity(_configuration["GitCredential:Name"], _configuration["GitCredential:Email"]), DateTimeOffset.Now);
-
+        
             // Pull
-            Commands.Pull(repo, signature, options);
+            RetryHelper.TryInvoke(() => Commands.Pull(repo, signature, options), 10);
+        }
+        else
+        {
+            var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
+            var gitPullResult = await CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder);
+            if (gitPullResult.ExitCode != 0)
+            {
+                _logger.LogError("Error when git pull, exitCode: {ExitCode}, output: {Output}, error: {Error}",
+                    gitPullResult.ExitCode, gitPullResult.StandardOut, gitPullResult.StandardError);
+                throw new InvalidOperationException($"Error when git pull, exitCode: {gitPullResult.ExitCode}, {gitPullResult.StandardError}");
+            }
         }
         
-        // var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
-        // var gitPullResult = await CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder);
-        // if (gitPullResult.ExitCode != 0)
-        // {
-        //     _logger.LogError("Error when git pull, exitCode: {ExitCode}, output: {Output}, error: {Error}",
-        //         gitPullResult.ExitCode, gitPullResult.StandardOut, gitPullResult.StandardError);
-        //     throw new InvalidOperationException($"Error when git pull, exitCode: {gitPullResult.ExitCode}, {gitPullResult.StandardError}");
-        // }
+        var nodePath = _configuration.GetRequiredAppSetting("NodePath");
+        var previousPath = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+        var updatedPath = previousPath.EndsWith(';') ? $"{previousPath}{nodePath}" : $"{previousPath};{nodePath}";
+        _logger.LogInformation("Previous environment path: {PreviousPath}, updatedPath: {UpdatedPath}", previousPath, updatedPath);
+        var yarnPath = ApplicationHelper.ResolvePath("yarn.cmd") ?? _configuration.GetRequiredAppSetting("YarnPath");
+        // exec yarn
+        var yarnResult = await CommandExecutor.ExecuteAndCaptureAsync(yarnPath, null, repoFolder, info =>
+        {
+            if (_configuration.GetAppSetting<bool>("AddNodeOptionsEnv"))
+                info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
+            
+            info.EnvironmentVariables["NODE_PATH"] = nodePath;
+            info.EnvironmentVariables["PATH"] = updatedPath;
+            
+            var processUser = _configuration["ProcessUserCredential:UserName"];
+            if (!string.IsNullOrEmpty(processUser))
+            {
+                info.UserName = processUser;
+                if (OperatingSystem.IsWindows() && !string.IsNullOrEmpty(_configuration["ProcessUserCredential:Password"]))
+                  info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]).GetString();
+            }
+        });
+        if (yarnResult.ExitCode != 0)
+        {
+            _logger.LogError("Error when yarn, exitCode: {ExitCode}, output: {Output}, error: {Error}",
+                yarnResult.ExitCode, yarnResult.StandardOut, yarnResult.StandardError);
+            throw new InvalidOperationException($"Error when yarn, exitCode: {yarnResult.ExitCode}");
+        }
         
         // cleanup previous dist folder
         var distFolder = Path.Combine(repoFolder, "dist");
-        Directory.Delete(distFolder, true);
-        
-        var yarnPath = ApplicationHelper.ResolvePath("yarn.cmd") ?? _configuration.GetRequiredAppSetting("YarnPath");
-        // exec yarn
-        await CommandExecutor.ExecuteCommandAsync(yarnPath, repoFolder, info =>
-        {
-            info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
-        });
+        if (Directory.Exists(distFolder))
+            Directory.Delete(distFolder, true);
         
         // exec yarn build
-        var result = await CommandExecutor.ExecuteAndCaptureAsync(yarnPath, "build", repoFolder, info =>
+        var buildResult = await CommandExecutor.ExecuteAndCaptureAsync(yarnPath, "build", repoFolder, info =>
         {
-            info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
+            if (_configuration.GetAppSetting<bool>("AddNodeOptionsEnv"))
+                info.EnvironmentVariables.Add("NODE_OPTIONS", "--openssl-legacy-provider");
+            
+            info.EnvironmentVariables["NODE_PATH"] = nodePath;
+            info.EnvironmentVariables["PATH"] = updatedPath;
+            
+            var processUser = _configuration["ProcessUserCredential:UserName"];
+            if (!string.IsNullOrEmpty(processUser))
+            {
+                info.UserName = processUser;
+                if (OperatingSystem.IsWindows() && !string.IsNullOrEmpty(_configuration["ProcessUserCredential:Password"]))
+                    info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]).GetString();
+            }
         });
-        if (result.ExitCode != 0)
+        if (buildResult.ExitCode != 0)
         {
             _logger.LogError("Error when yarn build, exitCode: {ExitCode}, output: {Output}, error: {Error}",
-                result.ExitCode, result.StandardOut, result.StandardError);
-            throw new InvalidOperationException($"Error when yarn build, exitCode: {result.ExitCode}");
+                buildResult.ExitCode, buildResult.StandardOut, buildResult.StandardError);
+            throw new InvalidOperationException($"Error when yarn build, exitCode: {buildResult.ExitCode}");
         }
         
         // copy dist to site folder
@@ -150,7 +189,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         if (string.IsNullOrEmpty(siteFolder))
         {
             _logger.LogError("No site name mapped, RepoName: {RepoName}", githubPushEvent.RepoName);
-            throw new InvalidOperationException($"Error when yarn build, exitCode: {result.ExitCode}");
+            throw new InvalidOperationException($"Error when yarn build, exitCode: {buildResult.ExitCode}");
         }
         CopyDirectory(distFolder, siteFolder, true);
     }
