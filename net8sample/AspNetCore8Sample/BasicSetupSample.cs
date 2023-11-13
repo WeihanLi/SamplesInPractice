@@ -1,6 +1,6 @@
 ﻿namespace AspNetCore8Sample;
 
-public class BasicSetupSample
+public static class BasicSetupSample
 {
     public static async Task MainTest(string[] args)
     {
