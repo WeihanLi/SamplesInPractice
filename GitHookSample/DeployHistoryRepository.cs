@@ -27,7 +27,7 @@ public class DeployHistoryRepository: IDeployHistoryRepository
     public DeployHistory[] GetDeployHistory(string service)
     {
         if (_store.TryGetValue(service, out var svcStore))
-            return svcStore.OrderBy(x => x.BeginTime).ToArray();
+            return svcStore.OrderByDescending(x => x.BeginTime).ToArray();
 
         return Array.Empty<DeployHistory>();
     }
