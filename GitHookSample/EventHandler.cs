@@ -1,8 +1,5 @@
 ﻿using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
-using System.Collections.Concurrent;
 using System.Threading.Channels;
-using WeihanLi.Common;
 using WeihanLi.Common.Event;
 using WeihanLi.Common.Helpers;
 using WeihanLi.Extensions;
@@ -13,19 +10,19 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
 {
     private readonly ILogger<EventHandler> _logger;
     private readonly IConfiguration _configuration;
-    private readonly ConcurrentQueue<DeployHistory> _deployHistories;
+    private readonly IDeployHistoryRepository _deployHistoryRepository;
 
     private readonly Channel<GithubPushEvent> _channel = 
-        Channel.CreateBounded<GithubPushEvent>(new BoundedChannelOptions(5)
+        Channel.CreateBounded<GithubPushEvent>(new BoundedChannelOptions(3)
         {
             FullMode = BoundedChannelFullMode.DropOldest 
         });
 
-    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration, ConcurrentQueue<DeployHistory> deployHistories)
+    public EventHandler(ILogger<EventHandler> logger, IConfiguration configuration, IDeployHistoryRepository deployHistoryRepository)
     {
         _logger = logger;
         _configuration = configuration;
-        _deployHistories = deployHistories;
+        _deployHistoryRepository = deployHistoryRepository;
     }
     
     public bool Publish<TEvent>(TEvent @event) where TEvent : class, IEventBase
@@ -37,7 +34,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
     {
         if (@event is not GithubPushEvent githubPushEvent)
         {
-            throw new NotSupportedException();            
+            throw new NotSupportedException();
         }
         
         await _channel.Writer.WriteAsync(githubPushEvent);
@@ -46,38 +43,30 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (await _channel.Reader.WaitToReadAsync(stoppingToken))
+        await foreach (var githubPushEvent in _channel.Reader.ReadAllAsync(stoppingToken))
         {
-            if (_channel.Reader.TryRead(out var githubPushEvent))
+            var beginTime = DateTimeOffset.Now;
+            var watch = ValueStopwatch.StartNew();
+            try
             {
-                var beginTime = DateTimeOffset.Now;
-                var watch = ValueStopwatch.StartNew();
-                try
+                await HandleGithubPushEvent(githubPushEvent);
+                watch.Stop();
+                var endTime = DateTimeOffset.Now;
+                _logger.LogInformation("{RepoName} Deploy done in {Elapsed}, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
+                    githubPushEvent.RepoName, watch.Elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
+                var deployHistory = new DeployHistory
                 {
-                    await HandleGithubPushEvent(githubPushEvent);
-                    watch.Stop();
-                    var endTime = DateTimeOffset.Now;
-                    _logger.LogInformation("{RepoName} Deploy done in {Elapsed}, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
-                        githubPushEvent.RepoName, watch.Elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
-                    var deployHistory = new DeployHistory
-                    {
-                        Event = githubPushEvent, 
-                        BeginTime = beginTime,
-                        EndTime = endTime,
-                        Elapsed = watch.Elapsed
-                    };
-                    _deployHistories.Enqueue(deployHistory);
-                    if (_deployHistories.Count > 100)
-                    {
-                        _deployHistories.TryDequeue(out _);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "{Method} Exception", nameof(HandleGithubPushEvent));
-                }
+                    Event = githubPushEvent, 
+                    BeginTime = beginTime,
+                    EndTime = endTime,
+                    Elapsed = watch.Elapsed
+                };
+                _deployHistoryRepository.AddDeployHistory(githubPushEvent.RepoName, deployHistory);
             }
-
+            catch (Exception e)
+            {
+                _logger.LogError(e, "{Method} Exception", nameof(HandleGithubPushEvent));
+            }
             await Task.Delay(10_000, stoppingToken);
         }
     }
@@ -117,12 +106,11 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         else
         {
             var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
-            var gitPullResult = await CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder);
-            if (gitPullResult.ExitCode != 0)
+            var gitPullResult = await RetryHelper.TryInvokeAsync(() => CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder),
+                r => r?.ExitCode == 0, 10);
+            if (gitPullResult?.ExitCode != 0)
             {
-                _logger.LogError("Error when git pull, exitCode: {ExitCode}, output: {Output}, error: {Error}",
-                    gitPullResult.ExitCode, gitPullResult.StandardOut, gitPullResult.StandardError);
-                throw new InvalidOperationException($"Error when git pull, exitCode: {gitPullResult.ExitCode}, {gitPullResult.StandardError}");
+                throw new InvalidOperationException($"Error when git pull, exitCode: {gitPullResult?.ExitCode}, {gitPullResult?.StandardError}");
             }
         }
         

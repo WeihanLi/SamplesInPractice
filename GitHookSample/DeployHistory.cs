@@ -1,6 +1,6 @@
 ﻿namespace GitHookSample;
 
-public class DeployHistory
+public sealed class DeployHistory
 {
     public required GithubPushEvent Event { get; init; }
     public DateTimeOffset BeginTime { get; set; }
