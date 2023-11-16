@@ -33,6 +33,9 @@
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <StackTraceSupport>false</StackTraceSupport>
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
