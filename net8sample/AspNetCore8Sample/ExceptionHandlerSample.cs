@@ -12,7 +12,17 @@ public static class ExceptionHandlerSample
 
         app.UseExceptionHandler(new ExceptionHandlerOptions()
         {
-            ExceptionHandlingPath = "/"
+            // ExceptionHandlingPath = "/",
+            ExceptionHandler = context =>
+            {
+                context.Response.StatusCode = 500;
+                context.Response.WriteAsJsonAsync(new
+                {
+                    title = "Internal Error",
+                    traceId = context.TraceIdentifier
+                });
+                return Task.CompletedTask;
+            }
         });
         app.MapGet("/", () => "Hello .NET 8!");
         app.MapGet("/exception", () =>
@@ -30,10 +40,17 @@ public static class ExceptionHandlerSample
 
 file sealed class ArgumentExceptionHandler : IExceptionHandler
 {
-    public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         httpContext.RequestServices.GetRequiredService<ILogger<ArgumentExceptionHandler>>()
             .LogError(exception, "Exception handled");
-        return ValueTask.FromResult(exception is ArgumentException);
+        if (exception is not ArgumentException) return false;
+
+        httpContext.Response.StatusCode = 400;
+        await httpContext.Response.WriteAsJsonAsync(new
+        {
+            exception.Message
+        }, cancellationToken);
+        return true;
     }
 }
