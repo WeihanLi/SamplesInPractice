@@ -76,7 +76,7 @@ public static class JsonSample
 
     private static void InterfaceHierarchyTest()
     {
-        IDerived value = new DerivedImplement() { Base = 0, Derived =1 };
+        IDerived value = new DerivedImplement() { Base = 0, Derived = 1 };
         var serializedValue = JsonSerializer.Serialize(value);
         Console.WriteLine(serializedValue);
     }

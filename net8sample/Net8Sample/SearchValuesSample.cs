@@ -2,7 +2,7 @@
 
 namespace Net8Sample;
 
-public class IndexOfAnyValueSample
+public class SearchValuesSample
 {
     public static void MainTest()
     {
