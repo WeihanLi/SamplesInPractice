@@ -9,7 +9,11 @@ public static class ExceptionHandlerSample
         var builder = WebApplication.CreateSlimBuilder(args);
         builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
         var app = builder.Build();
-        app.UseExceptionHandler();
+
+        app.UseExceptionHandler(new ExceptionHandlerOptions()
+        {
+            ExceptionHandlingPath = "/"
+        });
         app.MapGet("/", () => "Hello .NET 8!");
         app.MapGet("/exception", () =>
         {
