@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿// https://github.com/dotnet/aspnetcore/issues/46280
+// https://github.com/dotnet/aspnetcore/pull/47923
+
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace AspNetCore8Sample;
 
