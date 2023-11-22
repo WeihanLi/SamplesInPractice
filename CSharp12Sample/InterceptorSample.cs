@@ -6,6 +6,17 @@
         {
             var c = new C();
             c.InterceptableMethod();
+
+            var a = new A();
+            a.TestMethod();
+        }
+    }
+    
+    public class A
+    {
+        public void TestMethod()
+        {
+            Console.WriteLine("A.TestMethod");
         }
     }
 
@@ -28,22 +39,28 @@ namespace System.Runtime.CompilerServices
     }
 }
 
-// namespace CSharp12Sample.Generated
-// {
-//     public static class D
-//     {
-//         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+namespace CSharp12Sample.Generated
+{
+     public static class Extensions
+     {
+         [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 11/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+         public static void TestMethodInterceptor(this A a)
+         {
+             Console.WriteLine($"Intercepted: {nameof(TestMethodInterceptor)}");
+         }
+         
+//         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 8/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
 //         // public static void InterceptorMethod(this C c)
 //         // {
 //         //     Console.WriteLine($"interceptor");
 //         // }
 //         
-//         [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 10/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+//         [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 8/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
 //         public static void LoggingInterceptorMethod(this C c)
 //         {
 //             Console.WriteLine("Before...");
 //             c.InterceptableMethod();
 //             Console.WriteLine("After...");
 //         }        
-//     }
-// }
+     }
+}

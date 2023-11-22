@@ -17,7 +17,7 @@
   <ItemGroup>
     <Using Include="CSharp12Sample" />
     <Using Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20231105-053855" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60" />
   </ItemGroup>
 
   <ItemGroup>
