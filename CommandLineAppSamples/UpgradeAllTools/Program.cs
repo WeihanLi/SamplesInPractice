@@ -13,7 +13,7 @@ if (args is { Length: 1 })
         PrintHelp();
         return;
     }
-    
+
     // print version
     var versionArguments = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "-v", "--version", "version" };
     if (versionArguments.Contains(args[0]))
@@ -29,12 +29,10 @@ var toolLevelOption = isLocal ? "--local" : "--global";
 Console.WriteLine($"Going to update all {toolLevelOption.TrimStart('-')} tools");
 
 var exitToken = InvokeHelper.GetExitToken();
-exitToken.Register(() => WriteLineWithColor("Exiting", ConsoleColor.DarkYellow));
-
 var dotnetPath = ApplicationHelper.GetDotnetPath();
 ArgumentNullException.ThrowIfNull(dotnetPath);
 var dotnetToolListOutput = await CommandExecutor.ExecuteAndCaptureAsync(dotnetPath, $"tool list {toolLevelOption}", cancellationToken: exitToken);
-Console.WriteLine($"`dotnet tool list {dotnetToolListOutput}` output:");
+Console.WriteLine($"`dotnet tool list {toolLevelOption}` output:");
 Console.WriteLine(dotnetToolListOutput.StandardOut);
 
 var dotnetToolList = dotnetToolListOutput.StandardOut.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -42,7 +40,6 @@ if (dotnetToolList.Length <= 2) return;
 
 foreach (var tool in dotnetToolList[2..])
 {
-    if (exitToken.IsCancellationRequested) break;
     var toolId = tool.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim();
     if (fullToolName.Equals(toolId))
     {
@@ -64,7 +61,7 @@ static void PrintHelp()
 {
     Console.WriteLine("dotnet-update-all-tools is a tool for upgrade all dotnet tools, update all global dotnet tools by default, and you can set `--local` option for local tools");
     Console.WriteLine("Options:");
-    Console.WriteLine($"\t {"--local", -20} \t update all local dotnet tools");
-    Console.WriteLine($"\t {"-v/--version", -20} \t output version information");
-    Console.WriteLine($"\t {"-h/--help", -20} \t output help information");
+    Console.WriteLine($"\t {"--local",-20} \t update all local dotnet tools");
+    Console.WriteLine($"\t {"-v/--version",-20} \t output version information");
+    Console.WriteLine($"\t {"-h/--help",-20} \t output help information");
 }
