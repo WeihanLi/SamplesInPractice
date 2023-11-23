@@ -17,7 +17,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>    
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0' AND '$(AOT)'=='true'">
     <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows&WT.mc_id=DT-MVP-5004222 -->
     <PublishAot>true</PublishAot>
     <IsAotCompatible>true</IsAotCompatible>
