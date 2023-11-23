@@ -2,7 +2,7 @@
 
 InvokeHelper.OnInvokeException = e => ConsoleHelper.WriteLineWithColor(e.ToString(), ConsoleColor.Red);
 
-var exitToken = ConsoleHelper.GetExitToken();
+var exitToken = InvokeHelper.GetExitToken();
 // InvokeHelper.TryInvoke(JsonSample.MainTest);
 // DataAnnotationSample.MainTest();
 // TimeProviderSample.MainTest();

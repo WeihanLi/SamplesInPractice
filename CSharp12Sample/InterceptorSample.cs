@@ -43,11 +43,11 @@ namespace CSharp12Sample.Generated
 {
      public static class Extensions
      {
-         [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 11/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
-         public static void TestMethodInterceptor(this A a)
-         {
-             Console.WriteLine($"Intercepted: {nameof(TestMethodInterceptor)}");
-         }
+        //  [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 11/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
+        //  public static void TestMethodInterceptor(this A a)
+        //  {
+        //      Console.WriteLine($"Intercepted: {nameof(TestMethodInterceptor)}");
+        //  }
          
 //         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 8/*L1*/, character: 15/*C1*/)] // refers to the call at (L1, C1)
 //         // public static void InterceptorMethod(this C c)

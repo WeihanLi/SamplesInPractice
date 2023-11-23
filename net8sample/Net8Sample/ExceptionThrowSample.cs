@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
-using WeihanLi.Common;
 using WeihanLi.Common.Helpers;
+using WeihanLi.Common.Services;
 
 namespace Net8Sample;
 
