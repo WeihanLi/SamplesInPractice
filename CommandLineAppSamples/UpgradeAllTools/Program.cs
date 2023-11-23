@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using WeihanLi.Common.Helpers;
+﻿using WeihanLi.Common.Helpers;
 using static WeihanLi.Common.Helpers.ConsoleHelper;
 
 const string toolName = "update-all-tools";
@@ -16,10 +15,11 @@ if (args is { Length: 1 })
     }
     
     // print version
-    var versionArguments = new HashSet<string>() { "-v", "--version", "version" };
+    var versionArguments = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "-v", "--version", "version" };
     if (versionArguments.Contains(args[0]))
     {
-        Console.WriteLine(JsonSerializer.Serialize(ApplicationHelper.GetLibraryInfo(typeof(Program))));
+        var libInfo = ApplicationHelper.GetLibraryInfo(typeof(Program));
+        Console.WriteLine($"{libInfo.LibraryVersion} {libInfo.LibraryHash}");
         return;
     }
 }
@@ -62,9 +62,9 @@ foreach (var tool in dotnetToolList[2..])
 
 static void PrintHelp()
 {
-    Console.WriteLine("dotnet-update-all-tools is a tool for upgrade all dotnet tools, update all global dotnet tools by default");
-    Console.WriteLine("Options");
-    Console.WriteLine("`--local` \t\t You can set `--local` option to update all local dotnet tools");
-    Console.WriteLine("`-v`/`--version` \t\t output version information");
-    Console.WriteLine("`-h`/`--help` \t\t output help information");
+    Console.WriteLine("dotnet-update-all-tools is a tool for upgrade all dotnet tools, update all global dotnet tools by default, and you can set `--local` option for local tools");
+    Console.WriteLine("Options:");
+    Console.WriteLine($"\t {"--local", -20} \t update all local dotnet tools");
+    Console.WriteLine($"\t {"-v/--version", -20} \t output version information");
+    Console.WriteLine($"\t {"-h/--help", -20} \t output help information");
 }
