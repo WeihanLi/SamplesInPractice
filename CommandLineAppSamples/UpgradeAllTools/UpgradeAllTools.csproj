@@ -13,7 +13,7 @@
     <Description>update all dotnet-tool in a command</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/WeihanLi/SamplesInPractice/tree/master/CommandLineAppSamples/UpgradeAllTools</PackageProjectUrl>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>    
   </PropertyGroup>
 
