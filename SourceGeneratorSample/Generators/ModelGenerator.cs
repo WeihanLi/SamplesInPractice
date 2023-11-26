@@ -18,7 +18,7 @@ public class ModelGenerator : ISourceGenerator
     {
         var codeBuilder = new StringBuilder(@"
 using System;
-using WeihanLi.Extensions;
+using WeihanLi.Extensions.Dump;
 
 namespace Generated
 {

@@ -1,15 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference> -->
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
     <ProjectReference Include="..\TestModels\TestModels.csproj" />
   </ItemGroup>
 
@@ -17,16 +13,16 @@
     <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>  
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.46" GeneratePathProperty="true" />
-    <PackageReference Include="WeihanLi.EntityFramework" Version="2.0.0-preview-20210202-165807" GeneratePathProperty="true" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" GeneratePathProperty="true" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60" GeneratePathProperty="true" />
+    <PackageReference Include="WeihanLi.EntityFramework" Version="2.0.0" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" GeneratePathProperty="true" />
   </ItemGroup>
   <Target Name="GetDependencyTargetPaths">
     <ItemGroup>
       <!-- <TargetPathWithTargetPlatformMoniker Include="..\TestModels\bin\$(Configuration)\netstandard2.0\TestModels.dll" IncludeRuntimeDependency="false" /> -->
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGWeihanLi_Common)\lib\netstandard2.1\WeihanLi.Common.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGWeihanLi_EntityFramework)\lib\netstandard2.1\WeihanLi.EntityFramework.dll" IncludeRuntimeDependency="false" />
-      <TargetPathWithTargetPlatformMoniker Include="$(PKGMicrosoft_EntityFrameworkCore)\lib\netstandard2.1\Microsoft.EntityFrameworkCore.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PKGWeihanLi_Common)\lib\net6.0\WeihanLi.Common.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PKGWeihanLi_EntityFramework)\lib\net6.0\WeihanLi.EntityFramework.dll" IncludeRuntimeDependency="false" />
+      <TargetPathWithTargetPlatformMoniker Include="$(PKGMicrosoft_EntityFrameworkCore)\lib\net6.0\Microsoft.EntityFrameworkCore.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 </Project>
