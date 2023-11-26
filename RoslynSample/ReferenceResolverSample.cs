@@ -61,7 +61,7 @@ public static class ReferenceResolverSample
             Console.WriteLine("Compile failed");
             foreach (var diagnostic in emitResult.Diagnostics)
             {
-                if (diagnostic.Severity != DiagnosticSeverity.Error) ;
+                if (diagnostic.Severity != DiagnosticSeverity.Error) continue;
                 Console.WriteLine(CSharpDiagnosticFormatter.Instance.Format(diagnostic));
             }
         }
