@@ -17,7 +17,7 @@ public class MoqAutoMockerTest
         var result = service.TestMethod1();
         Assert.Equal(1, result);
     }
-    
+
     [Fact]
     public void TestMethod1WithAutoMocker()
     {
@@ -28,7 +28,7 @@ public class MoqAutoMockerTest
         var result = service.TestMethod1();
         Assert.Equal(1, result);
     }
-    
+
     [Fact]
     public void TestMethod2()
     {
@@ -39,6 +39,7 @@ public class MoqAutoMockerTest
         cMock.Setup(x => x.GetResult())
             .Returns(1);
         autoMocker.Use(cMock);
+        // autoMocker.Use(cMock.Object);
         var service = autoMocker.CreateInstance<TestService>();
         var result = service.TestMethod2();
         Assert.Equal(2, result);
@@ -49,12 +50,12 @@ public class MoqAutoMockerTest
     public void TestMethod3()
     {
         var autoMocker = new AutoMocker();
-        autoMocker.Use<ID>(x=> x.GetResult() == 1);
+        autoMocker.Use<ID>(x => x.GetResult() == 1);
         var service = autoMocker.CreateInstance<TestService>();
         var result = service.TestMethod3();
         Assert.Equal(101, result);
         autoMocker.GetMock<ID>()
-            .Verify(x=> x.GetResult());
+            .Verify(x => x.GetResult());
     }
 }
 
@@ -98,12 +99,12 @@ file sealed class TestService
     {
         return _a.GetResult();
     }
-    
+
     public int TestMethod2()
     {
         return _b.GetResult() + _c.GetResult();
     }
-    
+
     public int TestMethod3()
     {
         return _d.GetResult() + 100;
