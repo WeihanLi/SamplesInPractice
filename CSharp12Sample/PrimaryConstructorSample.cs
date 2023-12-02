@@ -1,5 +1,4 @@
-﻿using WeihanLi.Common;
-using WeihanLi.Common.Services;
+﻿using WeihanLi.Common.Services;
 
 namespace CSharp12Sample;
 
@@ -21,6 +20,9 @@ public static class PrimaryConstructorSample
         var helper = new CrudHelper<int>();
         var result = helper.Create(1);
         Console.WriteLine(result);
+
+        Console.WriteLine(nameof(AbstractAnimal));
+        Console.WriteLine(nameof(AbstractSharp));
     }
 }
 
@@ -29,7 +31,7 @@ file class Animal(string name)
     public string Name => name;
 }
 
-file sealed class Cat(string name) : Animal(name){}
+file sealed class Cat(string name) : Animal(name);
 
 file sealed class Dog(string name, int age) : Animal(name)
 {
@@ -50,6 +52,8 @@ file struct Point(int x, int y)
     public override string ToString() => $"({X}, {Y})";
 }
 
+file struct Point3D(int x, int y, int z);
+
 file sealed class CrudHelper<T>(IIdGenerator idGenerator)
 {
     public CrudHelper(): this(GuidIdGenerator.Instance)
@@ -61,3 +65,6 @@ file sealed class CrudHelper<T>(IIdGenerator idGenerator)
         return idGenerator.NewId();
     }
 }
+
+file abstract class AbstractAnimal;  
+file struct AbstractSharp;
