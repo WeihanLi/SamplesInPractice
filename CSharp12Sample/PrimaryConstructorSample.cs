@@ -26,7 +26,7 @@ public static class PrimaryConstructorSample
     }
 }
 
-file class Animal(string name) 
+file class Animal(string name) : AbstractAnimal
 {
     public string Name => name;
 }
@@ -66,5 +66,8 @@ file sealed class CrudHelper<T>(IIdGenerator idGenerator)
     }
 }
 
+file record Job(string title);
+file record struct PointZ(int X, int Y);
+file record EmptyJob;
 file abstract class AbstractAnimal;  
 file struct AbstractSharp;
