@@ -25,5 +25,13 @@ namespace XunitSample
         public static void ArgumentExceptionTest() => throw new ArgumentException();
 
         public static void ArgumentNullExceptionTest() => throw new ArgumentNullException();
+
+
+        private static volatile bool _ready;
+        public static bool Ready => _ready;
+        public static void MarkReady()
+        {
+            _ready = true;
+        }
     }
 }

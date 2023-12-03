@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace XunitSample
@@ -34,6 +35,17 @@ namespace XunitSample
             Assert.Throws<ArgumentNullException>(Helper.ArgumentNullExceptionTest);
             Assert.ThrowsAny<ArgumentNullException>(Helper.ArgumentNullExceptionTest);
             Assert.ThrowsAny<ArgumentException>(Helper.ArgumentNullExceptionTest);
+        }
+        
+        [Fact]
+        public async Task ConcurrencyTest()
+        {
+            Assert.False(Helper.Ready);
+            await Task.Run(Helper.MarkReady);
+            Parallel.For(1, 1_000_000, i =>
+            {
+                Assert.True(Helper.Ready);
+            });
         }
     }
 }
