@@ -11,20 +11,28 @@ public class ScopeActivityGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var methodCalls = context.SyntaxProvider.CreateSyntaxProvider(
-            predicate: static (node, _) => node is 
-                InvocationExpressionSyntax 
-                { 
-                    Expression: MemberAccessExpressionSyntax 
-                    { 
-                        Name:
+            predicate: static (node, _) =>
+            {
+                if (node is
+                    InvocationExpressionSyntax
+                    {
+                        Expression: MemberAccessExpressionSyntax
                         {
-                            Identifier:
+                            Name:
                             {
-                                ValueText: "CreateScope"
+                                Identifier:
+                                {
+                                    ValueText: "CreateScope"
+                                }
                             }
                         }
-                    }
+                    })
+                {
+                    return true;
                 }
+
+                return false;
+            }
             ,
             transform: static (context, token) =>
             {

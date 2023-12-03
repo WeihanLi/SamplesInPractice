@@ -18,4 +18,8 @@
     <Compile Include="LoggingGenerator.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
 </Project>

@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <Content Include="Directory.Build.props" />
-    <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
 </Project>
