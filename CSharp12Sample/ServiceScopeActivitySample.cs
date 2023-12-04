@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace CSharp12Sample;
 
@@ -19,7 +18,16 @@ public static class ServiceScopeActivitySample
         {
             using var scope = serviceProvider.CreateScope();
             Console.WriteLine("activity scope activityId:");
-            Console.WriteLine(scope.ServiceProvider.GetRequiredService<ActivityScope>()?.Activity?.Id);
+            Console.WriteLine(scope.ServiceProvider.GetRequiredService<ActivityScope>().Activity?.Id);
+            Console.WriteLine();
+            Console.WriteLine("Current activityId:");
+            Console.WriteLine(Activity.Current?.Id);
+        }
+        Console.WriteLine();
+        {
+            await using var scope = serviceProvider.CreateAsyncScope();
+            Console.WriteLine("activity async scope activityId:");
+            Console.WriteLine(scope.ServiceProvider.GetRequiredService<ActivityScope>().Activity?.Id);
             Console.WriteLine();
             Console.WriteLine("Current activityId:");
             Console.WriteLine(Activity.Current?.Id);
@@ -27,7 +35,7 @@ public static class ServiceScopeActivitySample
     }
 }
 
-public sealed class ActivityScope : IDisposable
+public sealed class ActivityScope : IDisposable, IAsyncDisposable
 {
     private static readonly ActivitySource ActivitySource = new(nameof(ActivityScope));
 
@@ -37,6 +45,16 @@ public sealed class ActivityScope : IDisposable
     
     public void Dispose()
     {
+        Console.WriteLine("Dispose ing...");
         _activity?.Dispose();
+        Console.WriteLine("Dispose done");
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        Console.WriteLine("DisposeAsync ing...");
+        _activity?.Dispose();
+        Console.WriteLine("DisposeAsync done");
+        return ValueTask.CompletedTask;
     }
 }
