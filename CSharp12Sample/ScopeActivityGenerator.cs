@@ -71,7 +71,7 @@ public class ScopeActivityGenerator : IIncrementalGenerator
             .Select((invocations, _) =>
             {
                 var stringBuilder = new StringBuilder();
-                foreach (var invocationGroup in invocations.GroupBy(i=> i!.MethodName))
+                foreach (var invocationGroup in invocations.GroupBy(i => i!.MethodName))
                 {
                     foreach (var invocation in invocationGroup)
                     {
@@ -114,7 +114,7 @@ namespace CSharp12Sample.Generated
 {
     public static partial class GeneratedActivityScope
     {
-{{sources}}
+{{sources.TrimEnd()}}
     }
 }
 """;

@@ -22,6 +22,24 @@ public static class ServiceScopeActivitySample
             Console.WriteLine();
             Console.WriteLine("Current activityId:");
             Console.WriteLine(Activity.Current?.Id);
+
+            {
+                using var scope1 = serviceProvider.CreateScope();
+                Console.WriteLine("activity scope activityId:");
+                Console.WriteLine(scope1.ServiceProvider.GetRequiredService<ActivityScope>().Activity?.Id);
+                Console.WriteLine();
+                Console.WriteLine("Current activityId:");
+                Console.WriteLine(Activity.Current?.Id);
+            }            
+        }
+        Console.WriteLine();
+        {
+            await using var scope = serviceProvider.CreateAsyncScope();
+            Console.WriteLine("activity async scope activityId:");
+            Console.WriteLine(scope.ServiceProvider.GetRequiredService<ActivityScope>().Activity?.Id);
+            Console.WriteLine();
+            Console.WriteLine("Current activityId:");
+            Console.WriteLine(Activity.Current?.Id);
         }
         Console.WriteLine();
         {
