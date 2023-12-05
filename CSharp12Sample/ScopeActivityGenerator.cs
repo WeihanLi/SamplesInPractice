@@ -48,26 +48,25 @@ public class ScopeActivityGenerator : IIncrementalGenerator
             .Where(static invocation => invocation != null);
         
         var definition = """
-                                               public static Microsoft.Extensions.DependencyInjection.IServiceScope ScopeActivityInterceptorMethod(this System.IServiceProvider provider)
-                                               {
-                                                   System.Console.WriteLine("scope creating...");
-                                                   var scope = provider.CreateScope();
-                                                   var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
-                                                   System.Console.WriteLine("scope created...");
-                                                   return scope;
-                                               }
-                                    """;
-                    var asyncDefinition = """
-                                                
-                                                public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this System.IServiceProvider provider)
-                                                {
-                                                    System.Console.WriteLine("scope creating...");
-                                                    var scope = provider.CreateAsyncScope();
-                                                    var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
-                                                    System.Console.WriteLine("scope created...");
-                                                    return scope;
-                                                }
-                                    """;
+        public static Microsoft.Extensions.DependencyInjection.IServiceScope ScopeActivityInterceptorMethod(this System.IServiceProvider provider)
+        {
+            System.Console.WriteLine("scope creating...");
+            var scope = provider.CreateScope();
+            var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
+            System.Console.WriteLine("scope created...");
+            return scope;
+        }
+""";
+        var asyncDefinition = """
+        public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this System.IServiceProvider provider)
+        {
+            System.Console.WriteLine("scope creating...");
+            var scope = provider.CreateAsyncScope();
+            var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
+            System.Console.WriteLine("scope created...");
+            return scope;
+        }
+""";
         var interceptors = methodCalls.Collect()
             .Select((invocations, _) =>
             {
@@ -77,16 +76,16 @@ public class ScopeActivityGenerator : IIncrementalGenerator
                     foreach (var invocation in invocationGroup)
                     {
                         Debug.Assert(invocation != null);
-                        stringBuilder.Append(
-                            $$"""            [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]""");
+                        stringBuilder.AppendLine(
+                            $$"""        [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]""");
                     }
                     if ("CreateScope".Equals(invocationGroup.Key))
                     {
-                        stringBuilder.Append(definition);
+                        stringBuilder.AppendLine(definition);
                     }
                     else
                     {
-                        stringBuilder.Append(asyncDefinition);
+                        stringBuilder.AppendLine(asyncDefinition);
                     }
                     stringBuilder.AppendLine();
                 }
