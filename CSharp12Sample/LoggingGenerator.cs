@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Operations;
+using System.Diagnostics;
 using System.Text;
 
 namespace gen;
@@ -32,7 +33,7 @@ public sealed class LoggingGenerator : IIncrementalGenerator
                 if (operation is IInvocationOperation targetOperation 
                     )
                 {
-                    return new InterceptInvocation(targetOperation);
+                    return new InterceptInvocation(targetOperation, (InvocationExpressionSyntax)context.Node);
                 }
                 return null;
             })
@@ -44,8 +45,9 @@ public sealed class LoggingGenerator : IIncrementalGenerator
                 var stringBuilder = new StringBuilder();
                 foreach (var invocation in invocations)
                 {
+                    Debug.Assert(invocation != null);
                     var definition = $$"""
-                                               [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation!.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
+                                               [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
                                                public static void LoggingInterceptorMethod(this CSharp12Sample.C c)
                                                {
                                                    System.Console.WriteLine("logging before...");
@@ -74,9 +76,7 @@ public sealed class LoggingGenerator : IIncrementalGenerator
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-#pragma warning disable CS9113 // Parameter is unread.
     file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute {}
-#pragma warning restore CS9113 // Parameter is unread.
 }
 
 namespace CSharp12Sample.Generated
@@ -93,8 +93,10 @@ namespace CSharp12Sample.Generated
 }
 
 
-internal sealed class InterceptInvocation(IInvocationOperation invocationOperation)
+internal sealed class InterceptInvocation(IInvocationOperation invocationOperation, InvocationExpressionSyntax invocationExpressionSyntax)
 {
+    public string MethodName =>
+        ((MemberAccessExpressionSyntax)invocationExpressionSyntax.Expression).Name.Identifier.Text;
 
     public (string FilePath, int Line, int Column) Location { get; } = GetLocation(invocationOperation);
 

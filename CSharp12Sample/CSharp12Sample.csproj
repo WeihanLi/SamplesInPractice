@@ -11,7 +11,7 @@
     <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);CSharp12Sample.Generated</InterceptorsPreviewNamespaces>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <EnableDefaultItems>false</EnableDefaultItems>
-    <NoWarn>$(NoWarn);EXP001;EXP002</NoWarn>
+    <NoWarn>$(NoWarn);EXP001;EXP002;CS9113</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
