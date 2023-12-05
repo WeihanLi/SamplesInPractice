@@ -1,9 +1,10 @@
 using System.Net;
 using WeihanLi.Extensions;
+using WeihanLi.Extensions.Hosting;
 
 namespace IpMonitor;
 
-public sealed class Worker : BackgroundService
+public sealed class Worker : TimerBaseBackgroundServiceWithDiagnostic
 {
     private readonly TimeSpan _period;
     private readonly INotification _notification;
@@ -11,7 +12,8 @@ public sealed class Worker : BackgroundService
 
     private volatile string _previousIpInfo = string.Empty;
 
-    public Worker(IConfiguration configuration, INotificationSelector notificationSelector, ILogger<Worker> logger)
+    public Worker(IConfiguration configuration, INotificationSelector notificationSelector, ILogger<Worker> logger, IServiceProvider serviceProvider)
+      : base(serviceProvider)
     {
         _logger = logger;
         _period = configuration.GetAppSetting<TimeSpan>("MonitorPeriod");
@@ -22,31 +24,22 @@ public sealed class Worker : BackgroundService
         }
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        using var timer = new PeriodicTimer(_period);
-        while (await timer.WaitForNextTickAsync(stoppingToken))
-        {
-            try
-            {
-                var host = Dns.GetHostName();
-                var ips = await Dns.GetHostAddressesAsync(host, stoppingToken);
-                var ipInfo = $"{Environment.MachineName} - {host}\n {ips.Order(new IpAddressComparer())
-                    .Select(x => x.MapToIPv4().ToString()).StringJoin(", ")}";
-                if (_previousIpInfo == ipInfo)
-                {
-                    _logger.LogDebug("IpInfo not changed");
-                    continue;
-                }
+    protected override TimeSpan Period => _period;
 
-                _logger.LogInformation("Ip info: {IpInfo}", ipInfo);
-                await _notification.SendNotification($"[IpMonitor]\n{ipInfo}");
-                _previousIpInfo = ipInfo;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "GetIp exception");
-            }
+    protected override async Task ExecuteTaskInternalAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
+    {
+        var host = Dns.GetHostName();
+        var ips = await Dns.GetHostAddressesAsync(host, cancellationToken);
+        var ipInfo = $"{Environment.MachineName} - {host}\n {ips.Order(new IpAddressComparer())
+            .Select(x => x.MapToIPv4().ToString()).StringJoin(", ")}";
+        if (_previousIpInfo == ipInfo)
+        {
+            _logger.LogDebug("IpInfo not changed");
+            return;
         }
+
+        _logger.LogInformation("Ip info: {IpInfo}", ipInfo);
+        await _notification.SendNotification($"[IpMonitor]\n{ipInfo}");
+        _previousIpInfo = ipInfo;
     }
 }
