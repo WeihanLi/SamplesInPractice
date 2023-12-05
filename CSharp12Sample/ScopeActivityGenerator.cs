@@ -89,7 +89,7 @@ public class ScopeActivityGenerator : IIncrementalGenerator
                     }
                     stringBuilder.AppendLine();
                 }
-                return stringBuilder.ToString();
+                return stringBuilder.ToString().TrimEnd();
             });
 
         context.RegisterSourceOutput(interceptors, (ctx, sources) =>
@@ -114,7 +114,7 @@ namespace CSharp12Sample.Generated
 {
     public static partial class GeneratedActivityScope
     {
-{{sources.TrimEnd()}}
+{{sources}}
     }
 }
 """;
