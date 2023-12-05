@@ -52,7 +52,7 @@ public class ScopeActivityGenerator : IIncrementalGenerator
         {
             System.Console.WriteLine("scope creating...");
             var scope = provider.CreateScope();
-            var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
+            _ = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
             System.Console.WriteLine("scope created...");
             return scope;
         }
@@ -60,10 +60,10 @@ public class ScopeActivityGenerator : IIncrementalGenerator
         var asyncDefinition = """
         public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this System.IServiceProvider provider)
         {
-            System.Console.WriteLine("scope creating...");
+            System.Console.WriteLine("async scope creating...");
             var scope = provider.CreateAsyncScope();
-            var activity = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
-            System.Console.WriteLine("scope created...");
+            _ = scope.ServiceProvider.GetRequiredService<CSharp12Sample.ActivityScope>();
+            System.Console.WriteLine("async scope created...");
             return scope;
         }
 """;
