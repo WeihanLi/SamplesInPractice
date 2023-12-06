@@ -17,6 +17,8 @@ namespace CSharp12Sample
             c.GenericSampleMethod(1, Result.Success());
             
             C.StaticGenericSampleMethod(1, Result.Success());
+
+            Console.WriteLine(a.Name);
         }
     }
     
@@ -26,6 +28,8 @@ namespace CSharp12Sample
         {
             Console.WriteLine("A.TestMethod");
         }
+
+        public string Name => "test";
     }
 
     public class C
@@ -46,7 +50,7 @@ namespace CSharp12Sample
             where T1: struct
             where T2: class
         {
-            Console.WriteLine($"{nameof(GenericSampleMethod)}, t1: {t1}, t2: {t2}");
+            Console.WriteLine($"{nameof(StaticGenericSampleMethod)}, t1: {t1}, t2: {t2}");
         }
     }
 }
@@ -110,6 +114,14 @@ namespace CSharp12Sample.Generated
          // public static void StaticGenericSampleMethodInterceptor<T1, T2>(T1 t1, T2 t2)
          // {
          //     Console.WriteLine($"Intercepted: {nameof(StaticGenericSampleMethodInterceptor)}");
+         // }
+         
+         // Error CS9151 : Possible method name 'Name' cannot be intercepted because it is not being invoked.
+         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 21, character: 33)]
+         // public static string TestPropertyInterceptor(this A a)
+         // {
+         //     Console.WriteLine($"Intercepted: {nameof(TestPropertyInterceptor)}");
+         //     return $"intercepted- {a.Name}";
          // }
      }
 }
