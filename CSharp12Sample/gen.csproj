@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>  
+    <Compile Include="InterceptorHelper.cs" />  
     <Compile Include="ScopeActivityGenerator.cs" />  
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
     <Compile Include="LoggingGenerator.cs" />
