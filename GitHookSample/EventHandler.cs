@@ -48,12 +48,11 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         await foreach (var githubPushEvent in _channel.Reader.ReadAllAsync(stoppingToken))
         {
             var beginTime = DateTimeOffset.Now;
-            var startTimestamp = TimeProvider.System.GetTimestamp();
             try
             {
                 await HandleGithubPushEvent(githubPushEvent);
-                var elapsed = TimeProvider.System.GetElapsedTime(startTimestamp);
                 var endTime = DateTimeOffset.Now;
+                var elapsed = endTime - beginTime;
                 _logger.LogInformation("{RepoName} Deploy done in {Elapsed}, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
                     githubPushEvent.RepoName, elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
                 var deployHistory = new DeployHistory
