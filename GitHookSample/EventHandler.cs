@@ -24,7 +24,9 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         _configuration = configuration;
         _deployHistoryRepository = deployHistoryRepository;
     }
-    
+
+    private readonly TimeSpan _period = TimeSpan.FromSeconds(10);
+
     public bool Publish<TEvent>(TEvent @event) where TEvent : class, IEventBase
     {
         throw new NotImplementedException();
@@ -46,20 +48,20 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         await foreach (var githubPushEvent in _channel.Reader.ReadAllAsync(stoppingToken))
         {
             var beginTime = DateTimeOffset.Now;
-            var watch = ValueStopwatch.StartNew();
+            var startTimestamp = TimeProvider.System.GetTimestamp();
             try
             {
                 await HandleGithubPushEvent(githubPushEvent);
-                watch.Stop();
+                var elapsed = TimeProvider.System.GetElapsedTime(startTimestamp);
                 var endTime = DateTimeOffset.Now;
                 _logger.LogInformation("{RepoName} Deploy done in {Elapsed}, last commit msg: {CommitMsg}, {PushedBy}, please help check the result", 
-                    githubPushEvent.RepoName, watch.Elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
+                    githubPushEvent.RepoName, elapsed, githubPushEvent.CommitMsg, githubPushEvent.PushByEmail);
                 var deployHistory = new DeployHistory
                 {
                     Event = githubPushEvent, 
                     BeginTime = beginTime,
                     EndTime = endTime,
-                    Elapsed = watch.Elapsed
+                    Elapsed = elapsed
                 };
                 _deployHistoryRepository.AddDeployHistory(githubPushEvent.RepoName, deployHistory);
             }
@@ -67,7 +69,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             {
                 _logger.LogError(e, "{Method} Exception", nameof(HandleGithubPushEvent));
             }
-            await Task.Delay(10_000, stoppingToken);
+            await Task.Delay(_period, stoppingToken);
         }
     }
 

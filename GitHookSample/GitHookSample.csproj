@@ -2,19 +2,20 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibGit2Sharp" Version="0.28.0" />
-    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.5" />
-    <PackageReference Include="PolySharp" Version="1.13.2">
+    <PackageReference Include="LibGit2Sharp" Version="0.29.0" />
+    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.6" />
+    <PackageReference Include="PolySharp" Version="1.14.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.60-preview-20231111-140807" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.60" />
+    <PackageReference Include="WeihanLi.Extensions.Hosting" Version="1.0.60" />
   </ItemGroup>
 
 </Project>
