@@ -33,7 +33,7 @@ public sealed class LoggingGenerator : IIncrementalGenerator
                 if (operation is IInvocationOperation targetOperation 
                     )
                 {
-                    return new InterceptInvocation(targetOperation, (InvocationExpressionSyntax)context.Node);
+                    return new InterceptInvocation(targetOperation);
                 }
                 return null;
             })
