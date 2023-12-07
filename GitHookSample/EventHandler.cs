@@ -107,7 +107,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
         else
         {
             var gitPath = ApplicationHelper.ResolvePath("git") ?? _configuration.GetRequiredAppSetting("GitPath");
-            var gitPullResult = await RetryHelper.TryInvokeAsync(() => CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder),
+            var gitPullResult = await RetryHelper.TryInvokeAsync(() => CommandExecutor.ExecuteAndCaptureAsync(gitPath, "pull", repoFolder)!,
                 r => r?.ExitCode == 0, 10);
             if (gitPullResult?.ExitCode != 0)
             {
@@ -134,7 +134,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             {
                 info.UserName = processUser;
                 if (OperatingSystem.IsWindows() && !string.IsNullOrEmpty(_configuration["ProcessUserCredential:Password"]))
-                  info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]).GetString();
+                  info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]!).GetString();
             }
         });
         if (yarnResult.ExitCode != 0)
@@ -163,7 +163,7 @@ public sealed class EventHandler : BackgroundService, IEventPublisher
             {
                 info.UserName = processUser;
                 if (OperatingSystem.IsWindows() && !string.IsNullOrEmpty(_configuration["ProcessUserCredential:Password"]))
-                    info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]).GetString();
+                    info.PasswordInClearText = Convert.FromBase64String(_configuration["ProcessUserCredential:Password"]!).GetString();
             }
         });
         if (buildResult.ExitCode != 0)

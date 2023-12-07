@@ -3,6 +3,7 @@ using Octokit.Webhooks;
 using Octokit.Webhooks.AspNetCore;
 using WeihanLi.Common.Event;
 using WeihanLi.Common.Helpers;
+using WeihanLi.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,10 @@ builder.Services.Configure<IISServerOptions>(options =>
 });
 
 var app = builder.Build();
-app.MapGitHubWebhooks("/api/github/webhooks",app.Configuration.GetRequiredAppSetting("GithubWebhookSecret"));
+app.MapGitHubWebhooks("/api/github/webhooks", app.Configuration.GetRequiredAppSetting("GithubWebhookSecret"));
 app.Map("/", () => "Hooks world");
-app.Map("/runtime-info", () => ApplicationHelper.RuntimeInfo);
+app.MapRuntimeInfo();
+app.UseHealthCheck("/health", _ => Task.FromResult(true));
 
 app.Map("/deploy-history", (IDeployHistoryRepository repository) => repository.GetAllDeployHistory());
 app.Map("/deploy-history/{service}", (string service, IDeployHistoryRepository repository) => repository.GetDeployHistory(service));
