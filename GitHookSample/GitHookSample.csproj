@@ -16,6 +16,7 @@
     </PackageReference>
     <PackageReference Include="WeihanLi.Common" Version="1.0.60" />
     <PackageReference Include="WeihanLi.Extensions.Hosting" Version="1.0.60" />
+    <PackageReference Include="WeihanLi.Web.Extensions" Version="1.7.0" />
   </ItemGroup>
 
 </Project>
