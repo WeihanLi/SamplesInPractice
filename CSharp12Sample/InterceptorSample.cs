@@ -19,6 +19,8 @@ namespace CSharp12Sample
             C.StaticGenericSampleMethod(1, Result.Success());
 
             Console.WriteLine(a.Name);
+            
+            c.ExtensionMethod();
         }
     }
     
@@ -51,6 +53,14 @@ namespace CSharp12Sample
             where T2: class
         {
             Console.WriteLine($"{nameof(StaticGenericSampleMethod)}, t1: {t1}, t2: {t2}");
+        }
+    }
+
+    public static class Extensions
+    {
+        public static void ExtensionMethod(this C c)
+        {
+            Console.WriteLine($"{nameof(ExtensionMethod)} Test");
         }
     }
 }
@@ -122,6 +132,13 @@ namespace CSharp12Sample.Generated
          // {
          //     Console.WriteLine($"Intercepted: {nameof(TestPropertyInterceptor)}");
          //     return $"intercepted- {a.Name}";
+         // }
+         
+         // intercept instance extension method
+         // [System.Runtime.CompilerServices.InterceptsLocation(@"C:\projects\sources\SamplesInPractice\CSharp12Sample\InterceptorSample.cs", line: 23, character: 15)]
+         // public static void TestExtensionMethodInterceptor(this C c)
+         // {
+         //     Console.WriteLine($"Intercepted: {nameof(TestExtensionMethodInterceptor)}");
          // }
      }
 }
