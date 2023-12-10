@@ -77,7 +77,7 @@ public sealed class CreateScopeActivityGenerator : IIncrementalGenerator
                     {
                         Debug.Assert(invocation != null);
                         stringBuilder.AppendLine(
-                            $$"""        [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]""");
+                            $$"""        [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation!.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]""");
                     }
                     if ("CreateScope".Equals(invocationGroup.Key))
                     {

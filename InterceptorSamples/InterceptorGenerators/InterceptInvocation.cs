@@ -13,7 +13,13 @@ internal sealed class InterceptInvocation
     public InterceptInvocation(IInvocationOperation invocationOperation)
     {
         _invocationOperation = invocationOperation;
-        _memberAccessExpressionSyntax = (MemberAccessExpressionSyntax)((InvocationExpressionSyntax)_invocationOperation.Syntax).Expression;
+        // The invocation expression consists of two properties:
+        // - Expression: which is a `MemberAccessExpressionSyntax` that represents the method being invoked.
+        // - ArgumentList: the list of arguments being invoked.
+        // Here, we resolve the `MemberAccessExpressionSyntax` to get the location of the method being invoked.
+        _memberAccessExpressionSyntax = (MemberAccessExpressionSyntax)((InvocationExpressionSyntax)_invocationOperation.Syntax)
+            .Expression;
+        
         MethodName = _memberAccessExpressionSyntax.Name.Identifier.Text;
         Location = GetLocation();
     }
@@ -24,17 +30,12 @@ internal sealed class InterceptInvocation
 
     private (string filePath, int line, int column) GetLocation()
     {
-        // The invocation expression consists of two properties:
-        // - Expression: which is a `MemberAccessExpressionSyntax` that represents the method being invoked.
-        // - ArgumentList: the list of arguments being invoked.
-        // Here, we resolve the `MemberAccessExpressionSyntax` to get the location of the method being invoked.
-        var memberAccessorExpression = _memberAccessExpressionSyntax;
         // The `MemberAccessExpressionSyntax` in turn includes three properties:
         // - Expression: the expression that is being accessed.
         // - OperatorToken: the operator token, typically the dot separate.
         // - Name: the name of the member being accessed
         // Here, we resolve the `Name` to extract the location of the method being invoked.
-        var invocationNameSpan = memberAccessorExpression.Name.Span;
+        var invocationNameSpan = _memberAccessExpressionSyntax.Name.Span;
         // Resolve LineSpan associated with the name span so we can resolve the line and character number.
         var lineSpan = _invocationOperation.Syntax.SyntaxTree.GetLineSpan(invocationNameSpan);
         // Resolve the filepath of the invocation while accounting for source mapped paths.
