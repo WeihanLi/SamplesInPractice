@@ -14,18 +14,11 @@ public sealed class CreateScopeActivityGenerator : IIncrementalGenerator
         var methodCalls = context.SyntaxProvider.CreateSyntaxProvider(
             predicate: static (node, _) =>
             {
-                if (node is
-                    InvocationExpressionSyntax
+                if (node is InvocationExpressionSyntax
                     {
                         Expression: MemberAccessExpressionSyntax
                         {
-                            Name:
-                            {
-                                Identifier:
-                                {
-                                    ValueText: "CreateScope" or "CreateAsyncScope"
-                                }
-                            }
+                            Name.Identifier.ValueText: "CreateScope" or "CreateAsyncScope"
                         }
                     })
                 {
@@ -67,9 +60,12 @@ public sealed class CreateScopeActivityGenerator : IIncrementalGenerator
                     var interceptorCode =
                         (invocationGroup.Key.ContainingTypeName, invocationGroup.Key.MethodName) switch
                         {
-                            ("Microsoft.Extensions.DependencyInjection.IServiceScopeFactory", "CreateScope") => ScopeActivityGeneratedSource.ServiceScopeFactoryCreateScopeInterceptorCode,
-                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateScope") => ScopeActivityGeneratedSource.ServiceProviderCreateScopeInterceptorCode,
-                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateAsyncScope") => ScopeActivityGeneratedSource.ServiceProviderCreateScopeAsyncInterceptorCode,
+                            ("Microsoft.Extensions.DependencyInjection.IServiceScopeFactory", "CreateScope") 
+                                => ScopeActivityGeneratedSource.ServiceScopeFactoryCreateScopeInterceptorCode,
+                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateScope") 
+                                => ScopeActivityGeneratedSource.ServiceProviderCreateScopeInterceptorCode,
+                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateAsyncScope") 
+                                => ScopeActivityGeneratedSource.ServiceProviderCreateScopeAsyncInterceptorCode,
                             _ => throw new ArgumentOutOfRangeException($"{invocationGroup.Key.MethodName}")
                         };
                     stringBuilder.AppendLine(interceptorCode);

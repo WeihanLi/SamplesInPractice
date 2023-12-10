@@ -7,20 +7,14 @@ namespace InterceptorGenerators;
 internal sealed class InterceptInvocation
 {
     private readonly MemberAccessExpressionSyntax _memberAccessExpressionSyntax;
-
     private readonly IInvocationOperation _invocationOperation;
 
     public InterceptInvocation(IInvocationOperation invocationOperation)
     {
         _invocationOperation = invocationOperation;
-        // The invocation expression consists of two properties:
-        // - Expression: which is a `MemberAccessExpressionSyntax` that represents the method being invoked.
-        // - ArgumentList: the list of arguments being invoked.
-        // Here, we resolve the `MemberAccessExpressionSyntax` to get the location of the method being invoked.
         _memberAccessExpressionSyntax =
             (MemberAccessExpressionSyntax)((InvocationExpressionSyntax)_invocationOperation.Syntax)
             .Expression;
-        // `MemberAccessExpressionSyntax`.Name: the name of the member being accessed
         MethodName = _memberAccessExpressionSyntax.Name.Identifier.Text;
         AssemblyName = _invocationOperation.TargetMethod.ContainingAssembly.MetadataName;
         ContainingNamespace = _invocationOperation.TargetMethod.ContainingNamespace.GetFullNamespace();
@@ -48,6 +42,7 @@ internal sealed class InterceptInvocation
 
     private (string filePath, int line, int column) GetLocation()
     {
+        // https://github.com/dotnet/aspnetcore/blob/3f1acb59718cadf111a0a796681e3d3509bb3381/src/Http/Http.Extensions/gen/StaticRouteHandlerModel/Endpoint.cs#L143
         // The `MemberAccessExpressionSyntax` in turn includes three properties:
         // - Expression: the expression that is being accessed.
         // - OperatorToken: the operator token, typically the dot separate.
