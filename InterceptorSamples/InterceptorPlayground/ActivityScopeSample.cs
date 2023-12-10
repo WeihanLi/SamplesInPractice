@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using TestLibrary;
+using WeihanLi.Common.Helpers;
 
 namespace InterceptorPlayground;
 
-public class ActivityScopeSample
+public static class ActivityScopeSample
 {
     public static async Task MainTest()
     {
@@ -35,9 +36,11 @@ public class ActivityScopeSample
             Console.WriteLine("CreateAsyncScope Current activityId:");
             Console.WriteLine(Activity.Current?.Id);
         }
-        Console.WriteLine();
+        
+        ConsoleHelper.ReadLineWithPrompt();
         await app.StartAsync();
-        Console.ReadLine();
+        ConsoleHelper.ReadLineWithPrompt("Press Enter to exit");
+        
         if (app is IAsyncDisposable asyncDisposable)
         {
             await asyncDisposable.DisposeAsync();

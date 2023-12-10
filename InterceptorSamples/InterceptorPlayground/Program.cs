@@ -13,6 +13,7 @@ public class Test
 {
     public string Hello(int age) => $"Hello, I'm {age} years old";
 }
+
 public static class Extensions
 {
     public static int AgePlusPlus(this Test test, int age)
@@ -22,14 +23,14 @@ public static class Extensions
 }
 
 namespace InterceptorPlayground.Generated
-{    
+{
     public static class Generators
     {
         // [System.Runtime.CompilerServices.InterceptsLocation(
-        //     @"C:\projects\sources\SamplesInPractice\InterceptorSamples\InterceptorPlayground\Program.cs", 
-        //     1, 
+        //     @"C:\projects\sources\SamplesInPractice\InterceptorSamples\InterceptorPlayground\Program.cs",
+        //     1,
         //     9
-        //     )]
+        // )]
         public static void ConsoleWriteLineInterceptor(string? text)
         {
             Console.WriteLine($"Intercepted: {text}");
@@ -74,6 +75,6 @@ namespace InterceptorPlayground.Generated
 
 namespace System.Runtime.CompilerServices
 {
-     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-     file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute;
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute;
 }
