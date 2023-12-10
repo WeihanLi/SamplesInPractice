@@ -17,12 +17,30 @@ internal sealed class InterceptInvocation
         // - Expression: which is a `MemberAccessExpressionSyntax` that represents the method being invoked.
         // - ArgumentList: the list of arguments being invoked.
         // Here, we resolve the `MemberAccessExpressionSyntax` to get the location of the method being invoked.
-        _memberAccessExpressionSyntax = (MemberAccessExpressionSyntax)((InvocationExpressionSyntax)_invocationOperation.Syntax)
+        _memberAccessExpressionSyntax =
+            (MemberAccessExpressionSyntax)((InvocationExpressionSyntax)_invocationOperation.Syntax)
             .Expression;
-        
+        // `MemberAccessExpressionSyntax`.Name: the name of the member being accessed
         MethodName = _memberAccessExpressionSyntax.Name.Identifier.Text;
+        AssemblyName = _invocationOperation.TargetMethod.ContainingAssembly.MetadataName;
+        ContainingNamespace = _invocationOperation.TargetMethod.ContainingNamespace.GetFullNamespace();
+        ContainingTypeName = string.IsNullOrEmpty(ContainingNamespace)
+                ? _invocationOperation.TargetMethod.ContainingType.Name
+                : $"{ContainingNamespace}.{_invocationOperation.TargetMethod.ContainingType.Name}"
+            ;
+        IsStaticMethod = _invocationOperation.TargetMethod.IsStatic;
+        IsExtensionMethod = _invocationOperation.TargetMethod.IsExtensionMethod;
+        
         Location = GetLocation();
     }
+
+    public string AssemblyName { get; }
+    
+    public string ContainingTypeName { get; }
+    public string ContainingNamespace { get; }
+
+    public bool IsExtensionMethod { get; }
+    public bool IsStaticMethod { get; }
 
     public string MethodName { get; }
 
@@ -40,11 +58,11 @@ internal sealed class InterceptInvocation
         var lineSpan = _invocationOperation.Syntax.SyntaxTree.GetLineSpan(invocationNameSpan);
         // Resolve the filepath of the invocation while accounting for source mapped paths.
         var filePath = _invocationOperation.Syntax.SyntaxTree.GetInterceptorFilePath(
-              _invocationOperation.SemanticModel?.Compilation.Options.SourceReferenceResolver
-            );
+            _invocationOperation.SemanticModel?.Compilation.Options.SourceReferenceResolver
+        );
         // LineSpan.LinePosition is 0-indexed, but we want to display 1-indexed line and character numbers in the interceptor attribute.
         return (filePath, lineSpan.StartLinePosition.Line + 1, lineSpan.StartLinePosition.Character + 1);
-    }   
+    }
 }
 
 file static class Extensions
@@ -53,6 +71,40 @@ file static class Extensions
     // Utilize the same logic used by the interceptors API for resolving the source mapped
     // value of a path.
     // https://github.com/dotnet/roslyn/blob/f290437fcc75dad50a38c09e0977cce13a64f5ba/src/Compilers/CSharp/Portable/Compilation/CSharpCompilation.cs#L1063-L1064
-    internal static string GetInterceptorFilePath(this SyntaxTree tree, SourceReferenceResolver? resolver) =>
+    public static string GetInterceptorFilePath(this SyntaxTree tree, SourceReferenceResolver? resolver) =>
         resolver?.NormalizePath(tree.FilePath, baseFilePath: null) ?? tree.FilePath;
+
+    public static string GetFullNamespace(this INamespaceSymbol symbol)
+    {
+        if (symbol.ContainingNamespace is null)
+            return symbol.Name;
+
+        return $"{GetFullNamespace(symbol.ContainingNamespace)}.{symbol.Name}".Trim('.');
+    }
+    
+    public static string GetFullContainingTypeName(this ITypeSymbol symbol)
+    {
+        if (symbol.ContainingNamespace is null)
+            return symbol.Name;
+
+        return $"{GetFullNamespace(symbol.ContainingNamespace)}.{symbol.Name}".Trim('.');
+    }
+
+    public static string GetArgumentDeclaration(this IArgumentOperation argumentOperation)
+    {
+        var parameter = argumentOperation.Parameter;
+        if (parameter is null) throw new ArgumentNullException(nameof(parameter));
+        
+        var fullTypeName = parameter.Type.GetFullContainingTypeName();
+        var parameterName = parameter.Name;
+
+        var simpleText = $"{fullTypeName} {parameterName}";
+
+        if (parameter.HasExplicitDefaultValue)
+        {
+            simpleText = $"{simpleText} = {parameter.ExplicitDefaultValue}";
+        }
+        
+        return simpleText;
+    }
 }

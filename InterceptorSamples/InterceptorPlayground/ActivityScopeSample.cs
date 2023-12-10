@@ -21,6 +21,7 @@ public static class ActivityScopeSample
         appBuilder.Services.AddHostedService<TimeEchoService>();
         var app = appBuilder.Build();
         {
+            Console.WriteLine("=== IServiceProvider.CreateScope() sample ===");
             using var scope = app.Services.CreateScope();
             Console.WriteLine("Current activityId:");
             Console.WriteLine(Activity.Current?.Id);
@@ -32,22 +33,32 @@ public static class ActivityScopeSample
         }
         Console.WriteLine();
         {
+            Console.WriteLine("=== IServiceProvider.CreateAsyncScope() sample ===");
             await using var scope = app.Services.CreateAsyncScope();
             Console.WriteLine("CreateAsyncScope Current activityId:");
+            Console.WriteLine(Activity.Current?.Id);
+        }
+        Console.WriteLine();
+        {
+            Console.WriteLine("=== IServiceScopeFactory.CreateScope() sample ===");
+            using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            Console.WriteLine("Current activityId:");
             Console.WriteLine(Activity.Current?.Id);
         }
         
         ConsoleHelper.ReadLineWithPrompt();
         await app.StartAsync();
         ConsoleHelper.ReadLineWithPrompt("Press Enter to exit");
+        await app.StopAsync();
         
-        if (app is IAsyncDisposable asyncDisposable)
+        switch (app)
         {
-            await asyncDisposable.DisposeAsync();
-        }
-        else if (app is IDisposable disposable)
-        {
-            disposable.Dispose();
+            case IAsyncDisposable asyncDisposable:
+                await asyncDisposable.DisposeAsync();
+                break;
+            case IDisposable disposable:
+                disposable.Dispose();
+                break;
         }
     }
 }

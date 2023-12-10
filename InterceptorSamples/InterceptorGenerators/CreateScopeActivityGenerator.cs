@@ -46,32 +46,16 @@ public sealed class CreateScopeActivityGenerator : IIncrementalGenerator
                 return null;
             })
             .Where(static invocation => invocation != null);
-        
-        var definition = """
-        public static Microsoft.Extensions.DependencyInjection.IServiceScope ScopeActivityInterceptorMethod(this System.IServiceProvider provider)
-        {
-            System.Console.WriteLine("scope creating...");
-            var scope = provider.CreateScope();
-            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
-            System.Console.WriteLine("scope created...");
-            return scope;
-        }
-""";
-        var asyncDefinition = """
-        public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this System.IServiceProvider provider)
-        {
-            System.Console.WriteLine("async scope creating...");
-            var scope = provider.CreateAsyncScope();
-            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
-            System.Console.WriteLine("async scope created...");
-            return scope;
-        }
-""";
+
         var interceptors = methodCalls.Collect()
             .Select((invocations, _) =>
             {
                 var stringBuilder = new StringBuilder();
-                foreach (var invocationGroup in invocations.GroupBy(i => i!.MethodName))
+                foreach (var invocationGroup in invocations.GroupBy(i => new
+                         {
+                             i!.MethodName,
+                             i.ContainingTypeName
+                         }))
                 {
                     foreach (var invocation in invocationGroup)
                     {
@@ -79,14 +63,16 @@ public sealed class CreateScopeActivityGenerator : IIncrementalGenerator
                         stringBuilder.AppendLine(
                             $$"""        [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation!.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]""");
                     }
-                    if ("CreateScope".Equals(invocationGroup.Key))
-                    {
-                        stringBuilder.AppendLine(definition);
-                    }
-                    else
-                    {
-                        stringBuilder.AppendLine(asyncDefinition);
-                    }
+
+                    var interceptorCode =
+                        (invocationGroup.Key.ContainingTypeName, invocationGroup.Key.MethodName) switch
+                        {
+                            ("Microsoft.Extensions.DependencyInjection.IServiceScopeFactory", "CreateScope") => ScopeActivityGeneratedSource.ServiceScopeFactoryCreateScopeInterceptorCode,
+                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateScope") => ScopeActivityGeneratedSource.ServiceProviderCreateScopeInterceptorCode,
+                            ("Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions", "CreateAsyncScope") => ScopeActivityGeneratedSource.ServiceProviderCreateScopeAsyncInterceptorCode,
+                            _ => throw new ArgumentOutOfRangeException($"{invocationGroup.Key.MethodName}")
+                        };
+                    stringBuilder.AppendLine(interceptorCode);
                     stringBuilder.AppendLine();
                 }
                 return stringBuilder.ToString().TrimEnd();
@@ -123,4 +109,51 @@ namespace InterceptorPlayground.Generated
             ctx.AddSource("GeneratedActivityScopeInterceptor.g.cs", code);
         });
     }
+}
+
+file static class ScopeActivityGeneratedSource
+{
+    public const string ServiceProviderCreateScopeInterceptorCode = """
+        public static Microsoft.Extensions.DependencyInjection.IServiceScope ScopeActivityInterceptorMethod(this System.IServiceProvider provider)
+        {
+            System.Console.WriteLine("scope creating...");
+            var scope = provider.CreateScope();
+            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
+            System.Console.WriteLine("scope created...");
+            return scope;
+        }
+""";
+    
+    public const string ServiceProviderCreateScopeAsyncInterceptorCode = """
+        public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this System.IServiceProvider provider)
+        {
+            System.Console.WriteLine("async scope creating...");
+            var scope = provider.CreateAsyncScope();
+            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
+            System.Console.WriteLine("async scope created...");
+            return scope;
+        }
+""";
+    
+    public const string ServiceScopeFactoryCreateScopeInterceptorCode = """
+        public static Microsoft.Extensions.DependencyInjection.IServiceScope ScopeActivityInterceptorMethod(this IServiceScopeFactory factory)
+        {
+            System.Console.WriteLine("scope creating...");
+            var scope = factory.CreateScope();
+            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
+            System.Console.WriteLine("scope created...");
+            return scope;
+        }
+""";
+    
+    public const string ServiceScopeFactoryCreateScopeAsyncInterceptorCode = """
+        public static Microsoft.Extensions.DependencyInjection.AsyncServiceScope ScopeActivityInterceptorAsyncMethod(this IServiceScopeFactory factory)
+        {
+            System.Console.WriteLine("async scope creating...");
+            var scope = factory.CreateAsyncScope();
+            _ = scope.ServiceProvider.GetRequiredService<TestLibrary.ScopeActivityCreator>();
+            System.Console.WriteLine("async scope created...");
+            return scope;
+        }
+""";
 }
