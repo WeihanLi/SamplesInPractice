@@ -47,14 +47,14 @@ public sealed class LoggingGenerator : IIncrementalGenerator
                 {
                     Debug.Assert(invocation != null);
                     var definition = $$"""
-                                               [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
-                                               public static void LoggingInterceptorMethod(this CSharp12Sample.C c)
-                                               {
-                                                   System.Console.WriteLine("logging before...");
-                                                   c.InterceptableMethod();
-                                                   System.Console.WriteLine("logging after...");
-                                               }
-                                       """;
+        [System.Runtime.CompilerServices.InterceptsLocationAttribute(@"{{invocation.Location.FilePath}}", {{invocation.Location.Line}}, {{invocation.Location.Column}})]
+        public static void LoggingInterceptorMethod(this CSharp12Sample.C c)
+        {
+            System.Console.WriteLine("logging before...");
+            c.InterceptableMethod();
+            System.Console.WriteLine("logging after...");
+        }
+""";
                     stringBuilder.Append(definition);
                     stringBuilder.AppendLine();
                 }
@@ -76,7 +76,7 @@ public sealed class LoggingGenerator : IIncrementalGenerator
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute {}
+    file sealed class InterceptsLocationAttribute(string filePath, int line, int character) : Attribute;
 }
 
 namespace CSharp12Sample.Generated
