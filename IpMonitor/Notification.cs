@@ -1,8 +1,6 @@
 ﻿using System.Net.Http.Json;
-using System.Reflection.PortableExecutable;
+using System.Text.Json.Serialization;
 using WeihanLi.Common;
-using WeihanLi.Common.Helpers;
-using WeihanLi.Extensions;
 
 namespace IpMonitor;
 
@@ -10,11 +8,6 @@ public interface INotification
 {
     string NotificationType { get; }
     Task<bool> SendNotification(string text);
-}
-
-public interface INotificationSelector
-{
-    INotification SelectNotification(string type);
 }
 
 public sealed class GoogleChatNotification: INotification
@@ -31,17 +24,20 @@ public sealed class GoogleChatNotification: INotification
     public async Task<bool> SendNotification(string text)
     {
         // https://developers.google.com/chat/api/guides/message-formats/basic
-        using var response = await _httpClient.PostAsJsonAsync(_webhookUrl, new { text });
+        using var response = await _httpClient.PostAsJsonAsync(_webhookUrl,
+            new GoogleChatRequestMsgModel { Text = text },
+            NotificationRequestSerializationContext.Default.Options
+            );
         return response.IsSuccessStatusCode;
     }
 }
 
-public sealed class DingTalkNotification : INotification
+public sealed class DingBotNotification : INotification
 {
     private readonly HttpClient _httpClient;
     private readonly string _webhookUrl;
 
-    public DingTalkNotification(HttpClient httpClient, IConfiguration configuration)
+    public DingBotNotification(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
         _webhookUrl = Guard.NotNullOrEmpty(configuration.GetAppSetting("WebhookUrl"));
@@ -52,35 +48,40 @@ public sealed class DingTalkNotification : INotification
     public async Task<bool> SendNotification(string text)
     {
         using var response = await _httpClient.PostAsJsonAsync(_webhookUrl,
-            new 
+            new DingBotTextRequestModel
             {
-                msgtype = "text", 
-                text = new
+                Text = new()
                 {
-                    content = text
+                    Content = text
                 }
-            });
+            }, NotificationRequestSerializationContext.Default.Options);
         return response.IsSuccessStatusCode;
     }
 }
 
-public sealed class NotificationSelector : INotificationSelector
+public sealed class GoogleChatRequestMsgModel
 {
-    private readonly IServiceProvider _serviceProvider;
+    [JsonPropertyName("text")]
+    public required string Text { get; set; }
+}
 
-    public NotificationSelector(IServiceProvider serviceProvider)
+public sealed class DingBotTextRequestModel
+{
+    [JsonPropertyName("msgtype")]
+    public string MsgType => "text";
+
+    [JsonPropertyName("text")]
+    public required TextModel Text { get; set; }
+
+    public sealed class TextModel
     {
-        _serviceProvider = serviceProvider;
+        [JsonPropertyName("content")]
+        public required string Content { get; set; }
     }
-    
-    public INotification SelectNotification(string type)
-    {
-        if ("DingDing".EqualsIgnoreCase(type) 
-            || "DingTalk".EqualsIgnoreCase(type)
-            || "DingBot".EqualsIgnoreCase(type))
-        {
-            return _serviceProvider.GetServiceOrCreateInstance<DingTalkNotification>(); 
-        }
-        return _serviceProvider.GetServiceOrCreateInstance<GoogleChatNotification>();
-    }
+}
+
+[JsonSerializable(typeof(GoogleChatRequestMsgModel))]
+[JsonSerializable(typeof(DingBotTextRequestModel))]
+public partial class NotificationRequestSerializationContext : JsonSerializerContext 
+{
 }

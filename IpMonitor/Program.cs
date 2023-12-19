@@ -25,18 +25,19 @@ builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.Environment
     
 builder.Services.AddHostedService<Worker>();
 builder.Services.AddSingleton<HttpClient>();
-builder.Services.AddSingleton<GoogleChatNotification>();
-builder.Services.AddSingleton<DingTalkNotification>();
+builder.Services.AddSingleton<INotification, GoogleChatNotification>();
+builder.Services.AddSingleton<INotification, DingBotNotification>();
 builder.Services.AddSingleton<INotificationSelector, NotificationSelector>();
 
+#if !DEBUG
 AddWindowsLifetime(builder.Services);
+#endif
 
 await builder.Build().RunAsync();
 
+#if !DEBUG
 void AddWindowsLifetime(IServiceCollection services)
 {
-#if !DEBUG
-
     if (WindowsServiceHelpers.IsWindowsService())
     {
         services.AddLogging(logging =>
@@ -53,6 +54,6 @@ void AddWindowsLifetime(IServiceCollection services)
         {
             options.ServiceName = serviceName;
         });
-    }  
-#endif
+    }
 }
+#endif
