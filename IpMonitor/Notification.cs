@@ -26,7 +26,7 @@ public sealed class GoogleChatNotification: INotification
         // https://developers.google.com/chat/api/guides/message-formats/basic
         using var response = await _httpClient.PostAsJsonAsync(_webhookUrl,
             new GoogleChatRequestMsgModel { Text = text },
-            NotificationRequestSerializationContext.Default.Options
+            NotificationRequestSerializationContext.Default.GoogleChatRequestMsgModel
             );
         return response.IsSuccessStatusCode;
     }
@@ -54,7 +54,7 @@ public sealed class DingBotNotification : INotification
                 {
                     Content = text
                 }
-            }, NotificationRequestSerializationContext.Default.Options);
+            }, NotificationRequestSerializationContext.Default.DingBotTextRequestModel);
         return response.IsSuccessStatusCode;
     }
 }
