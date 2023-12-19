@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <OutputType>exe</OutputType>
     <LangVersion>preview</LangVersion>
-    <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
+    <PublishSingleFile Condition="'$(Configuration)' == 'Release' AND '$(PublishAot)' != 'true'">true</PublishSingleFile>
     <!-- <PublishAot Condition="'$(Configuration)' == 'Release'">true</PublishAot> -->
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
