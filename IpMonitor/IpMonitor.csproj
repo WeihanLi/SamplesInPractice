@@ -11,6 +11,23 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(PublishAot)'=='true'">
+    <IsAotCompatible>true</IsAotCompatible>
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/optimizing?WT.mc_id=DT-MVP-5004222 -->
+    <OptimizationPreference>Size</OptimizationPreference>
+    <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?WT.mc_id=DT-MVP-5004222#trimming-framework-library-features -->
+    <DebuggerSupport>false</DebuggerSupport>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <EventSourceSupport>false</EventSourceSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <StackTraceSupport>false</StackTraceSupport>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <Using Include="Microsoft.Extensions.Configuration" />
     <Using Include="Microsoft.Extensions.DependencyInjection" />

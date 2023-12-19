@@ -1,13 +1,7 @@
 using IpMonitor;
-
-#if !DEBUG
 using Microsoft.Extensions.Hosting.WindowsServices;
-using Microsoft.Extensions.Logging.EventLog;
-using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-#endif
 
 const string serviceName = "IpMonitor";
 
@@ -29,14 +23,12 @@ builder.Services.AddSingleton<INotification, GoogleChatNotification>();
 builder.Services.AddSingleton<INotification, DingBotNotification>();
 builder.Services.AddSingleton<INotificationSelector, NotificationSelector>();
 
-#if !DEBUG
-AddWindowsLifetime(builder.Services);
-#endif
+AddServices(builder.Services);
 
 await builder.Build().RunAsync();
 
-#if !DEBUG
-void AddWindowsLifetime(IServiceCollection services)
+
+void AddServices(IServiceCollection services)
 {
     if (WindowsServiceHelpers.IsWindowsService())
     {
@@ -55,5 +47,12 @@ void AddWindowsLifetime(IServiceCollection services)
             options.ServiceName = serviceName;
         });
     }
+    else
+    {
+        services.AddLogging(logging =>
+        {
+            logging.AddSimpleConsole();
+        });
+    }
 }
-#endif
+

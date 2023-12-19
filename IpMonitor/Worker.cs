@@ -6,7 +6,6 @@ namespace IpMonitor;
 
 public sealed class Worker : TimerBaseBackgroundServiceWithDiagnostic
 {
-    private readonly TimeSpan _period;
     private readonly INotification _notification;
     private readonly ILogger<Worker> _logger;
 
@@ -16,18 +15,18 @@ public sealed class Worker : TimerBaseBackgroundServiceWithDiagnostic
       : base(serviceProvider)
     {
         _logger = logger;
-        _notification = notificationSelector.SelectNotification(configuration.GetAppSetting("NotificationType") ?? string.Empty);
-        if (TimeSpan.TryParse(configuration.GetAppSetting("MonitorPeriod"), out var period) && period > TimeSpan.Zero)
+        _notification = notificationSelector.SelectNotification(configuration.GetRequiredAppSetting("NotificationType"));
+        if (TimeSpan.TryParse(configuration["AppSettings:MonitorPeriod"], out var period) && period > TimeSpan.Zero)
         {
-            _period = period;
+            Period = period;
         }
         else
         {
-            _period = TimeSpan.FromMinutes(10);
+            Period = TimeSpan.FromMinutes(10);
         }
     }
 
-    protected override TimeSpan Period => _period;
+    protected override TimeSpan Period { get; }
 
     protected override async Task ExecuteTaskInternalAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
     {

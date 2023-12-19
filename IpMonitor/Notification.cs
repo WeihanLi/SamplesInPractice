@@ -10,16 +10,11 @@ public interface INotification
     Task<bool> SendNotification(string text);
 }
 
-public sealed class GoogleChatNotification: INotification
+public sealed class GoogleChatNotification(HttpClient httpClient, IConfiguration configuration) : INotification
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _webhookUrl;
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly string _webhookUrl = configuration.GetRequiredAppSetting("WebhookUrl");
 
-    public GoogleChatNotification(HttpClient httpClient, IConfiguration configuration)
-    {
-        _httpClient = httpClient;
-        _webhookUrl = Guard.NotNullOrEmpty(configuration.GetAppSetting("WebhookUrl"));
-    }
     public string NotificationType => "GoogleChat";
     public async Task<bool> SendNotification(string text)
     {
@@ -32,16 +27,10 @@ public sealed class GoogleChatNotification: INotification
     }
 }
 
-public sealed class DingBotNotification : INotification
+public sealed class DingBotNotification(HttpClient httpClient, IConfiguration configuration) : INotification
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _webhookUrl;
-
-    public DingBotNotification(HttpClient httpClient, IConfiguration configuration)
-    {
-        _httpClient = httpClient;
-        _webhookUrl = Guard.NotNullOrEmpty(configuration.GetAppSetting("WebhookUrl"));
-    }
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly string _webhookUrl = configuration.GetRequiredAppSetting("WebhookUrl");
 
     public string NotificationType => "DingBot";
 
