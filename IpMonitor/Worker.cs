@@ -16,9 +16,12 @@ public sealed class Worker : TimerBaseBackgroundServiceWithDiagnostic
       : base(serviceProvider)
     {
         _logger = logger;
-        _period = configuration.GetAppSetting<TimeSpan>("MonitorPeriod");
         _notification = notificationSelector.SelectNotification(configuration.GetAppSetting("NotificationType") ?? string.Empty);
-        if (_period <= TimeSpan.Zero)
+        if (TimeSpan.TryParse(configuration.GetAppSetting("MonitorPeriod"), out var period) && period > TimeSpan.Zero)
+        {
+            _period = period;
+        }
+        else
         {
             _period = TimeSpan.FromMinutes(10);
         }
