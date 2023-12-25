@@ -16,7 +16,7 @@ public static class HttpAutoClientSample
             {
                 client.BaseAddress = new Uri("https://reservation.weihanli.xyz");
             });
-        services.AddNoticeClient();
+        // services.AddNoticeClient();
         services.AddSingleton<NoticeService>();
 
         await using var serviceProvider = services.BuildServiceProvider();
@@ -47,7 +47,7 @@ public static class HttpAutoClientSample
     }
 }
 
-[AutoClient(nameof(INoticeClient))]
+// [AutoClient(nameof(INoticeClient))]
 public interface INoticeClient
 {
     [Get("/api/notice")]

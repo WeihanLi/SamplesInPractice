@@ -7,7 +7,7 @@ var exitToken = InvokeHelper.GetExitToken();
 // DataAnnotationSample.MainTest();
 // TimeProviderSample.MainTest();
 
-MetricsSample.MainTest();
+// MetricsSample.MainTest();
 // InvokeHelper.TryInvoke(KeyedServiceSample.OptionsSample);
 
 // await InvokeHelper.TryInvokeAsync(() => HostedLifecycleServiceSample.MainTest(exitToken));
@@ -22,5 +22,7 @@ MetricsSample.MainTest();
 // await InvokeHelper.TryInvokeAsync(ParallelSample.MainTest);
 
 // InvokeHelper.TryInvoke(ExceptionThrowSample.MainTest);
+
+await InvokeHelper.TryInvokeAsync(HttpClientSample.ConfigureHttpClientDefaultsSample);
 
 Console.WriteLine("Hello, World!");

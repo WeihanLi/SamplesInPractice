@@ -14,6 +14,7 @@
     <Using Include="Net8Sample" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.Extensions.Http.AutoClient" Version="8.0.0-rc.2.23510.2" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.6.0" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.60" />
   </ItemGroup>
