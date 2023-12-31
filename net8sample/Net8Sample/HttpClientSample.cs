@@ -172,18 +172,16 @@ public static class HttpClientSample
         
         await using var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+        await InvokeHelper.TryInvokeAsync(async () =>
         {
-            await InvokeHelper.TryInvokeAsync(async () =>
-            {
-                var responseText = await httpClientFactory.CreateClient("reservation-client")
-                    .GetStringAsync("/health");
-                Console.WriteLine(responseText);
-            });
-            Console.WriteLine();
-            //
-            await InvokeHelper.TryInvokeAsync(() => httpClientFactory.CreateClient("spark-client")
-                .GetStringAsync("/"));
-        }
+            var responseText = await httpClientFactory.CreateClient("reservation-client")
+                .GetStringAsync("/health");
+            Console.WriteLine(responseText);
+        });
+        Console.WriteLine();
+        //
+        await InvokeHelper.TryInvokeAsync(() => httpClientFactory.CreateClient("spark-client")
+            .GetStringAsync("/"));
     }
 
     //
