@@ -122,26 +122,18 @@ public static class HttpClientSample
         services.AddHttpClient("reservation-client", client =>
         {
             client.BaseAddress = new Uri("https://reservation.weihanli.xyz");
-        }).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler()
-        {
-            ServerCertificateCustomValidationCallback = (_, _, _, _)=> true
         }).AddHttpMessageHandler<MyHttpDelegatingHandler2>();
         services.AddHttpClient("spark-client", client =>
         {
             client.BaseAddress = new Uri("https://spark.weihanli.xyz");
-        }).ConfigurePrimaryHttpMessageHandler(_ => new HttpClientHandler()
-        {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
         });
         services.ConfigureHttpClientDefaults(x =>
         {
             x.AddHttpMessageHandler<MyHttpDelegatingHandler3>();
         });
-        var firstConfigure = services.FirstOrDefault(x => x.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>));
-        if (firstConfigure is { ImplementationInstance: ConfigureNamedOptions<HttpClientFactoryOptions> configure })
-        {
-            Console.WriteLine($"FirstConfigure HttpClientName: {configure.Name}");
-        }
+        
+        services.DumpHttpClientFactoryOptionsConfigureService();
+        
         await using var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
         {
@@ -177,11 +169,9 @@ public static class HttpClientSample
         {
             client.BaseAddress = new Uri("https://reservation.weihanli.xyz");
         }).AddHttpMessageHandler<MyHttpDelegatingHandler2>();
-        var firstConfigure = services.FirstOrDefault(x => x.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>));
-        if (firstConfigure is { ImplementationInstance: ConfigureNamedOptions<HttpClientFactoryOptions> configure })
-        {
-            Console.WriteLine($"FirstConfigure HttpClientName: {configure.Name}");
-        }
+        
+        services.DumpHttpClientFactoryOptionsConfigureService();
+        
         await using var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
         {
@@ -201,7 +191,19 @@ public static class HttpClientSample
     //
     public static async Task HttpClientLoggerSample()
     {
-        
+    }
+
+    private static void DumpHttpClientFactoryOptionsConfigureService(this IServiceCollection services)
+    {
+        Console.WriteLine();
+        foreach (var configure in services
+                     .Where(x => x.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>))
+                     .Select(x=> x.ImplementationInstance)
+                     .OfType<ConfigureNamedOptions<HttpClientFactoryOptions>>())
+        {
+            Console.WriteLine($"Configure HttpClientName: {configure.Name}");
+        }
+        Console.WriteLine();
     }
 }
 
