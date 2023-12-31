@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http;
 using Microsoft.Extensions.Http.Logging;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using System.Text.Json;
 using WeihanLi.Common.Helpers;
@@ -135,6 +137,51 @@ public static class HttpClientSample
         {
             x.AddHttpMessageHandler<MyHttpDelegatingHandler3>();
         });
+        var firstConfigure = services.FirstOrDefault(x => x.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>));
+        if (firstConfigure is { ImplementationInstance: ConfigureNamedOptions<HttpClientFactoryOptions> configure })
+        {
+            Console.WriteLine($"FirstConfigure HttpClientName: {configure.Name}");
+        }
+        await using var serviceProvider = services.BuildServiceProvider();
+        var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+        {
+            await InvokeHelper.TryInvokeAsync(async () =>
+            {
+                var responseText = await httpClientFactory.CreateClient("reservation-client")
+                    .GetStringAsync("/health");
+                Console.WriteLine(responseText);
+            });
+            Console.WriteLine();
+            //
+            await InvokeHelper.TryInvokeAsync(() => httpClientFactory.CreateClient("spark-client")
+                .GetStringAsync("/"));
+        }
+    }
+    
+    public static async Task ConfigureHttpClientDefaultsSample2()
+    {
+        var services = new ServiceCollection();
+        services.AddTransient<MyHttpDelegatingHandler>();
+        services.AddTransient<MyHttpDelegatingHandler2>();
+        services.AddTransient<MyHttpDelegatingHandler3>();
+        services.AddHttpClient("spark-client", client =>
+        {
+            client.BaseAddress = new Uri("https://spark.weihanli.xyz");
+        }).AddHttpMessageHandler<MyHttpDelegatingHandler2>();
+        services.ConfigureHttpClientDefaults(x =>
+        {
+            x.AddHttpMessageHandler<MyHttpDelegatingHandler>();
+            x.AddHttpMessageHandler<MyHttpDelegatingHandler3>();
+        });
+        services.AddHttpClient("reservation-client", client =>
+        {
+            client.BaseAddress = new Uri("https://reservation.weihanli.xyz");
+        }).AddHttpMessageHandler<MyHttpDelegatingHandler2>();
+        var firstConfigure = services.FirstOrDefault(x => x.ServiceType == typeof(IConfigureOptions<HttpClientFactoryOptions>));
+        if (firstConfigure is { ImplementationInstance: ConfigureNamedOptions<HttpClientFactoryOptions> configure })
+        {
+            Console.WriteLine($"FirstConfigure HttpClientName: {configure.Name}");
+        }
         await using var serviceProvider = services.BuildServiceProvider();
         var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
         {

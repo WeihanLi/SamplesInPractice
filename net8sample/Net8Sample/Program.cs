@@ -24,5 +24,7 @@ var exitToken = InvokeHelper.GetExitToken();
 // InvokeHelper.TryInvoke(ExceptionThrowSample.MainTest);
 
 await InvokeHelper.TryInvokeAsync(HttpClientSample.ConfigureHttpClientDefaultsSample);
+Console.WriteLine();
+await InvokeHelper.TryInvokeAsync(HttpClientSample.ConfigureHttpClientDefaultsSample2);
 
 Console.WriteLine("Hello, World!");
