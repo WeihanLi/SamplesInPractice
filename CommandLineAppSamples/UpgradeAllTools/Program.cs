@@ -1,8 +1,9 @@
 ﻿using WeihanLi.Common.Helpers;
+using WeihanLi.Extensions;
 using static WeihanLi.Common.Helpers.ConsoleHelper;
 
-const string toolName = "update-all-tools";
-const string fullToolName = $"dotnet-{toolName}";
+const string thisToolName = "update-all-tools";
+const string thisToolId = $"dotnet-{thisToolName}";
 
 if (args is { Length: 1 })
 {
@@ -41,14 +42,18 @@ if (dotnetToolList.Length <= 2) return;
 foreach (var tool in dotnetToolList[2..])
 {
     var toolId = tool.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0].Trim();
-    if (fullToolName.Equals(toolId))
-    {
+    if (thisToolId.Equals(toolId))
         continue;
-    }
+
     Console.WriteLine($"update tool {toolId}...");
     try
     {
-        await CommandExecutor.ExecuteAsync(dotnetPath, $"tool update {toolLevelOption} {toolId}");
+        await RetryHelper.TryInvokeAsync(async () =>
+        {
+            var exitCode = await CommandExecutor.ExecuteAsync(dotnetPath, $"tool update {toolLevelOption} {toolId}",
+                cancellationToken: exitToken);
+            exitCode.EnsureSuccessExitCode();
+        });
         Console.WriteLine($"update tool {toolId} completed");
     }
     catch (Exception ex)

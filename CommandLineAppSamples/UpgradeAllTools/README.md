@@ -2,6 +2,8 @@
 
 ## Intro
 
+[![dotnet-update-all-tools](https://img.shields.io/nuget/v/dotnet-update-all-tools)](https://www.nuget.org/packages/dotnet-update-all-tools/)
+
 A dotnet tool for upgrading all dotnet tools, update all dotnet-tool in a command
 
 Install:
