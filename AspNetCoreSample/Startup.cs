@@ -19,9 +19,8 @@ namespace AspNetCoreSample
                 {
                     options.InputFormatters.Add(new Base64EncodedJsonInputFormatter());
                 })
-                // uncomment to use newtonsoft.Json
-                // comment to use system.text.json
-                .AddNewtonsoftJson()
+                // uncomment to use newtonsoft.Json, comment to use system.text.json
+                // .AddNewtonsoftJson()
                 ;
             services.AddSwaggerGen(c =>
             {
@@ -34,10 +33,11 @@ namespace AspNetCoreSample
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreSample v1"));
+                app.UseDeveloperExceptionPage();                
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNetCoreSample v1"));
 
             app.UseRouting();
             app.UseAuthorization();
