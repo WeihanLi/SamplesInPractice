@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WeihanLi.Totp\WeihanLi.Totp.csproj" />
+    <Compile Remove="Totp.cs" />
   </ItemGroup>
 
 </Project>
