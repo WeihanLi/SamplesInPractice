@@ -99,16 +99,16 @@ file sealed class CustomCollection<T>
 {
     public required T[] Elements { get; init; }
 
-    // public IEnumerator<T> GetEnumerator()
-    // {
-    //     return (IEnumerator<T>)Elements.GetEnumerator();
-    // }
+    public IEnumerator<T> GetEnumerator()
+    {
+        return (IEnumerator<T>)Elements.GetEnumerator();
+    }
 }
 
 file static class CustomCollectionBuilder
 {
-    public static IEnumerator<T> GetEnumerator<T>(this CustomCollection<T> collection) 
-        => (IEnumerator<T>)collection.Elements.GetEnumerator();
+    // public static IEnumerator<T> GetEnumerator<T>(this CustomCollection<T> collection) 
+    //     => (IEnumerator<T>)collection.Elements.GetEnumerator();
     
     public static CustomNumberCollection CreateNumber(ReadOnlySpan<int> elements)
     {
