@@ -20,14 +20,18 @@ public static class PriorityQueueSample
         if (!queue.Remove("Jane", out _, out _))
         {
             Console.WriteLine("Jane not existed");
-        }
-        
+        }        
         if (queue.Remove("Alice", out _, out _))
         {
             Console.WriteLine("Alice removed");
-        }
+        }        
 
+        Console.WriteLine();
         // remove with custom equality comparer
+        if (!queue.Remove("mike", out _, out _))
+        {
+            Console.WriteLine($"mike not exists");
+        }
         if (queue.Remove("mike", out var removedElement, out var removedPriority, StringComparer.OrdinalIgnoreCase))
         {
             Console.WriteLine($"RemovedElement - {removedElement}: {removedPriority}");
