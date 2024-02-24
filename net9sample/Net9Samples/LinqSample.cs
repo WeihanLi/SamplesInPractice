@@ -9,7 +9,7 @@ public static class LinqSample
         var employees = Enumerable.Range(1, 10)
             .Select(x => new { Id = x, Level = x % 4, Name = $"xxx {x}", Score = x * 10 })
             .ToArray();
-        
+
         // https://github.com/dotnet/runtime/issues/95563
         // https://github.com/dotnet/runtime/pull/95947
         // Index
@@ -33,6 +33,11 @@ public static class LinqSample
         // AggregateBy
         Console.WriteLine("AggregateBy sample:");
         foreach (var (key, total) in employees.AggregateBy(s => s.Level, 0, (a, x) => a + x.Score))
+        {
+            Console.WriteLine($"Level {key}: Total: {total}");
+        }
+        Console.WriteLine();
+        foreach (var (key, total) in employees.AggregateBy(s => s.Level, x => x * 10, (a, x) => a + x.Score))
         {
             Console.WriteLine($"Level {key}: Total: {total}");
         }
