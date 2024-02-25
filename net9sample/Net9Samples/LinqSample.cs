@@ -7,7 +7,13 @@ public static class LinqSample
     public static void MainTest()
     {
         var employees = Enumerable.Range(1, 10)
-            .Select(x => new { Id = x, Level = x % 4, Name = $"xxx {x}", Score = x * 10 })
+            .Select(x => new
+            {
+                Id = x, 
+                Level = x % 4, 
+                Name = $"xxx {x}", 
+                Score = x * 10
+            })
             .ToArray();
 
         // https://github.com/dotnet/runtime/issues/95563
