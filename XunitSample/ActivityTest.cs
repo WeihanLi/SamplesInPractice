@@ -30,6 +30,7 @@ public class ActivityTest
         Assert.NotNull(capturedActivity);
         Assert.Equal(activityId, capturedActivity.ParentId);
         Assert.Equal(traceId, capturedActivity.TraceId.ToHexString());
+        Assert.Equal("1", capturedActivity.GetTagItem("test.id")?.ToString());
     }
     
     private static readonly ActivitySource ActivitySource = new(nameof(ActivityTest));
