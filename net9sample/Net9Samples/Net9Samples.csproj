@@ -12,9 +12,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-preview.1.24080.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0-preview.1.24080.9" />
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="WeihanLi.Common" />
   </ItemGroup>
 
 </Project>

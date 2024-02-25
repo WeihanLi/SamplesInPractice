@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable central package management, https://learn.microsoft.com/en-us/nuget/consume-packages/Central-Package-Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-preview.1.24080.9" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.63-preview-20240224-134159" />
+  </ItemGroup>
+</Project>
