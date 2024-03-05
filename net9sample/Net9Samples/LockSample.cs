@@ -1,8 +1,6 @@
-using System.Runtime.Versioning;
-
-[assembly:RequiresPreviewFeatures]
 namespace Net9Samples;
 
+[System.Runtime.Versioning.RequiresPreviewFeatures]
 public static class LockSample
 {
     public static void MainTest()
