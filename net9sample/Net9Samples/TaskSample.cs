@@ -9,7 +9,7 @@ public class TaskSample
         {
             var tcs = new TaskCompletionSource();
 
-            _ = Task.Delay(2000).ContinueWith(r=> tcs.SetFromTask(r));
+            _ = Task.Delay(2000).ContinueWith(r => tcs.SetFromTask(r));
 
             await tcs.Task;
             Console.WriteLine("Completed");
@@ -18,9 +18,27 @@ public class TaskSample
         {
             var tcs = new TaskCompletionSource();
             using var cts = new CancellationTokenSource(200);
-            _ = Task.Delay(2000, cts.Token).ContinueWith(r=> tcs.SetFromTask(r));
-
-            await tcs.Task;
+            var task = Task.Delay(2000, cts.Token);
+            await Task.Delay(500);
+            try
+            {
+                tcs.SetFromTask(task);
+                await tcs.Task;                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception:");
+                Console.WriteLine(ex);
+            }
+            
+            Console.WriteLine("Completed");
+        }
+        
+        
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetFromTask(Task.FromResult(100));
+            Console.WriteLine(await tcs.Task);
             Console.WriteLine("Completed");
         }
     }
