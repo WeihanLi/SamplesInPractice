@@ -8,10 +8,17 @@ public class TaskSample
     {
         {
             var tcs = new TaskCompletionSource();
-
+            var startTimestamp = TimeProvider.System.GetTimestamp();
             _ = Task.Delay(2000).ContinueWith(r => tcs.SetFromTask(r));
-
             await tcs.Task;
+            var elapsedTime = TimeProvider.System.GetElapsedTime(startTimestamp);
+            Console.WriteLine($"Completed in {elapsedTime.TotalMilliseconds}ms");
+        }
+        
+        {
+            var tcs = new TaskCompletionSource<int>();
+            tcs.SetFromTask(Task.FromResult(100));
+            Console.WriteLine(await tcs.Task);
             Console.WriteLine("Completed");
         }
         
@@ -23,22 +30,57 @@ public class TaskSample
             try
             {
                 tcs.SetFromTask(task);
-                await tcs.Task;                
+                await tcs.Task;
             }
             catch (Exception ex)
             {
+                Console.WriteLine(tcs.Task.Status);
                 Console.WriteLine("Exception:");
                 Console.WriteLine(ex);
             }
             
             Console.WriteLine("Completed");
         }
-        
+
+        {
+            var tcs = new TaskCompletionSource();
+            var task = Task.Run(() =>
+            {
+                throw new NotImplementedException();
+            });
+            await task.ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
+            try
+            {
+                tcs.SetFromTask(task);
+                await tcs.Task;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(tcs.Task.Status);
+                Console.WriteLine("Exception:");
+                Console.WriteLine(ex);
+            }
+            
+            Console.WriteLine("Completed");
+        }
+
         
         {
-            var tcs = new TaskCompletionSource<int>();
-            tcs.SetFromTask(Task.FromResult(100));
-            Console.WriteLine(await tcs.Task);
+            var tcs = new TaskCompletionSource();
+            tcs.SetCanceled();
+            Console.WriteLine(tcs.Task.Status);
+            try
+            {
+                Console.WriteLine(tcs.TrySetFromTask(Task.CompletedTask));
+                tcs.SetFromTask(Task.CompletedTask);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(tcs.Task.Status);
+                Console.WriteLine("Exception:");
+                Console.WriteLine(ex);
+            }
+            
             Console.WriteLine("Completed");
         }
     }

@@ -6,6 +6,6 @@
   <ItemGroup>
     <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-preview.1.24080.9" />
-    <PackageVersion Include="WeihanLi.Common" Version="1.0.63-preview-20240224-134159" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.63" />
   </ItemGroup>
 </Project>
