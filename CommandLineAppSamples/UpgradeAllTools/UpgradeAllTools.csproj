@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(AOT)'!='true'">net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
@@ -13,11 +13,12 @@
     <Description>update all dotnet-tool in a command</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/WeihanLi/SamplesInPractice/tree/master/CommandLineAppSamples/UpgradeAllTools</PackageProjectUrl>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>    
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0' AND '$(AOT)'=='true'">
+  <PropertyGroup Condition="'$(AOT)'=='true'">
+    <TargetFramework>net9.0</TargetFramework>
     <!-- https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows&WT.mc_id=DT-MVP-5004222 -->
     <PublishAot>true</PublishAot>
     <IsAotCompatible>true</IsAotCompatible>
@@ -39,7 +40,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.61" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.63" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
