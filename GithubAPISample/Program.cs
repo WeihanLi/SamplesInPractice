@@ -7,8 +7,7 @@ using WeihanLi.Npoi;
 
 const int pageCount = 30;
 const string userName = "weihanli";
-const string urlFormat =
-    $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E=2022-03-01";
+const string urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E=2023-04-01";
 
 var prList = new List<GithubPRModel>();
 var itemsCount = 0;
@@ -71,7 +70,7 @@ var mdContent = prList.GroupBy(g => new
 })
 .OrderBy(g => g.Key.RepoName)
 .Select(g => $@"- [{g.Key.RepoName}]({g.Key.RepoUrl})
-{g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title}({x.ClosedAt:yyyyMMdd}) <{x.Url}>").StringJoin(Environment.NewLine)}
+{g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title}({x.ClosedAt:yyyy-MM-dd}) <{x.Url}>").StringJoin(Environment.NewLine)}
 ")
 .StringJoin(Environment.NewLine);
 
