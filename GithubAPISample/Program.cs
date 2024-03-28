@@ -52,7 +52,8 @@ do
 var totalCount = prList.Count;
 prList.RemoveAll(x => userName.Equals(x.UserName, StringComparison.OrdinalIgnoreCase));
 var excludedCount = prList.Count;
-Console.WriteLine($"Total:{totalCount}, excludedCount: {excludedCount}");
+var repoCount = prList.GroupBy(x => x.RepoUrl).Count();
+Console.WriteLine($"Total PR: {totalCount}, externalContributionCount: {excludedCount}, external repository count: {repoCount}");
 
 prList.OrderBy(x => x.RepoName)
     .ThenBy(x => x.CreatedAt)
@@ -78,7 +79,7 @@ await File.WriteAllTextAsync("result.md", mdContent);
 Console.WriteLine("Completed");
 Console.ReadLine();
 
-internal class GithubPRModel
+file sealed class GithubPRModel
 {
     private string _url;
     public string Title { get; set; }
