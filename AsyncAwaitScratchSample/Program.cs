@@ -27,7 +27,6 @@ using WeihanLi.Common.Helpers;
     ConsoleHelper.ReadLineWithPrompt();
     
     Console.WriteLine("MyTask.Run/Wait sample");
-
     for (var i = 0; i < 5; i++)
     {
         var id = i;
@@ -37,6 +36,23 @@ using WeihanLi.Common.Helpers;
             Console.WriteLine(id);
         }).Wait();
     }
+    Console.WriteLine();
+    
+    Console.WriteLine("AsyncLocal sample");
+    var asyncLocalNumber = new AsyncLocal<int>
+    {
+        Value = 1
+    };
+    MyTask.Run(delegate
+    {
+        asyncLocalNumber.Value = 2;
+        Console.WriteLine("Hello World");
+        Console.WriteLine($"Thread: {Thread.CurrentThread.Name} BackgroundThread: {Thread.CurrentThread.IsBackground}");
+        Console.WriteLine($"AsyncLocalNumber value: {asyncLocalNumber.Value} From MyTask");
+    }).Wait();
+    Console.WriteLine($"AsyncLocalNumber value: {asyncLocalNumber.Value}");
+    
+    ConsoleHelper.ReadLineWithPrompt();
 }
 
 {
