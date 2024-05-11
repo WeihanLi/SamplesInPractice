@@ -14,7 +14,8 @@ LogHelper.ConfigureLogging(builder => builder.AddConsole());
 // await InvokeHelper.TryInvokeAsync(NoAutoRedirectSample.MainTest);
 
 // await InvokeHelper.TryInvokeAsync(HttpClientEventSample.MainTest);
-await InvokeHelper.TryInvokeAsync(HtmlDocumentAnalyzeSample.MainTest);
+// await InvokeHelper.TryInvokeAsync(HtmlDocumentAnalyzeSample.MainTest);
+await InvokeHelper.TryInvokeAsync(AsyncEnumerableSample.MainTest);
 
 Console.WriteLine("Completed!");
 Console.ReadLine();
