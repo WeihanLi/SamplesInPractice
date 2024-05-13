@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Hosting;
 using System.Net;
-using System.Net.Http.Json;
-using WeihanLi.Common.Helpers;
 
 namespace HttpClientTest;
 
@@ -71,6 +68,11 @@ public static class AsyncEnumerableSample
         app.Urls.Clear();
         app.Urls.Add("http://localhost:5000");
         app.UseResponseCompression();
+        app.Use((context, next) =>
+        {
+            context.Features.Get<IHttpResponseBodyFeature>()?.DisableBuffering();
+            return next();
+        });
         app.Map("/m/api/values", TestHelper.GetValues);
         app.Map("/m/api/values1", TestHelper.GetValuesAsync);
         app.MapControllers();
