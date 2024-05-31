@@ -20,7 +20,7 @@ public static class InterceptorDISample
                     Console.WriteLine($"[{level}][{category}] {msg}\n{exception}");
                 }))
                 .AddSingleton<IUserIdProvider, UserIdProvider>()
-                .AddSingleton<DIAutoUpdateInterceptor>()
+                .AddScoped<DIAutoUpdateInterceptor>()
                 .AddDbContext<BlogPostContext>((provider, options) =>
                 {
                     options.AddInterceptors(provider.GetRequiredService<DIAutoUpdateInterceptor>());
@@ -28,19 +28,40 @@ public static class InterceptorDISample
                 })
                 .BuildServiceProvider()
             ;
-        await using var scope = services.CreateAsyncScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<BlogPostContext>();
-        await dbContext.Database.EnsureDeletedAsync();
-        await dbContext.Database.EnsureCreatedAsync();
         
-        dbContext.Posts.Add(new BlogPost()
         {
-            Title = "test",
-        });
-        await dbContext.SaveChangesAsync();
+            await using var scope = services.CreateAsyncScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<BlogPostContext>();
+            await dbContext.Database.EnsureDeletedAsync();
+            await dbContext.Database.EnsureCreatedAsync();
+        
+            dbContext.Posts.Add(new BlogPost()
+            {
+                Title = "test",
+            });
+            await dbContext.SaveChangesAsync();
+        
+        
+            dbContext.Posts.Add(new BlogPost()
+            {
+                Title = "test2",
+            });
+            await dbContext.SaveChangesAsync();
 
-        var posts = await dbContext.Posts.AsNoTracking().ToArrayAsync();
-        Console.WriteLine(JsonSerializer.Serialize(posts));
+            var posts = await dbContext.Posts.AsNoTracking().ToArrayAsync();
+            Console.WriteLine(JsonSerializer.Serialize(posts));
+        }
+
+
+        {
+            await using var scope = services.CreateAsyncScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<BlogPostContext>();
+            dbContext.Posts.Add(new BlogPost()
+            {
+                Title = "test3",
+            });
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
 
@@ -72,6 +93,7 @@ file sealed class DIAutoUpdateInterceptor(IUserIdProvider userIdProvider) : Save
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
         CancellationToken cancellationToken = new CancellationToken())
     {
+        Console.WriteLine($"Current interceptor hashCode: {GetHashCode()}");
         ArgumentNullException.ThrowIfNull(eventData.Context);
         foreach (var entry in eventData.Context.ChangeTracker.Entries<BlogPost>())
         {
