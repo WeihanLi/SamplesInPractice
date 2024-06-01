@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using WeihanLi.Common.Services;
 
 namespace EFSamples;
 
@@ -65,11 +64,6 @@ public static class InterceptorDISample
     }
 }
 
-file sealed class UserIdProvider : IUserIdProvider
-{
-    public string GetUserId() => "Admin";
-}
-
 file sealed class BlogPostContext(DbContextOptions<BlogPostContext> options): DbContext(options)
 {
     public DbSet<BlogPost> Posts { get; set; } = default!;
@@ -88,19 +82,31 @@ public class BlogPost
     public string UpdatedBy { get; set; } = default!;
 }
 
+file interface IUserIdProvider
+{
+    string? GetUserId();
+}
+
+file sealed class UserIdProvider : IUserIdProvider
+{
+    public string GetUserId() => "Admin";
+}
+
 file sealed class DIAutoUpdateInterceptor(IUserIdProvider userIdProvider) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
-        CancellationToken cancellationToken = new CancellationToken())
+        CancellationToken cancellationToken = default)
     {
         Console.WriteLine($"Current interceptor hashCode: {GetHashCode()}");
         ArgumentNullException.ThrowIfNull(eventData.Context);
+        string? userId = null;
         foreach (var entry in eventData.Context.ChangeTracker.Entries<BlogPost>())
         {
             if (entry.State is not EntityState.Added) continue;
+            userId ??= userIdProvider.GetUserId() ?? "";
             
             entry.Entity.UpdatedAt = DateTimeOffset.Now;
-            entry.Entity.UpdatedBy = userIdProvider.GetUserId() ?? "";
+            entry.Entity.UpdatedBy = userId;
         }
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
