@@ -2,6 +2,8 @@
 //
 // PriorityQueueSample.MainTest();
 // JsonSample.MainTest();
-ToHexStringSample.MainTest();
+// ToHexStringSample.MainTest();
+
+LruCacheSample.MainTest();
 
 Console.WriteLine("Hello World");
