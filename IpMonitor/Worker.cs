@@ -1,69 +1,61 @@
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using WeihanLi.Common.Helpers;
+using System.Net.Sockets;
 using WeihanLi.Extensions;
 using WeihanLi.Extensions.Hosting;
 
 namespace IpMonitor;
 
-public sealed class Worker : TimerBaseBackgroundServiceWithDiagnostic
+public sealed class Worker(
+    IConfiguration configuration, 
+    INotificationSelector notificationSelector, 
+    ILogger<Worker> logger, 
+    IServiceProvider serviceProvider
+    ) 
+    : TimerBaseBackgroundServiceWithDiagnostic(serviceProvider)
 {
-    private readonly INotification _notification;
-    private readonly ILogger<Worker> _logger;
-
+    private readonly bool _ipV4Only = configuration.GetAppSetting("IPV4Only").ToBoolean(true);
+    private readonly INotification _notification =
+        notificationSelector.SelectNotification(configuration.GetRequiredAppSetting("NotificationType"));
     private volatile string _previousIpInfo = string.Empty;
 
-    public Worker(IConfiguration configuration, INotificationSelector notificationSelector, ILogger<Worker> logger, IServiceProvider serviceProvider)
-      : base(serviceProvider)
-    {
-        _logger = logger;
-        _notification = notificationSelector.SelectNotification(configuration.GetRequiredAppSetting("NotificationType"));
-        if (TimeSpan.TryParse(configuration["AppSettings:MonitorPeriod"], out var period) && period > TimeSpan.Zero)
-        {
-            Period = period;
-        }
-        else
-        {
-            Period = TimeSpan.FromMinutes(10);
-        }
-    }
-
-    protected override TimeSpan Period { get; }
+    protected override TimeSpan Period { get; } =
+        TimeSpan.TryParse(configuration["AppSettings:MonitorPeriod"], out var period) && period > TimeSpan.Zero
+            ? period : TimeSpan.FromSeconds(10);
 
     protected override async Task ExecuteTaskInternalAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
     {
+        var ipList = new List<IPAddress>();
         foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
         {
             if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Loopback)
                 continue;
-            
-            var physicalAddress = networkInterface.GetPhysicalAddress();
-            Console.WriteLine(physicalAddress);
-            var ipProperties = networkInterface.GetIPProperties();
-            var ipV4Properties = ipProperties.GetIPv4Properties();
-            var ipV6Properties = ipProperties.GetIPv6Properties();
-            Console.WriteLine(JsonSerializer.Serialize(ipProperties));
-        }
 
-        var interfaceInfo = JsonSerializer.Serialize(NetworkInterface.GetAllNetworkInterfaces(), new JsonSerializerOptions(JsonSerializerDefaults.General)
-        {
-            Converters = { new JsonStringEnumConverter() }
-        }.WithUnsafeEncoder());
-        // Console.WriteLine(interfaceInfo);
+            var ipProperties = networkInterface.GetIPProperties();
+            foreach (var ipAddress in ipProperties.UnicastAddresses)
+            {
+                logger.LogInformation("Interface: {InterfaceName}, type: {InterfaceType}, IP: {IPAddress}, AddressFamily: {AddressFamily}",
+                    networkInterface.Name, networkInterface.NetworkInterfaceType.ToString(), ipAddress.Address, ipAddress.Address.AddressFamily
+                );
+                
+                if (_ipV4Only && ipAddress.Address.AddressFamily is not AddressFamily.InterNetwork)
+                    continue;
+                
+                ipList.Add(ipAddress.Address);
+            }
+        }
         
-        var host = Dns.GetHostName();
-        var ips = await Dns.GetHostAddressesAsync(host, cancellationToken);
-        var ipInfo = $"{Environment.MachineName} - {host}\n {ips.Order(new IpAddressComparer())
-            .Select(x => x.MapToIPv4().ToString()).StringJoin(", ")}";
+        var ipInfo = $"{Environment.MachineName} \n {
+            ipList.Order(new IpAddressComparer())
+            .Select(x => x.ToString()).StringJoin(", ")
+        }";
         if (_previousIpInfo == ipInfo)
         {
-            _logger.LogDebug("IpInfo not changed");
+            logger.LogDebug("IpInfo not changed");
             return;
         }
 
-        _logger.LogInformation("Ip info: {IpInfo}", ipInfo);
+        logger.LogInformation("Ip info: {IpInfo}", ipInfo);
         await _notification.SendNotification($"[IpMonitor]\n{ipInfo}");
         _previousIpInfo = ipInfo;
     }
