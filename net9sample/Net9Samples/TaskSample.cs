@@ -2,7 +2,7 @@
 
 // https://github.com/dotnet/runtime/issues/47998
 // https://github.com/dotnet/runtime/pull/97077
-public class TaskSample
+public static class TaskSample
 {
     public static async Task MainTest()
     {
@@ -83,5 +83,22 @@ public class TaskSample
             
             Console.WriteLine("Completed");
         }
+    }
+
+    // https://github.com/dotnet/runtime/issues/61959
+    // https://github.com/dotnet/runtime/pull/100316
+    public static async Task WhenEachTest()
+    {
+        var startTimestamp = TimeProvider.System.GetTimestamp();
+        var tasks = Enumerable.Range(0, 5)
+            .Select(i => Task.Delay(TimeSpan.FromSeconds(i + 1)))
+            ;
+        await foreach (var item in Task.WhenEach(tasks))
+        {
+            Console.WriteLine(item.IsCompletedSuccessfully);
+            Console.WriteLine(TimeProvider.System.GetLocalNow());
+        }
+        var elapsedTime = TimeProvider.System.GetElapsedTime(startTimestamp);
+        Console.WriteLine(elapsedTime);
     }
 }
