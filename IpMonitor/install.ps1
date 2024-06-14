@@ -10,3 +10,4 @@ Write-Output "Installing service... $ipMonitorPath $destDir"
 New-Service $serviceName -BinaryPathName $ipMonitorPath
 Start-Service $serviceName
 Write-Output "Service $serviceName started"
+Get-Service $serviceName
