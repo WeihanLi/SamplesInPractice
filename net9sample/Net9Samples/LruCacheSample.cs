@@ -8,26 +8,51 @@ internal static class LruCacheSample
 {
     public static void MainTest()
     {
-        var cache = new LruCache(2);
-        cache.Set("name", "test");
-        cache.Set("age", "10");
-        cache.PrintKeys();
-
-        ConsoleHelper.HandleInputLoop(x =>
         {
-            if (x.StartsWith("get:"))
-            {
-                var key = x["get:".Length..];
-                cache.TryGetValue(key, out string? value);
-                Console.WriteLine($"key: {key}, value: {value}");
-                return;
-            }
-
-            cache.Set(x, "Hello .NET");
-
+            var cache = new LruCache(2);
+            cache.Set("name", "test");
+            cache.Set("age", "10");
             cache.PrintKeys();
-        }, "Input something to test lruCache,  starts with 'get:' to try get cache value, otherwise set cache, input q to exit");
-        ConsoleHelper.ReadLineWithPrompt();
+
+            ConsoleHelper.HandleInputLoop(x =>
+            {
+                if (x.StartsWith("get:"))
+                {
+                    var key = x["get:".Length..];
+                    cache.TryGetValue(key, out string? value);
+                    Console.WriteLine($"key: {key}, value: {value}");
+                    return;
+                }
+
+                cache.Set(x, "Hello .NET");
+
+                cache.PrintKeys();
+            }, "Input something to test lruCache,  starts with 'get:' to try get cache value, otherwise set cache, input q to exit");
+            ConsoleHelper.ReadLineWithPrompt();
+        }
+
+        {
+            var cache = new LruCacheV2(2);
+            cache.Set("name", "test");
+            cache.Set("age", "10");
+            cache.PrintKeys();
+
+            ConsoleHelper.HandleInputLoop(x =>
+            {
+                if (x.StartsWith("get:"))
+                {
+                    var key = x["get:".Length..];
+                    cache.TryGetValue(key, out string? value);
+                    Console.WriteLine($"key: {key}, value: {value}");
+                    return;
+                }
+
+                cache.Set(x, "Hello .NET");
+
+                cache.PrintKeys();
+            }, "Input something to test lruCache,  starts with 'get:' to try get cache value, otherwise set cache, input q to exit");
+            ConsoleHelper.ReadLineWithPrompt();
+        }
     }
 }
 
@@ -42,13 +67,17 @@ file sealed class LruCache(int maxSize) : ICache
 {
     private readonly ConcurrentDictionary<string, object?> _store = new();
     private readonly PriorityQueue<string, long> _priorityQueue = new PriorityQueue<string, long>();
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
     public ICollection<string> Keys => _store.Keys;
 
     public void PrintKeys()
     {
         Console.WriteLine("PrintKeys:");
-        Console.WriteLine(JsonSerializer.Serialize(_store));
+        Console.WriteLine(JsonSerializer.Serialize(_store, _jsonSerializerOptions));
     }
 
     public void Set(string key, object? value)
@@ -130,13 +159,17 @@ file sealed class LruCacheV2(int maxSize) : ICache
     private static readonly CacheAccessEntryComparer CacheEntryComparer = new();
     private readonly PriorityQueue<string, CacheAccessEntry> _priorityQueue =
         new(CacheEntryComparer);
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
     public ICollection<string> Keys => _store.Keys;
 
     public void PrintKeys()
     {
         Console.WriteLine("PrintKeys:");
-        Console.WriteLine(JsonSerializer.Serialize(_store));
+        Console.WriteLine(JsonSerializer.Serialize(_store, _jsonSerializerOptions));
     }
 
     public void Set(string key, object? value)
