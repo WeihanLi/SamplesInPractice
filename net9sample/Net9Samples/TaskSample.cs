@@ -104,6 +104,22 @@ public static class TaskSample
         }
 
         {
+            var startTimestamp = TimeProvider.System.GetTimestamp();
+            var tasks = Enumerable.Range(0, 5)
+                .Select(i => Task.Delay(TimeSpan.FromSeconds(i + 1))
+                    .ContinueWith(r =>
+                    {
+                        Console.WriteLine(r.IsCompletedSuccessfully);
+                        Console.WriteLine(TimeProvider.System.GetLocalNow());
+                    })
+                );
+            await Task.WhenAll(tasks);
+            var elapsedTime = TimeProvider.System.GetElapsedTime(startTimestamp);
+            Console.WriteLine(elapsedTime);
+        }
+
+        {
+            Console.WriteLine(TimeProvider.System.GetLocalNow());
             var tasks = Enumerable.Range(0, 5)
                 .Select(i =>
                 {
@@ -113,10 +129,11 @@ public static class TaskSample
                 ;
             await foreach (var item in Task.WhenEach(tasks))
             {
-                Console.WriteLine(item.IsCompletedSuccessfully);
                 Console.WriteLine(item.Result);
-                Console.WriteLine(TimeProvider.System.GetLocalNow());
+                await Task.Delay(TimeSpan.FromSeconds(1));
             }
+
+            Console.WriteLine(TimeProvider.System.GetLocalNow());
         }
     }
 }
