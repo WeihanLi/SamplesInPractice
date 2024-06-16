@@ -38,7 +38,7 @@ file interface ICache
     bool TryGetValue<TValue>(string key, [MaybeNullWhen(false)] out TValue value);
 }
 
-file sealed class LastUsedCache(int maxSize) : ICache
+file sealed class LruCache(int maxSize) : ICache
 {
     private readonly ConcurrentDictionary<string, object?> _store = new();
     private readonly PriorityQueue<string, long> _priorityQueue = new PriorityQueue<string, long>();
@@ -97,9 +97,9 @@ file sealed record CacheAccessEntry
     public long AccessTimestamp { get; set; }
 }
 
-file sealed class CacheAccessEntryComparer(Func<CacheAccessEntry, long> priorityFactory) : IComparer<CacheAccessEntry>
+file sealed class CacheAccessEntryComparer(Func<CacheAccessEntry, long>? priorityFactory) : IComparer<CacheAccessEntry>
 {
-    public CacheAccessEntryComparer() : this(e => e.AccessTimestamp + e.AccessCount)
+    public CacheAccessEntryComparer() : this(null)
     {
     }
 
@@ -108,11 +108,23 @@ file sealed class CacheAccessEntryComparer(Func<CacheAccessEntry, long> priority
         ArgumentNullException.ThrowIfNull(x);
         ArgumentNullException.ThrowIfNull(y);
 
-        return priorityFactory(x).CompareTo(priorityFactory(y));
+        if (priorityFactory is not null)
+        {
+            return priorityFactory(x).CompareTo(priorityFactory(y));
+        }
+
+        if (x.AccessCount == y.AccessCount)
+        {
+            return x.AccessTimestamp == y.AccessTimestamp
+                ? 0
+                : (x.AccessTimestamp > y.AccessTimestamp ? 1 : -1)
+                ;
+        }
+        return x.AccessCount > y.AccessCount ? 1 : -1;
     }
 }
 
-file sealed class LruCache(int maxSize) : ICache
+file sealed class LruCacheV2(int maxSize) : ICache
 {
     private readonly ConcurrentDictionary<string, object?> _store = new();
     private static readonly CacheAccessEntryComparer CacheEntryComparer = new();
