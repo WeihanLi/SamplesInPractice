@@ -4,6 +4,7 @@ namespace Net9Samples;
 
 // https://github.com/dotnet/runtime/issues/62761
 // https://github.com/dotnet/runtime/pull/100550
+// Bounded priority channel: https://github.com/dotnet/runtime/issues/101292
 public static class PriorityChannelSample
 {
     public static async Task MainTestAsync()
