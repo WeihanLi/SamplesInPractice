@@ -1,4 +1,6 @@
-﻿namespace Net9Samples;
+﻿using System.Text.Json;
+
+namespace Net9Samples;
 
 public static class CSharp13Samples
 {
@@ -56,4 +58,16 @@ public static class CSharp13Samples
     //{
     //    public string Name { get; set => field = value.Trim(); }
     //}
+
+    // public static void ImplicitIndexAccess()
+    // {
+    //     int[] nums = 
+    //     {
+    //         [^1] = 1,
+    //         [^2] = 2,
+    //         [^3] = 3,
+    //         [^4] = 4
+    //     };
+    //     Console.WriteLine(JsonSerializer.Serialize(nums));
+    // }
 }
