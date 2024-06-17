@@ -4,8 +4,9 @@
 // JsonSample.MainTest();
 // ToHexStringSample.MainTest();
 
-LruCacheSample.MainTest();
-
 // await TaskSample.WhenEachTest();
+// LruCacheSample.MainTest();
+
+await PriorityChannelSample.MainTestAsync();
 
 Console.WriteLine("Hello World");
