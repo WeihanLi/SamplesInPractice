@@ -2,6 +2,8 @@
 
 namespace Net9Samples;
 
+// https://github.com/dotnet/runtime/issues/62761
+// https://github.com/dotnet/runtime/pull/100550
 public static class PriorityChannelSample
 {
     public static async Task MainTestAsync()
