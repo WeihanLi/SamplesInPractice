@@ -7,6 +7,9 @@
 // await TaskSample.WhenEachTest();
 // LruCacheSample.MainTest();
 
-await PriorityChannelSample.MainTestAsync();
+// await PriorityChannelSample.MainTestAsync();
+
+CSharp13Samples.ParamsCollectionSample();
+// CSharp13Samples.ParamsSpanPerfTest();
 
 Console.WriteLine("Hello World");
