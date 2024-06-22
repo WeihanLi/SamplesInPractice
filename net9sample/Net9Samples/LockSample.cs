@@ -1,13 +1,12 @@
-namespace Net9Samples;
+﻿namespace Net9Samples;
 
-[System.Runtime.Versioning.RequiresPreviewFeatures]
 public static class LockSample
 {
     public static void MainTest()
     {
         Console.WriteLine(Enumerable.Range(1, 1000).Sum());
         Console.WriteLine();
-        
+
         {
             var sum = 0;
 
@@ -18,13 +17,13 @@ public static class LockSample
 
             Console.WriteLine(sum);
         }
-        
+
         {
             var sum = 0;
 
             Parallel.For(1, 1001, i =>
             {
-                lock(nameof(MainTest))
+                lock (nameof(MainTest))
                 {
                     sum += i;
                 }
@@ -32,7 +31,7 @@ public static class LockSample
 
             Console.WriteLine(sum);
         }
-        
+
         {
             // This API requires opting into preview features
             var locker = new Lock();
