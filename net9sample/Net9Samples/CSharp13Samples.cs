@@ -1,6 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using System.Collections;
 using System.Runtime.CompilerServices;
+using WeihanLi.Common.Helpers;
 
 namespace Net9Samples;
 
@@ -11,21 +13,40 @@ public static class CSharp13Samples
     // https://github.com/dotnet/csharplang/blob/main/proposals/params-span.md
     public static void ParamsCollectionSample()
     {
-        ParamsArrayMethod(1, 2, 3);
-        ParamsListMethod(1, 2, 3);
-        ParamsEnumerableMethod(1, 2, 3);
+        {
+            ParamsArrayMethod(1, 2, 3);
+            ParamsListMethod(1, 2, 3);
+            ParamsEnumerableMethod(1, 2, 3);
 
-        ParamsReadOnlySpanMethod(1, 2, 3);
-        ParamsSpanMethod(1, 2, 3);
+            ParamsSpanMethod(1, 2, 3);
+            ParamsReadOnlySpanMethod(1, 2, 3);
 
+            ParamsCustomCollectionMethod(1, 2, 3);
+        }
 
-        ParamsCollectionTest.OverloadTest(1, 2, 3);
-        ParamsCollectionTest.OverloadTest([1, 2, 3]);
-        ParamsCollectionTest.OverloadTest(new[] { 1, 2, 3 });
+        ConsoleHelper.ReadLineWithPrompt();
 
-        ParamsCollectionTest.OverloadTest2(1, 2, 3);
-        ParamsCollectionTest.OverloadTest2([1, 2, 3]);
-        ParamsCollectionTest.OverloadTest2(new[] { 1, 2, 3 });
+        {
+            ParamsCollectionTest.OverloadTest(1, 2, 3);
+            ParamsCollectionTest.OverloadTest([1, 2, 3]);
+            ParamsCollectionTest.OverloadTest(new[] { 1, 2, 3 });
+
+            ConsoleHelper.ReadLineWithPrompt();
+
+            ParamsCollectionTest.OverloadTest2(1, 2, 3);
+            ParamsCollectionTest.OverloadTest2([1, 2, 3]);
+            ParamsCollectionTest.OverloadTest2(new[] { 1, 2, 3 });
+
+            ConsoleHelper.ReadLineWithPrompt();
+
+            ParamsCollectionTest.OverloadTest3(1, 2, 3);
+            ParamsCollectionTest.OverloadTest3([1, 2, 3]);
+            ParamsCollectionTest.OverloadTest3(Enumerable.Range(1, 3));
+
+            ParamsCollectionTest.OverloadTest4(1, 2, 3);
+            ParamsCollectionTest.OverloadTest4([1, 2, 3]);
+            ParamsCollectionTest.OverloadTest4(Enumerable.Range(1, 3));
+        }
 
         void ParamsReadOnlySpanMethod(params ReadOnlySpan<int> collection)
         {
@@ -63,6 +84,15 @@ public static class CSharp13Samples
         {
             foreach (var item in array)
             {
+                Console.WriteLine(item);
+            }
+        }
+
+        void ParamsCustomCollectionMethod(params CustomNumberCollection collection)
+        {
+            foreach (var item in collection)
+            {
+
                 Console.WriteLine(item);
             }
         }
@@ -140,7 +170,66 @@ public class ParamsCollectionTest
     {
         Console.WriteLine("Executing in Span method");
     }
+
+    public static void OverloadTest3(params IEnumerable<int> values)
+    {
+        Console.WriteLine("Executing in IEnumerable method");
+    }
+
+    public static void OverloadTest3(params int[] array)
+    {
+        Console.WriteLine("Executing in Array method");
+    }
+
+    //public static void OverloadTest3(params List<int> values)
+    //{
+    //    Console.WriteLine("Executing in List method");
+    //}
+
+    public static void OverloadTest4(params IEnumerable<int> values)
+    {
+        Console.WriteLine("Executing in IEnumerable method");
+    }
+
+    public static void OverloadTest4(params ICollection<int> values)
+    {
+        Console.WriteLine("Executing in ICollection method");
+    }
+
+    public static void OverloadTest4(params IList<int> values)
+    {
+        Console.WriteLine("Executing in IList method");
+    }
 }
+
+
+
+[CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.CreateNumber))]
+file sealed class CustomNumberCollection : IEnumerable<int>
+{
+    public required int[] Numbers { get; init; }
+    public IEnumerator<int> GetEnumerator()
+    {
+        return Numbers.AsEnumerable().GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return Numbers.GetEnumerator();
+    }
+}
+
+file static class CustomCollectionBuilder
+{
+    public static CustomNumberCollection CreateNumber(ReadOnlySpan<int> elements)
+    {
+        return new CustomNumberCollection()
+        {
+            Numbers = elements.ToArray()
+        };
+    }
+}
+
 
 // partial property, https://github.com/dotnet/csharplang/issues/6420
 //public partial class PartialProperty
