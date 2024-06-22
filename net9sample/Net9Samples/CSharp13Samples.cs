@@ -145,14 +145,12 @@ public class ParamsCollectionTest
 
     private int ParamsOverloadMethod(params ReadOnlySpan<int> span)
     {
-        // Debug.WriteLine("Executing in Span method");
-        return 0;
+        return span.Length;
     }
 
     private int ParamsOverloadMethod(params int[] array)
     {
-        // Debug.WriteLine("Executing in Array method");
-        return 0;
+        return array.Length;
     }
 
     public static void OverloadTest(params int[] array)
