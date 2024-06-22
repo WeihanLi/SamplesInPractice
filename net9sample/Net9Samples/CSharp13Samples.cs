@@ -46,6 +46,12 @@ public static class CSharp13Samples
             ParamsCollectionTest.OverloadTest4(1, 2, 3);
             ParamsCollectionTest.OverloadTest4([1, 2, 3]);
             ParamsCollectionTest.OverloadTest4(Enumerable.Range(1, 3));
+
+            ParamsCollectionTest.StringOverloadTest("Hello");
+            ParamsCollectionTest.StringOverloadTest('H', 'e', 'l', 'l', 'o');
+            ParamsCollectionTest.StringOverloadTest(['H', 'e', 'l', 'l', 'o']);
+            ParamsCollectionTest.StringOverloadTest("Hello".AsSpan());
+            ParamsCollectionTest.StringOverloadTest("Hello".ToCharArray());
         }
 
         void ParamsReadOnlySpanMethod(params ReadOnlySpan<int> collection)
@@ -159,7 +165,7 @@ public class ParamsCollectionTest
         Console.WriteLine("Executing in Span method");
     }
 
-    // OverloadResolutionPriority not working so far(2024/06/20) https://github.com/dotnet/roslyn/issues/74067
+    // OverloadResolutionPriority not working so far(2024/06/22) https://github.com/dotnet/roslyn/issues/74067
     [OverloadResolutionPriority(1)]
     public static void OverloadTest2(params int[] array)
     {
@@ -199,6 +205,20 @@ public class ParamsCollectionTest
     public static void OverloadTest4(params IList<int> values)
     {
         Console.WriteLine("Executing in IList method");
+    }
+
+    public static void StringOverloadTest(string value)
+    {
+        Console.WriteLine("Executing in string method");
+    }
+
+    public static void StringOverloadTest(params char[] value)
+    {
+        Console.WriteLine("Executing in char method");
+    }
+    public static void StringOverloadTest(params ReadOnlySpan<char> value)
+    {
+        Console.WriteLine("Executing in span method");
     }
 }
 
