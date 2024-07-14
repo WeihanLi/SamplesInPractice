@@ -9,7 +9,8 @@
 
 // await PriorityChannelSample.MainTestAsync();
 
-CSharp13Samples.ParamsCollectionSample();
+// CSharp13Samples.ParamsCollectionSample();
 // CSharp13Samples.ParamsSpanPerfTest();
+CSharp13Samples.PartialPropertyTest();
 
 Console.WriteLine("Hello World");

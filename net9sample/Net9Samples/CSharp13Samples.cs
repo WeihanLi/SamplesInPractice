@@ -109,6 +109,15 @@ public static class CSharp13Samples
         BenchmarkRunner.Run<ParamsCollectionTest>();
     }
 
+    public static void PartialPropertyTest()
+    {
+        var partialPropertyClass = new PartialPropertyClass();
+        Console.WriteLine(partialPropertyClass.Num);
+
+        var partialPropertyStruct = new PartialPropertyStruct();
+        Console.WriteLine(partialPropertyStruct.Num);
+    }
+
     //public class SemiFieldSample
     //{
     //    public string Name { get; set => field = value.Trim(); }
@@ -220,8 +229,6 @@ public class ParamsCollectionTest
     }
 }
 
-
-
 [CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.CreateNumber))]
 file sealed class CustomNumberCollection : IEnumerable<int>
 {
@@ -248,13 +255,23 @@ file static class CustomCollectionBuilder
     }
 }
 
-
 // partial property, https://github.com/dotnet/csharplang/issues/6420
-//public partial class PartialProperty
-//{
-//    public partial int Num { get; }
-//}
-//public partial class PartialProperty
-//{
-//    public partial int Num => 0;
-//}
+file partial class PartialPropertyClass
+{
+    public partial int Num { get; }
+}
+
+file partial class PartialPropertyClass
+{
+    public partial int Num => 1;
+}
+
+file partial struct PartialPropertyStruct
+{
+    public partial int Num { get; }
+}
+
+file partial struct PartialPropertyStruct
+{
+    public partial int Num => 2;
+}
