@@ -1,0 +1,7 @@
+@BaseUrl = http://localhost:5000
+GET {{BaseUrl}}/
+
+X-Forwarded-For: 192.168.31.99
+X-Forwarded-Host: iherb.dev
+X-Forwarded-Prefix: /test
+X-Forwarded-Proto: https
