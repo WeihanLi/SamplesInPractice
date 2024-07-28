@@ -1,0 +1,20 @@
+services:
+  forward-test:
+    image: weihanli/dotnet-exec:web
+    container_name: forward-app
+    ports:
+      - 8080:8080
+    networks:
+      - forward-test
+    volumes:
+      - "./ForwardedHeadersSample.cs:/app/ForwardedHeadersSample.cs"
+    environment:
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+    command:
+      - "/app/ForwardedHeadersSample.cs"
+      - "--debug"
+
+networks:
+  forward-test:
+    name: forward-test
+    driver: bridge
