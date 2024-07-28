@@ -8,13 +8,10 @@ COPY ["AspNetCore8Sample/AspNetCore8Sample.csproj", "AspNetCore8Sample/"]
 RUN dotnet restore "AspNetCore8Sample/AspNetCore8Sample.csproj"
 COPY . .
 WORKDIR "/src/AspNetCore8Sample"
-RUN dotnet build "AspNetCore8Sample.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "AspNetCore8Sample.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "AspNetCore8Sample.csproj" -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "AspNetCore8Sample.dll"]
 USER app
