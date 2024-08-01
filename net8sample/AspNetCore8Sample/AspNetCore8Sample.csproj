@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="WeihanLi.Common" Version="1.0.60" />
+        <PackageReference Include="WeihanLi.Common" Version="1.0.67" />
         <Using Include="AspNetCore8Sample" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>

@@ -207,7 +207,7 @@ file sealed class Job
 {
     public required int Id { get; set; }
     public required string Title { get; set; }
-    public override string ToString() => $"JobId: {Id}, JobTitle: {Title}";
+    public override string ToString() => $"{{ JobId: {Id}, JobTitle: {Title} }}";
 }
 
 file sealed class MyHttpDelegatingHandler : DelegatingHandler
