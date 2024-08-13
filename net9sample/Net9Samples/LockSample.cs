@@ -32,8 +32,38 @@ public static class LockSample
             Console.WriteLine(sum);
         }
 
+
         {
-            // This API requires opting into preview features
+            var locker = new object();
+            var sum = 0;
+
+            Parallel.For(1, 1001, i =>
+            {
+                lock (locker)
+                {
+                    sum += i;
+                }
+            });
+
+            Console.WriteLine(sum);
+        }
+
+        {
+            var locker = new Lock();
+            var sum = 0;
+
+            Parallel.For(1, 1001, i =>
+            {
+                lock (locker)
+                {
+                    sum += i;
+                }
+            });
+
+            Console.WriteLine(sum);
+        }
+
+        {
             var locker = new Lock();
             var sum = 0;
 
