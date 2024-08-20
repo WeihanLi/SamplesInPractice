@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Schema;
-using WeihanLi.Common.Helpers;
 
 namespace Net9Samples;
 
@@ -38,13 +36,11 @@ public static class JsonSample
     public static void JsonSchemaExporterTest()
     {
         var type = typeof(Job);
-        var schemaSerializeOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web).WithWriteIntended();
-
         var schemaNode = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(Job));
-        Console.WriteLine(JsonSerializer.Serialize(schemaNode, schemaSerializeOptions));
+        Console.WriteLine(JsonSerializer.Serialize(schemaNode, JsonSerializerOptions.Web));
 
         var schemaNode2 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job));
-        Console.WriteLine(JsonSerializer.Serialize(schemaNode2, schemaSerializeOptions));
+        Console.WriteLine(JsonSerializer.Serialize(schemaNode2, JsonSerializerOptions.Web));
 
         var exporterOptions = new JsonSchemaExporterOptions
         {
@@ -77,12 +73,11 @@ public static class JsonSample
             }
         };
         var schemaNode3 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job), exporterOptions);
-        Console.WriteLine(JsonSerializer.Serialize(schemaNode3, schemaSerializeOptions));
+        Console.WriteLine(JsonSerializer.Serialize(schemaNode3, JsonSerializerOptions.Web));
     }
 }
 
-
-file class Job
+public class Job
 {
     public int Id { get; set; }
     public required string Title { get; set; }

@@ -9,6 +9,7 @@
 
 // await PriorityChannelSample.MainTestAsync();
 // Base64UrlEncodeSample.MainTest();
+GuidSample.MainTest();
 
 JsonSample.JsonSchemaExporterTest();
 
