@@ -35,11 +35,17 @@ public static class JsonSample
 
     public static void JsonSchemaExporterTest()
     {
-        var type = typeof(Job);
-        var schemaNode = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(Job));
+        var type = typeof(Job0);
+
+        var defaultSchemaNode = JsonSchemaExporter.GetJsonSchemaAsNode(
+            JsonSerializerOptions.Default, type
+            );
+        Console.WriteLine(JsonSerializer.Serialize(defaultSchemaNode, JsonSerializerOptions.Web));
+        
+        var schemaNode = JsonSerializerOptions.Web.GetJsonSchemaAsNode(type);
         Console.WriteLine(JsonSerializer.Serialize(schemaNode, JsonSerializerOptions.Web));
 
-        var schemaNode2 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job));
+        var schemaNode2 = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(Job));
         Console.WriteLine(JsonSerializer.Serialize(schemaNode2, JsonSerializerOptions.Web));
 
         var exporterOptions = new JsonSchemaExporterOptions
@@ -72,9 +78,20 @@ public static class JsonSample
                 return node;
             }
         };
-        var schemaNode3 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job), exporterOptions);
+        
+        var schemaNode3 = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(Job), exporterOptions);
         Console.WriteLine(JsonSerializer.Serialize(schemaNode3, JsonSerializerOptions.Web));
+        
+        var schemaNode4 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job0), exporterOptions);
+        Console.WriteLine(JsonSerializer.Serialize(schemaNode4, JsonSerializerOptions.Web));
     }
+}
+
+public class Job0
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = default!;
+    public string? Description { get; set; }
 }
 
 public class Job
