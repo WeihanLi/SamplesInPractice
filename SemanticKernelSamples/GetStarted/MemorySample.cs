@@ -28,7 +28,7 @@ public static class MemorySample
         // memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
         memoryBuilder.WithMemoryStore(new MongoDBMemoryStore(mongoDbConn, "playground", "embedding"));
         memoryBuilder.WithTextEmbeddingGeneration(new AzureOpenAITextEmbeddingGenerationService(
-            deployment, apiEndpoint, apiKey, 
+            deployment, apiEndpoint, apiKey,
             "text-embedding-small-003", null, loggerFactory, 256)
         );
         var memory = memoryBuilder.Build();

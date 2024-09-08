@@ -35,7 +35,7 @@ public static class DotnetConfHelper
                     var embeddings = await textEmbeddingService.GenerateEmbeddingsAsync(new[]
                     {
                         $"{session.Title}  {session.Description}"
-                    }).ContinueWith(r=> r.Result[0]);
+                    }).ContinueWith(r => r.Result[0]);
                     session.Embeddings = embeddings;
                 }
             }
@@ -48,7 +48,7 @@ public static class DotnetConfHelper
         var mlContext = new MLContext(seed: 0);
 
         // Create a list of training data points.
-        var trainingData = mlContext.Data.LoadFromEnumerable(sessions.Select(x=> new SessionInputModel()
+        var trainingData = mlContext.Data.LoadFromEnumerable(sessions.Select(x => new SessionInputModel()
         {
             SessionId = x.SessionId,
             Embeddings = x.Embeddings.ToArray(),
