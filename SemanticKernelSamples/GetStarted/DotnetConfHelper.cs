@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.ML;
+﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI.TextEmbedding;
-using Microsoft.SemanticKernel.Connectors.Memory.Redis;
-using Microsoft.SemanticKernel.Plugins.Memory;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using System.Text.Json;
 using WeihanLi.Common;
 
@@ -19,7 +15,7 @@ public static class DotnetConfHelper
         var apiEndpoint = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_ENDPOINT"));
         var apiKey = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY"));
 
-        var textEmbeddingService = new AzureTextEmbeddingGeneration(deployId, apiEndpoint, apiKey);
+        var textEmbeddingService = new AzureOpenAITextEmbeddingGenerationService(deployId, apiEndpoint, apiKey);
         
         var filePath = "dotnetconf2023-agenda.json";
         var filePathWithEmbeddings = "dotnetconf2023-agenda-with-embeddings.json";
