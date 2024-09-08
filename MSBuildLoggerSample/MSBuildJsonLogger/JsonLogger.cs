@@ -13,10 +13,16 @@ public sealed class JsonErrorLogger : ILogger
         WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
     
-    private readonly List<BuildError> _errors = new();
+    private readonly List<BuildError> _errors = new(), _warnings = new();
     public void Initialize(IEventSource eventSource)
     {
+        eventSource.WarningRaised += EventSourceOnWarningRaised;
         eventSource.ErrorRaised += EventSourceOnErrorRaised;
+    }
+
+    private void EventSourceOnWarningRaised(object sender, BuildWarningEventArgs e)
+    {
+        _warnings.Add(new BuildError(e.Subcategory, e.Code, e.File, e.LineNumber, e.ColumnNumber, e.EndLineNumber, e.EndColumnNumber, e.Message, e.HelpKeyword, e.SenderName));
     }
 
     private void EventSourceOnErrorRaised(object sender, BuildErrorEventArgs e)
@@ -27,7 +33,11 @@ public sealed class JsonErrorLogger : ILogger
     public void Shutdown()
     {
         using var fs = File.Create(ErrorLogFileName);
-        JsonSerializer.Serialize(fs, _errors, JsonSerializerOptions);
+        JsonSerializer.Serialize(fs, new
+        {
+            warnings = _warnings,
+            errors = _errors
+        }, JsonSerializerOptions);
         
         _errors.Clear();
     }
