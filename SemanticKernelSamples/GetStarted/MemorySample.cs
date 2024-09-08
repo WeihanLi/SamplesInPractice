@@ -9,8 +9,6 @@ using System.Text.Json.Serialization;
 using WeihanLi.Common;
 using WeihanLi.Common.Helpers;
 
-[assembly:Experimental("SKEXP0001")]
-
 namespace GetStarted;
 
 public static class MemorySample
