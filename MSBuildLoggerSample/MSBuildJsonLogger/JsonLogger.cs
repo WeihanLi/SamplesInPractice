@@ -4,6 +4,7 @@ using System.Text.Json;
 
 namespace MSBuildJsonLogger;
 
+// https://learn.microsoft.com/en-us/visualstudio/msbuild/build-loggers?view=vs-2022
 public sealed class JsonErrorLogger : ILogger
 {
     private const string ErrorLogFileName = "json-error-logger.json";
