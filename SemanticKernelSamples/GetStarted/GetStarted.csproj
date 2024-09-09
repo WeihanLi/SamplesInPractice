@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ErrorLog>errors.json,version=2.1</ErrorLog>
+<!--    <ErrorLog>errors.json,version=2.1</ErrorLog>-->
     <WarningsAsErrors>$(WarningsAsErrors)</WarningsAsErrors>
   </PropertyGroup>
 

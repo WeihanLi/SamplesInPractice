@@ -1,9 +1,16 @@
-﻿using Microsoft.ML;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.SemanticKernel.Memory;
+using System.Numerics.Tensors;
 using System.Text.Json;
 using WeihanLi.Common;
+using WeihanLi.Common.Helpers;
+using WeihanLi.Extensions;
 
 namespace GetStarted;
 
@@ -11,11 +18,13 @@ public static class DotnetConfHelper
 {
     public static async Task MainTest()
     {
-        var deployId = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID"));
-        var apiEndpoint = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_ENDPOINT"));
-        var apiKey = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY"));
+        var chatDeployId = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_CHAT_COMPLETION_DEPLOY_ID"));
+        var embeddingDeployId = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID"));
+        var apiEndpoint = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_API_ENDPOINT"));
+        var apiKey = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_API_KEY"));
 
-        var textEmbeddingService = new AzureOpenAITextEmbeddingGenerationService(deployId, apiEndpoint, apiKey);
+        var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddDefaultDelegateLogger());
+        var textEmbeddingService = new AzureOpenAITextEmbeddingGenerationService(embeddingDeployId, apiEndpoint, apiKey, loggerFactory: loggerFactory);
         
         var filePath = "dotnetconf2023-agenda.json";
         var filePathWithEmbeddings = "dotnetconf2023-agenda-with-embeddings.json";
@@ -35,12 +44,12 @@ public static class DotnetConfHelper
                     var embeddings = await textEmbeddingService.GenerateEmbeddingsAsync(new[]
                     {
                         $"""
-                        Speaker: {session.Speaker}
-                        Title: {session.Title}
-                        Description: {session.Description}
+                        {session.Title}
+                        {session.Description}
                         """
                     }).ContinueWith(r => r.Result[0]);
                     session.Embeddings = embeddings.ToArray();
+                    Console.WriteLine($"{session.Title} embeddings generated");
                 }
             }
             {
@@ -84,21 +93,39 @@ public static class DotnetConfHelper
             session.Distances = prediction.Distances;
         }
 
+        Console.WriteLine("Predicate completed");
+        
+        IChatCompletionService chatCompletionService = new AzureOpenAIChatCompletionService(chatDeployId, apiEndpoint, apiKey, loggerFactory: loggerFactory);
+        
         foreach (var group in sessions.GroupBy(x=> x.ClusterId))
         {
             Console.WriteLine($"ClusterId: {group.Key}");
+
             if (cleanCentroids.TryGetValue(group.Key, out var centroid))
             {
-                Console.WriteLine($"Centroid: {centroids}");
+                var sessionCollection = group.OrderByDescending(s=> 
+                    TensorPrimitives.CosineSimilarity(centroid, s.Embeddings))
+                    .ToArray();
+
+                var prompt = $"""
+                             You are a helpful assistant who is good at finding common ground in summarize in short words, 
+                             please find out what the following session topics have in common, and returns in one or two words directly,
+                             `.NET`/`dotnet` should not be a valid words
+                             for example: `Blazor` etc
+                             ===== topics =====
+                             {sessionCollection.Take(5).Select(x=> $"{x.Title}: {x.Description}").StringJoin($"{Environment.NewLine}==={Environment.NewLine}")}
+                             """;
+                var result = await chatCompletionService.GetChatMessageContentsAsync(prompt);
+                var commonGround = result[^1].Content;
+                Console.WriteLine($"Cluster: {group.Key}, {commonGround}");
+                foreach (var session in sessionCollection)
+                {
+                    Console.WriteLine($"{session.Title}");
+                }
             }
-            foreach (var session in group)
-            {
-                Console.WriteLine(session.Speaker);
-                Console.WriteLine(session.Title);
-                Console.WriteLine(session.Description);
-            }
+
+            Console.WriteLine();
         }
-            
     }
 }
 
