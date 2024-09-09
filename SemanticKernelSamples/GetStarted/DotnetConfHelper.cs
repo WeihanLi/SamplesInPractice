@@ -34,9 +34,13 @@ public static class DotnetConfHelper
                 {
                     var embeddings = await textEmbeddingService.GenerateEmbeddingsAsync(new[]
                     {
-                        $"{session.Title}  {session.Description}"
+                        $"""
+                        Speaker: {session.Speaker}
+                        Title: {session.Title}
+                        Description: {session.Description}
+                        """
                     }).ContinueWith(r => r.Result[0]);
-                    session.Embeddings = embeddings;
+                    session.Embeddings = embeddings.ToArray();
                 }
             }
             {
@@ -63,38 +67,56 @@ public static class DotnetConfHelper
 
         // Define the trainer.
         var pipeline = mlContext.Clustering.Trainers.KMeans(options);
-
         // Train the model.
         var model = pipeline.Fit(trainingData);
-        VBuffer<float>[]? centroids = default;
-        model.Model.GetClusterCentroids(ref centroids, out var k);
-        if (k > 0)
+        var predictor = mlContext.Model.CreatePredictionEngine<SessionInputModel, ClusterPredictionModel>(model);
+
+        foreach (var session in sessions)
         {
-            foreach (var centroid in centroids)
-            {
-            }
+            var prediction = predictor.Predict(session);
+            session.ClusterId = prediction.ClusterId;
+            session.Distances = prediction.Distances;
         }
 
-        Console.WriteLine("centrolids get");
-        
+        foreach (var group in sessions.GroupBy(x=> x.ClusterId))
+        {
+            Console.WriteLine(group.Key);
+            foreach (var session in group)
+            {
+                Console.WriteLine(session.Speaker);
+                Console.WriteLine(session.Title);
+                Console.WriteLine(session.Description);
+            }
+        }
+            
     }
 }
 
-file sealed class Session
+file sealed class Session : SessionInputModel
 {
-    public required int SessionId { get; init; }
     public required DateTimeOffset BeginDateTime { get; init; }
     public required DateTimeOffset EndDateTime { get; init; }
     public required string Title { get; set; }
     public required string Speaker { get; set; }
     public required string Description { get; set; }
-    public ReadOnlyMemory<float> Embeddings { get; set; }
+
+    public int ClusterId { get; set; }
+    public float[] Distances { get; set; }
 }
 
-file sealed class SessionInputModel
+file class SessionInputModel
 {
     public int SessionId { get; set; }
     
     [VectorType(1536)]
     public float[] Embeddings { get; set; }
+}
+
+public class ClusterPredictionModel
+{
+    [ColumnName("PredictedLabel")]
+    public int ClusterId { get; set; }
+
+    [ColumnName("Score")]
+    public float[] Distances { get; set; }
 }
