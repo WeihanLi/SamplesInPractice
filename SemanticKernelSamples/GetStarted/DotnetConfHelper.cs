@@ -52,11 +52,7 @@ public static class DotnetConfHelper
         var mlContext = new MLContext(seed: 0);
 
         // Create a list of training data points.
-        var trainingData = mlContext.Data.LoadFromEnumerable(sessions.Select(x => new SessionInputModel()
-        {
-            SessionId = x.SessionId,
-            Embeddings = x.Embeddings.ToArray(),
-        }));
+        var trainingData = mlContext.Data.LoadFromEnumerable(sessions);
         
         // Define trainer options.
         var options = new KMeansTrainer.Options
@@ -69,18 +65,32 @@ public static class DotnetConfHelper
         var pipeline = mlContext.Clustering.Trainers.KMeans(options);
         // Train the model.
         var model = pipeline.Fit(trainingData);
-        var predictor = mlContext.Model.CreatePredictionEngine<SessionInputModel, ClusterPredictionModel>(model);
+        VBuffer<float>[]? centroids = default;
+        model.Model.GetClusterCentroids(ref centroids, out var clustersCount);
+        Console.WriteLine($"clusters count: {clustersCount}");
+        
+        var cleanCentroids = Enumerable.Range(0, centroids.Length).ToDictionary(x => x, x =>
+        {
+            var values = centroids[x].GetValues().ToArray();
+            return values;
+        });
+        
+        var predictor = mlContext.Model.CreatePredictionEngine<Session, ClusterPredictionModel>(model);
 
         foreach (var session in sessions)
         {
             var prediction = predictor.Predict(session);
-            session.ClusterId = prediction.ClusterId;
+            session.ClusterId = (int)prediction.ClusterId;
             session.Distances = prediction.Distances;
         }
 
         foreach (var group in sessions.GroupBy(x=> x.ClusterId))
         {
-            Console.WriteLine(group.Key);
+            Console.WriteLine($"ClusterId: {group.Key}");
+            if (cleanCentroids.TryGetValue(group.Key, out var centroid))
+            {
+                Console.WriteLine($"Centroid: {centroids}");
+            }
             foreach (var session in group)
             {
                 Console.WriteLine(session.Speaker);
@@ -94,13 +104,24 @@ public static class DotnetConfHelper
 
 file sealed class Session : SessionInputModel
 {
+    [NoColumn]
     public required DateTimeOffset BeginDateTime { get; init; }
+    
+    [NoColumn]
     public required DateTimeOffset EndDateTime { get; init; }
+    
+    [NoColumn]
     public required string Title { get; set; }
+    
+    [NoColumn]
     public required string Speaker { get; set; }
+    
+    [NoColumn]
     public required string Description { get; set; }
 
+    [NoColumn]
     public int ClusterId { get; set; }
+    [NoColumn]
     public float[] Distances { get; set; }
 }
 
@@ -115,7 +136,7 @@ file class SessionInputModel
 public class ClusterPredictionModel
 {
     [ColumnName("PredictedLabel")]
-    public int ClusterId { get; set; }
+    public uint ClusterId { get; set; }
 
     [ColumnName("Score")]
     public float[] Distances { get; set; }
