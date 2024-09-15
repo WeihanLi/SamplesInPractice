@@ -89,7 +89,7 @@ public static class JsonSample
 
 public class Job0
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
     public string Title { get; set; } = default!;
     public string? Description { get; set; }
 }

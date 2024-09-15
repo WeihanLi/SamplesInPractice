@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" />
     <PackageReference Include="WeihanLi.Common" />
   </ItemGroup>
 

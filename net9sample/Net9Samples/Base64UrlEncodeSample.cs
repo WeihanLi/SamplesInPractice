@@ -8,6 +8,9 @@ public static class Base64UrlEncodeSample
 {
     public static void MainTest()
     {
+        var encodedBase64UrlText = Base64Url.EncodeToString("Hello"u8);
+        Console.WriteLine(encodedBase64UrlText);
+
         var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ_";
         foreach (var item in token.Split('.'))
         {
