@@ -9,7 +9,7 @@
 
 // await PriorityChannelSample.MainTestAsync();
 // Base64UrlEncodeSample.MainTest();
-// GuidSample.MainTest();
+GuidSample.MainTest();
 
 // JsonSample.JsonSchemaExporterTest();
 
@@ -17,6 +17,6 @@
 // CSharp13Samples.ParamsSpanPerfTest();
 // CSharp13Samples.PartialPropertyTest();
 
-await RuntimeMetricsSample.RunAsync();
+// await RuntimeMetricsSample.RunAsync();
 
 Console.WriteLine("Hello World");
