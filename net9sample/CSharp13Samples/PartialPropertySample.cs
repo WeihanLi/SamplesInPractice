@@ -34,12 +34,15 @@ public partial class PartialPropertySample
 // partial property, https://github.com/dotnet/csharplang/issues/6420
 file partial class PartialPropertyClass
 {
-    public partial int Num { get; }
+    // CS9252: Property accessor 'PartialPropertyClass.Num.set' must be implemented because it is declared on the definition part
+    // CS9253: Property accessor 'PartialPropertyClass.Num.set' does not implement any accessor declared on the definition part
+    public partial int Num { get; set; }
 }
 
 file partial class PartialPropertyClass
 {
-    public partial int Num => 1;
+    private int _num = 1;
+    public partial int Num { get => _num; set => _num = value; }
 }
 
 file partial struct PartialPropertyStruct
