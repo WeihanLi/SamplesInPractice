@@ -1,4 +1,6 @@
 ﻿using CSharp13Samples;
 
-PartialPropertySample.MainTest();
+//ImplicitIndexAccessSample.MainTest();
+//PartialPropertySample.MainTest();
+RefStructInterfaceSample.MainTest();
 Console.WriteLine("Completed!");
