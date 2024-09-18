@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="WeihanLi.Common" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="CSharp13Samples" />
   </ItemGroup>
 
