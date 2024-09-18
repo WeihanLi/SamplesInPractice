@@ -38,13 +38,21 @@ file partial class PartialPropertyClass
 {
     // CS9252: Property accessor 'PartialPropertyClass.Num.set' must be implemented because it is declared on the definition part
     // CS9253: Property accessor 'PartialPropertyClass.Num.set' does not implement any accessor declared on the definition part
-    //  a partial property cannot be automatically implemented
+    //  CS9250: a partial property cannot be automatically implemented
+
+    /// <summary>
+    /// Number comment on declaration
+    /// </summary>
     public partial int Num { get; set; }
 }
 
 file partial class PartialPropertyClass
 {
     private int _num = 1;
+
+    /// <summary>
+    /// Number comment on implementation
+    /// </summary>
     public partial int Num { get => _num; set => _num = value; }
 }
 
