@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Net9Samples;
+﻿namespace Net9Samples;
 internal static class GuidSample
 {
     // https://datatracker.ietf.org/doc/rfc9562/
