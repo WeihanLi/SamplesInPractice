@@ -1,6 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace CSharp13Samples;
+// https://github.com/dotnet/csharplang/issues/6420
+// https://github.com/dotnet/csharplang/blob/main/proposals/csharp-13.0/partial-properties.md
 public partial class PartialPropertySample
 {
     [GeneratedRegex(@"^1[1-9]\d{9}$")]
@@ -30,12 +34,11 @@ public partial class PartialPropertySample
     }
 }
 
-
-// partial property, https://github.com/dotnet/csharplang/issues/6420
 file partial class PartialPropertyClass
 {
     // CS9252: Property accessor 'PartialPropertyClass.Num.set' must be implemented because it is declared on the definition part
     // CS9253: Property accessor 'PartialPropertyClass.Num.set' does not implement any accessor declared on the definition part
+    //  a partial property cannot be automatically implemented
     public partial int Num { get; set; }
 }
 
@@ -47,11 +50,13 @@ file partial class PartialPropertyClass
 
 file partial struct PartialPropertyStruct
 {
+    [DisplayName("Number")]
     public partial int Num { get; }
 }
 
 file partial struct PartialPropertyStruct
 {
+    [JsonPropertyName("num")]
     public partial int Num => 2;
 }
 
