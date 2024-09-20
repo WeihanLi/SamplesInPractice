@@ -17,8 +17,10 @@
 // CSharp13Samples.ParamsSpanPerfTest();
 // CSharp13Samples.PartialPropertyTest();
 
-CSharp13Samples.RefStructPerfTest();
+// CSharp13Samples.RefStructPerfTest();
 
 // await RuntimeMetricsSample.RunAsync();
+
+LockSample.LockObjectPerfTest();
 
 // Console.WriteLine("Hello World");
