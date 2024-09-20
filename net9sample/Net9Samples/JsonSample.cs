@@ -41,7 +41,7 @@ public static class JsonSample
             JsonSerializerOptions.Default, type
             );
         Console.WriteLine(JsonSerializer.Serialize(defaultSchemaNode, JsonSerializerOptions.Web));
-        
+
         var schemaNode = JsonSerializerOptions.Web.GetJsonSchemaAsNode(type);
         Console.WriteLine(JsonSerializer.Serialize(schemaNode, JsonSerializerOptions.Web));
 
@@ -65,7 +65,7 @@ public static class JsonSample
                         var requiredNode = node["required"];
                         if (requiredNode is JsonArray jsonArrayNode)
                         {
-                            var requiredProperties = JsonSerializer.Serialize(jsonArrayNode.Select(x => x.GetValue<string>()).Append(idName));
+                            var requiredProperties = JsonSerializer.Serialize(jsonArrayNode.Select(x => x?.GetValue<string>()).Append(idName));
                             jsonArrayNode.ReplaceWith(JsonSerializer.Deserialize<JsonArray>(requiredProperties));
                         }
                         else
@@ -78,10 +78,10 @@ public static class JsonSample
                 return node;
             }
         };
-        
+
         var schemaNode3 = JsonSerializerOptions.Web.GetJsonSchemaAsNode(typeof(Job), exporterOptions);
         Console.WriteLine(JsonSerializer.Serialize(schemaNode3, JsonSerializerOptions.Web));
-        
+
         var schemaNode4 = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(Job0), exporterOptions);
         Console.WriteLine(JsonSerializer.Serialize(schemaNode4, JsonSerializerOptions.Web));
     }
