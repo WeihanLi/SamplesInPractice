@@ -5,6 +5,11 @@ internal static class RefStructInterfaceSample
 {
     public static void MainTest()
     {
+        var refStructAge = new RefStructAge();
+        // CS1503: Argument 1: cannot convert from 'CSharp13Samples.RefStructAge' to 'CSharp13Samples.IAge'
+        // PrintAge0(refStructAge);
+        PrintAge(refStructAge);
+
         int[] numbers = [1, 2, 3, 4];
         using var enumerator = GetEnumerator(numbers);
         // CS9244: The type 'ArrayEnumerator<int>' may not be a ref struct or a type parameter allowing ref structs in order to use it as parameter 'T' in the generic type or method 'RefStructInterfaceSample.Iterate<T>(T)'
@@ -25,6 +30,19 @@ internal static class RefStructInterfaceSample
         {
             Console.WriteLine(enumerator.Current);
         }
+    }
+
+    private static void PrintAge0(IAge age)
+    {
+        Console.WriteLine(age.GetAge());
+    }
+
+    // CS9244: The type 'RefStructAge' may not be a ref struct or a type parameter allowing ref structs in order to use it as parameter 'TAge' in the generic type or method 'RefStructInterfaceSample.PrintAge<TAge>(TAge)'
+    private static void PrintAge<TAge>(TAge age)
+        where TAge : IAge, allows ref struct
+    {
+        Console.WriteLine("GetAge {0}", age.GetAge());
+        Console.WriteLine("AgeNum {0}", age.AgeNum);
     }
 }
 
@@ -54,4 +72,18 @@ internal ref struct ArrayEnumerator<T>(T[] items) : IEnumerator<T>
     {
         _idx = -1;
     }
+}
+
+internal interface IAge
+{
+    int AgeNum { get; }
+    int GetAge();
+}
+
+internal ref struct RefStructAge
+    : IAge
+{
+    public int AgeNum => 1;
+
+    public int GetAge() => AgeNum;
 }

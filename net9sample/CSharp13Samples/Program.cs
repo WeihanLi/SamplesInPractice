@@ -1,6 +1,6 @@
 ﻿//ImplicitIndexAccessSample.MainTest();
-PartialPropertySample.MainTest();
-//RefStructInterfaceSample.MainTest();
+//PartialPropertySample.MainTest();
+RefStructInterfaceSample.MainTest();
 //OverloadResolutionPrioritySample.MainTest();
 
 Console.WriteLine("Completed!");
