@@ -109,6 +109,11 @@ public static class CSharp13Samples
         BenchmarkRunner.Run<ParamsCollectionTest>();
     }
 
+    public static void RefStructPerfTest()
+    {
+        BenchmarkRunner.Run<RefStructInterfaceBenchmark>();
+    }
+
     //public class SemiFieldSample
     //{
     //    public string Name { get; set => field = value.Trim(); }
@@ -206,6 +211,40 @@ public class ParamsCollectionTest
     {
         Console.WriteLine("Executing in span method");
     }
+}
+
+[SimpleJob]
+[MemoryDiagnoser]
+public class RefStructInterfaceBenchmark
+{
+    [Benchmark(Baseline = true)]
+    public int RefStructInterface()
+    {
+        var age = new RefStructAge();
+        return age.GetAge();
+    }
+
+    [Benchmark]
+    public int ClassInterface()
+    {
+        var age = new ClassAge();
+        return age.GetAge();
+    }
+}
+
+internal interface IAge
+{
+    int GetAge();
+}
+
+internal ref struct RefStructAge : IAge
+{
+    public int GetAge() => 1;
+}
+
+internal sealed class ClassAge : IAge
+{
+    public int GetAge() => 1;
 }
 
 [CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.CreateNumber))]
