@@ -1,17 +1,40 @@
 ﻿namespace CSharp13Samples;
-// The implicit "from the end" index operator, ^, is now allowed in an object initializer expression. 
+
 // https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13#implicit-index-access
 internal class ImplicitIndexAccessSample
 {
     public static void MainTest()
     {
-        //int[] numbers =
-        //{
-        //    [^1] = 4,
-        //    [^2] = 3,
-        //    [^3] = 2,
-        //    [^4] = 1,
-        //};
-        //Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(numbers));
+        var a = new TestClass()
+        {
+            Numbers =
+            {
+                [0] = 3,
+                [^1] = 1
+            },
+            NumList =
+            {
+                [^1] = 2
+            }
+        };
+
+        Console.WriteLine(nameof(a.Numbers));
+        foreach (var item in a.Numbers)
+        {
+            Console.WriteLine(item);
+        }
+
+        Console.WriteLine(nameof(a.NumList));
+        foreach (var item in a.NumList)
+        {
+            Console.WriteLine(item);
+        }
     }
+}
+
+file sealed class TestClass
+{
+    public int[] Numbers { get; init; } = new int[3];
+
+    public List<int> NumList { get; init; } = new([1, 1, 2]);
 }
