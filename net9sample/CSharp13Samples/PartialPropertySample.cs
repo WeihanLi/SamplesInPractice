@@ -44,12 +44,8 @@ file partial class PartialPropertyClass
     /// Number comment on declaration
     /// </summary>
     public partial int Num { get; set; }
-}
 
-file partial class PartialPropertyClass
-{
     private int _num = 1;
-
     /// <summary>
     /// Number comment on implementation
     /// </summary>
@@ -60,10 +56,7 @@ file partial struct PartialPropertyStruct
 {
     [DisplayName("Number")]
     public partial int Num { get; }
-}
 
-file partial struct PartialPropertyStruct
-{
     [JsonPropertyName("num")]
     public partial int Num => 2;
 }
