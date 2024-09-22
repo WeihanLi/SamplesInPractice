@@ -69,6 +69,9 @@ file partial struct PartialPropertyStruct
 file partial class PartialIndexer
 {
     public partial string this[int index] { get; }
+}
 
+file partial class PartialIndexer
+{
     public partial string this[int index] { get => index.ToString(); }
 }
