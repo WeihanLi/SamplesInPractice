@@ -14,8 +14,8 @@
 // JsonSample.JsonSchemaExporterTest();
 
 // CSharp13Samples.ParamsCollectionSample();
-// CSharp13Samples.RefStructPerfTest();
-CSharp13Samples.ParamsSpanPerfTest();
+CSharp13Samples.RefStructPerfTest();
+// CSharp13Samples.ParamsSpanPerfTest();
 
 // LockSample.LockObjectPerfTest();
 

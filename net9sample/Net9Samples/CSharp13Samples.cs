@@ -54,15 +54,29 @@ public class RefStructInterfaceBenchmark
     [Benchmark(Baseline = true)]
     public int RefStructInterface()
     {
-        var age = new RefStructAge();
-        return age.GetAge();
+        var num = 0;
+        for (var i = 0; i < 10_000; i++)
+        {
+            Aggregate(ref num, new RefStructAge(1));
+        }
+        return num;
     }
 
     [Benchmark]
     public int ClassInterface()
     {
-        var age = new ClassAge();
-        return age.GetAge();
+        var num = 0;
+        for (var i = 0; i < 10_000; i++)
+        {
+            Aggregate(ref num, new ClassAge(1));
+        }
+        return num;
+    }
+
+    private static void Aggregate<T>(ref int init, T t)
+        where T : IAge, allows ref struct
+    {
+        init += t.GetAge();
     }
 }
 
@@ -71,12 +85,12 @@ internal interface IAge
     int GetAge();
 }
 
-internal ref struct RefStructAge : IAge
+internal readonly ref struct RefStructAge(int age) : IAge
 {
-    public int GetAge() => 1;
+    public int GetAge() => age;
 }
 
-internal sealed class ClassAge : IAge
+internal sealed class ClassAge(int age) : IAge
 {
-    public int GetAge() => 1;
+    public int GetAge() => age;
 }

@@ -5,9 +5,17 @@ internal static class RefStructInterfaceSample
 {
     public static void MainTest()
     {
-        var refStructAge = new RefStructAge();
+        var classAge = new ClassAge(1);
+        var structAge = new StructAge(1);
+        var refStructAge = new RefStructAge(1);
+
+        PrintAge0(classAge);
+        PrintAge0(structAge);
         // CS1503: Argument 1: cannot convert from 'CSharp13Samples.RefStructAge' to 'CSharp13Samples.IAge'
         // PrintAge0(refStructAge);
+
+        PrintAge(classAge);
+        PrintAge(structAge);
         PrintAge(refStructAge);
 
         int[] numbers = [1, 2, 3, 4];
@@ -41,8 +49,17 @@ internal static class RefStructInterfaceSample
     private static void PrintAge<TAge>(TAge age)
         where TAge : IAge, allows ref struct
     {
-        Console.WriteLine("GetAge {0}", age.GetAge());
-        Console.WriteLine("AgeNum {0}", age.AgeNum);
+        // CS8121: An expression of type 'TAge' cannot be handled by a pattern of type 'RefStructAge'
+        //if (age is RefStructAge refStructAge)
+        //
+        //if (typeof(TAge) == typeof(RefStructAge))
+        //{
+        // CS0030: Cannot convert type 'TAge' to 'CSharp13Samples.RefStructAge'
+        //_ = ((RefStructAge)age).GetAge();
+        //}
+
+        Console.WriteLine($"GetAge {age.GetAge()}");
+        Console.WriteLine($"AgeNum {age.AgeNum}");
     }
 }
 
@@ -50,7 +67,8 @@ internal ref struct ArrayEnumerator<T>(T[] items) : IEnumerator<T>
 {
     private int _idx = -1;
 
-    public T Current => _idx > -1 && _idx < items.Length ? items[_idx] : throw new InvalidOperationException("Current can be accessed only when MoveNext() returns true");
+    public T Current => _idx > -1 && _idx < items.Length
+        ? items[_idx] : throw new InvalidOperationException("Current can be accessed only when MoveNext() returns true");
 
     object? IEnumerator.Current => Current;
 
@@ -80,10 +98,20 @@ internal interface IAge
     int GetAge();
 }
 
-internal ref struct RefStructAge
-    : IAge
+internal readonly ref struct RefStructAge(int age) : IAge
 {
-    public int AgeNum => 1;
+    public int AgeNum => age;
+    public int GetAge() => AgeNum;
+}
 
+internal struct StructAge(int age) : IAge
+{
+    public int AgeNum => age;
+    public int GetAge() => AgeNum;
+}
+
+internal sealed class ClassAge(int age) : IAge
+{
+    public int AgeNum => age;
     public int GetAge() => AgeNum;
 }
