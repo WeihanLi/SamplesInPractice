@@ -55,8 +55,13 @@ file partial class PartialPropertyClass
 file partial struct PartialPropertyStruct
 {
     [DisplayName("Number")]
-    public partial int Num { get; }
-
+    public partial int Num
+    {
+        get;
+    }
+}
+file partial struct PartialPropertyStruct
+{
     [JsonPropertyName("num")]
     public partial int Num => 2;
 }
@@ -64,9 +69,6 @@ file partial struct PartialPropertyStruct
 file partial class PartialIndexer
 {
     public partial string this[int index] { get; }
-}
 
-file partial class PartialIndexer
-{
     public partial string this[int index] { get => index.ToString(); }
 }
