@@ -10,94 +10,125 @@ internal class ParamsCollectionSample
     // https://github.com/dotnet/csharplang/blob/main/proposals/params-span.md
     public static void MainTest()
     {
-        {
-            ParamsArrayMethod(1, 2, 3);
-            ParamsListMethod(1, 2, 3);
-            ParamsEnumerableMethod(1, 2, 3);
-
-            ParamsSpanMethod(1, 2, 3);
-            ParamsReadOnlySpanMethod(1, 2, 3);
-
-            ParamsCustomCollectionMethod(1, 2, 3);
-        }
-
+        ParamsCollectionsUseSamples();
         ConsoleHelper.ReadLineWithPrompt();
 
+        OverloadSamples();
+        ConsoleHelper.ReadLineWithPrompt();
+
+        Overload2Samples();
+        ConsoleHelper.ReadLineWithPrompt();
+
+        Overload3Samples();
+        ConsoleHelper.ReadLineWithPrompt();
+
+        Overload4Samples();
+        ConsoleHelper.ReadLineWithPrompt();
+
+        StringOverloadSamples();
+    }
+
+    public static void ParamsCollectionsUseSamples()
+    {
+        ParamsArrayMethod(1, 2, 3);
+        ParamsListMethod(1, 2, 3);
+        ParamsEnumerableMethod(1, 2, 3);
+
+        ParamsSpanMethod(1, 2, 3);
+        ParamsReadOnlySpanMethod(1, 2, 3);
+
+        ParamsCustomCollectionMethod(1, 2, 3);
+    }
+
+    public static void OverloadSamples()
+    {
+        ParamsCollectionTest.OverloadTest(1, 2, 3);
+        ParamsCollectionTest.OverloadTest([1, 2, 3]);
+        ParamsCollectionTest.OverloadTest(new[] { 1, 2, 3 });
+    }
+
+    public static void Overload2Samples()
+    {
+        ParamsCollectionTest.OverloadTest2(1, 2, 3);
+        ParamsCollectionTest.OverloadTest2([1, 2, 3]);
+        ParamsCollectionTest.OverloadTest2(new[] { 1, 2, 3 });
+    }
+
+    public static void Overload3Samples()
+    {
+        // CS0121: The call is ambiguous between the following methods or properties:
+        //     'ParamsCollectionTest.OverloadTest3(params int[])' and 'ParamsCollectionTest.OverloadTest3(params List<int>)'
+        ParamsCollectionTest.OverloadTest3(1, 2, 3);
+        ParamsCollectionTest.OverloadTest3([1, 2, 3]);
+        ParamsCollectionTest.OverloadTest3(new[] { 1, 2, 3 });
+        ParamsCollectionTest.OverloadTest3(new List<int> { 1, 2, 3 });
+        ParamsCollectionTest.OverloadTest3(Enumerable.Range(1, 3));
+    }
+
+    public static void Overload4Samples()
+    {
+        ParamsCollectionTest.OverloadTest4(1, 2, 3);
+        ParamsCollectionTest.OverloadTest4([1, 2, 3]);
+        ParamsCollectionTest.OverloadTest4(Enumerable.Range(1, 3));
+    }
+
+    public static void StringOverloadSamples()
+    {
+        ParamsCollectionTest.StringOverloadTest("Hello");
+        ParamsCollectionTest.StringOverloadTest('H', 'e', 'l', 'l', 'o');
+        ParamsCollectionTest.StringOverloadTest(['H', 'e', 'l', 'l', 'o']);
+        ParamsCollectionTest.StringOverloadTest("Hello".AsSpan());
+        ParamsCollectionTest.StringOverloadTest("Hello".ToCharArray());
+    }
+
+
+    private static void ParamsArrayMethod(params int[] array)
+    {
+        foreach (var item in array)
         {
-            ParamsCollectionTest.OverloadTest(1, 2, 3);
-            ParamsCollectionTest.OverloadTest([1, 2, 3]);
-            ParamsCollectionTest.OverloadTest(new[] { 1, 2, 3 });
-
-            ConsoleHelper.ReadLineWithPrompt();
-
-            ParamsCollectionTest.OverloadTest2(1, 2, 3);
-            ParamsCollectionTest.OverloadTest2([1, 2, 3]);
-            ParamsCollectionTest.OverloadTest2(new[] { 1, 2, 3 });
-
-            ConsoleHelper.ReadLineWithPrompt();
-
-            ParamsCollectionTest.OverloadTest3(1, 2, 3);
-            ParamsCollectionTest.OverloadTest3([1, 2, 3]);
-            ParamsCollectionTest.OverloadTest3(Enumerable.Range(1, 3));
-
-            ParamsCollectionTest.OverloadTest4(1, 2, 3);
-            ParamsCollectionTest.OverloadTest4([1, 2, 3]);
-            ParamsCollectionTest.OverloadTest4(Enumerable.Range(1, 3));
-
-            ParamsCollectionTest.StringOverloadTest("Hello");
-            ParamsCollectionTest.StringOverloadTest('H', 'e', 'l', 'l', 'o');
-            ParamsCollectionTest.StringOverloadTest(['H', 'e', 'l', 'l', 'o']);
-            ParamsCollectionTest.StringOverloadTest("Hello".AsSpan());
-            ParamsCollectionTest.StringOverloadTest("Hello".ToCharArray());
+            Console.WriteLine(item);
         }
+    }
 
-        void ParamsReadOnlySpanMethod(params ReadOnlySpan<int> collection)
+    private static void ParamsReadOnlySpanMethod(params ReadOnlySpan<int> collection)
+    {
+        foreach (var item in collection)
         {
-            foreach (var item in collection)
-            {
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(item);
         }
+    }
 
-        void ParamsSpanMethod(params Span<int> collection)
+    private static void ParamsSpanMethod(params Span<int> collection)
+    {
+        foreach (var item in collection)
         {
-            foreach (var item in collection)
-            {
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(item);
         }
+    }
 
-        void ParamsListMethod(params List<int> list)
+    private static void ParamsListMethod(params List<int> list)
+    {
+        foreach (var item in list)
         {
-            foreach (var item in list)
-            {
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(item);
         }
+    }
 
-        void ParamsEnumerableMethod(params IEnumerable<int> array)
+    private static void ParamsEnumerableMethod(params IEnumerable<int> array)
+    {
+        foreach (var item in array)
         {
-            foreach (var item in array)
-            {
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(item);
         }
+    }
 
-        void ParamsArrayMethod(params int[] array)
+    // custom collection expression
+    private static void ParamsCustomCollectionMethod(params CustomNumberCollection collection)
+    {
+        foreach (var item in collection)
         {
-            foreach (var item in array)
-            {
-                Console.WriteLine(item);
-            }
-        }
 
-        void ParamsCustomCollectionMethod(params CustomNumberCollection collection)
-        {
-            foreach (var item in collection)
-            {
-
-                Console.WriteLine(item);
-            }
+            Console.WriteLine(item);
         }
     }
 }
@@ -135,8 +166,7 @@ public class ParamsCollectionTest
         Console.WriteLine("Executing in Span method");
     }
 
-    // OverloadResolutionPriority not working so far(2024/06/22) https://github.com/dotnet/roslyn/issues/74067
-    [OverloadResolutionPriority(1)]
+    // [OverloadResolutionPriority(1)]
     public static void OverloadTest2(params int[] array)
     {
         Console.WriteLine("Executing in Array method");
@@ -152,15 +182,16 @@ public class ParamsCollectionTest
         Console.WriteLine("Executing in IEnumerable method");
     }
 
+    [OverloadResolutionPriority(1)]
     public static void OverloadTest3(params int[] array)
     {
         Console.WriteLine("Executing in Array method");
     }
 
-    //public static void OverloadTest3(params List<int> values)
-    //{
-    //    Console.WriteLine("Executing in List method");
-    //}
+    public static void OverloadTest3(params List<int> values)
+    {
+        Console.WriteLine("Executing in List method");
+    }
 
     public static void OverloadTest4(params IEnumerable<int> values)
     {
@@ -193,7 +224,7 @@ public class ParamsCollectionTest
 }
 
 [CollectionBuilder(typeof(CustomCollectionBuilder), nameof(CustomCollectionBuilder.CreateNumber))]
-file sealed class CustomNumberCollection : IEnumerable<int>
+internal sealed class CustomNumberCollection : IEnumerable<int>
 {
     public required int[] Numbers { get; init; }
     public IEnumerator<int> GetEnumerator()
