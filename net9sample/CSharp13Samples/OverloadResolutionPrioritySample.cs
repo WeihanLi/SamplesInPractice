@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace CSharp13Samples;
 internal static class OverloadResolutionPrioritySample
@@ -14,8 +15,13 @@ internal static class OverloadResolutionPrioritySample
         PrintNumbers(1, 2, 3);
         PrintNumbers([1, 2, 3]);
 
+        PrintNumbers1(numbers);
+        PrintNumbers1(numbersSpan);
+
         PrintNumbers1(1, 2, 3);
         PrintNumbers1([1, 2, 3]);
+
+        Debug.Assert(numbers.Length != numbersSpan.Length);
     }
 
 
