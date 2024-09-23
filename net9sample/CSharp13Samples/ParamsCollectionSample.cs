@@ -52,6 +52,7 @@ internal class ParamsCollectionSample
         ParamsCollectionTest.OverloadTest2(1, 2, 3);
         ParamsCollectionTest.OverloadTest2([1, 2, 3]);
         ParamsCollectionTest.OverloadTest2(new[] { 1, 2, 3 });
+        ParamsCollectionTest.OverloadTest2(Enumerable.Range(1, 3));
     }
 
     public static void Overload3Samples()
@@ -166,13 +167,13 @@ public class ParamsCollectionTest
         Console.WriteLine("Executing in Span method");
     }
 
-    // [OverloadResolutionPriority(1)]
     public static void OverloadTest2(params int[] array)
     {
         Console.WriteLine("Executing in Array method");
     }
 
-    public static void OverloadTest2(params ReadOnlySpan<int> span)
+    // [OverloadResolutionPriority(1)]
+    public static void OverloadTest2(params IEnumerable<int> span)
     {
         Console.WriteLine("Executing in Span method");
     }
