@@ -18,7 +18,7 @@ public static class EscapeCharSample
         Console.WriteLine((int)escapeChar);
         Console.WriteLine((int)unicodeEscapeChar);
 
-        // 
+        // ANSI Console: https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
         Console.WriteLine("\u001b[31mThis text has a red foreground using ANSI escape codes.\u001b[0m");
         Console.WriteLine("\e[31mThis text has a red foreground using ANSI escape codes.\e[0m");
     }
