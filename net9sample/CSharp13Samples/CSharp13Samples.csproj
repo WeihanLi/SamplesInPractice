@@ -6,17 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-  
+
   <ItemGroup>
-    <Using Include="Net9Samples" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
-    <PackageReference Include="OpenTelemetry.Exporter.Console" />
     <PackageReference Include="WeihanLi.Common" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="CSharp13Samples" />
   </ItemGroup>
 
 </Project>

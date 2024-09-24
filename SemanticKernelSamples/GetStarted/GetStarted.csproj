@@ -5,14 +5,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+<!--    <ErrorLog>errors.json,version=2.1</ErrorLog>-->
+    <WarningsAsErrors>$(WarningsAsErrors)</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="dotenv.net" />
     <PackageReference Include="Microsoft.ML" />
     <PackageReference Include="Microsoft.SemanticKernel" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Memory.Redis" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.MongoDB" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" />
   </ItemGroup>
 
   <ItemGroup>

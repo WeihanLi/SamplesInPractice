@@ -8,9 +8,16 @@
 // LruCacheSample.MainTest();
 
 // await PriorityChannelSample.MainTestAsync();
+// Base64UrlEncodeSample.MainTest();
+// GuidSample.MainTest();
+
+// JsonSample.JsonSchemaExporterTest();
 
 // CSharp13Samples.ParamsCollectionSample();
+// CSharp13Samples.RefStructPerfTest();
 // CSharp13Samples.ParamsSpanPerfTest();
-CSharp13Samples.PartialPropertyTest();
+LockSample.LockObjectPerfTest();
 
-Console.WriteLine("Hello World");
+// await RuntimeMetricsSample.RunAsync();
+
+// Console.WriteLine("Hello World");

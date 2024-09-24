@@ -6,7 +6,7 @@ dotnet publish IpMonitor.csproj -c Release -o out
 $destDir = Resolve-Path ".\out"
 $ipMonitorPath = "$destDir\IpMonitor.exe"
 
-Write-Output "Installing service... $ipMonitorPath $destDir"
+Write-Output "Installing service for $ipMonitorPath ..."
 New-Service $serviceName -BinaryPathName $ipMonitorPath
 Start-Service $serviceName
 Write-Output "Service $serviceName started"

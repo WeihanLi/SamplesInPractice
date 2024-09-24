@@ -1,31 +1,48 @@
 using dotenv.net;
-using Microsoft.SemanticKernel.Connectors.AI.OpenAI;
-using Microsoft.SemanticKernel.Plugins.Memory;
+using Microsoft.Extensions.Logging;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.SemanticKernel.Connectors.MongoDB;
+using Microsoft.SemanticKernel.Memory;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WeihanLi.Common;
 using WeihanLi.Common.Helpers;
+
+namespace GetStarted;
 
 public static class MemorySample
 {
     public static async Task MainTest()
     {
         DotEnv.Load();
-        var apiEndpoint = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_ENDPOINT"));
-        var apiKey = Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_API_KEY"));
+        var apiEndpoint = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_API_ENDPOINT"));
+        var deployment = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID"));
+        var apiKey = Guard.NotNullOrEmpty(EnvHelper.Val("AZURE_OPENAI_API_KEY"));
+        var mongoDbConn = Guard.NotNullOrEmpty(EnvHelper.Val("MONGODB_CONNECTION"));
 
+        var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddDefaultDelegateLogger());
         var memoryBuilder = new MemoryBuilder();
-        memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
-        memoryBuilder.WithMemoryStore(new Microsoft.SemanticKernel.Connectors.Memory.Redis.RedisMemoryStore("localhost:6379"));
-        memoryBuilder.WithAzureTextEmbeddingGenerationService(Guard.NotNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_OPENAI_TEXT_EMBEDDING_DEPLOY_ID")), apiEndpoint, apiKey);
+        // memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
+        memoryBuilder.WithMemoryStore(new MongoDBMemoryStore(mongoDbConn, "playground", "embedding"));
+        memoryBuilder.WithTextEmbeddingGeneration(new AzureOpenAITextEmbeddingGenerationService(
+            deployment, apiEndpoint, apiKey,
+            "text-embedding-small-003", null, loggerFactory, 256)
+        );
         var memory = memoryBuilder.Build();
-        var collectionName = "Azure-Products";
+        
+        var collectionName = "AzureProducts";
+                
         await using var fs = File.OpenRead("text-sample.json");
         var list = await JsonSerializer.DeserializeAsync<Product[]>(fs);
         Guard.NotNull(list);
-        foreach (var product in list)
+        var productFromMemory = await memory.GetAsync(collectionName, list[0].Title);
+        if (productFromMemory is null)
         {
-            await memory.SaveInformationAsync(collectionName, product.Description, product.Title, product.Description, product.Category);
+            foreach (var product in list)
+            {
+                await memory.SaveInformationAsync(collectionName, product.Description, product.Title, product.Description, product.Category);
+                Console.WriteLine($"[{product.Title}] saved");
+            }    
         }
 
         await ConsoleHelper.HandleInputLoopAsync(async input =>

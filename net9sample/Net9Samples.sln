@@ -5,18 +5,27 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net9Samples", "Net9Samples\Net9Samples.csproj", "{01F5FECE-606B-41B9-BFA3-53F04303AA12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharp13Samples", "CSharp13Samples\CSharp13Samples.csproj", "{0A344F2C-1F57-4CD4-B221-846A51CE3E14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{01F5FECE-606B-41B9-BFA3-53F04303AA12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{01F5FECE-606B-41B9-BFA3-53F04303AA12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01F5FECE-606B-41B9-BFA3-53F04303AA12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F5FECE-606B-41B9-BFA3-53F04303AA12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A344F2C-1F57-4CD4-B221-846A51CE3E14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A344F2C-1F57-4CD4-B221-846A51CE3E14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A344F2C-1F57-4CD4-B221-846A51CE3E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A344F2C-1F57-4CD4-B221-846A51CE3E14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {554451E8-764C-4818-98D6-EF6B99C1C137}
 	EndGlobalSection
 EndGlobal
