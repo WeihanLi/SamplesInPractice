@@ -34,10 +34,10 @@ void AddServices(IServiceCollection services)
     {
         services.AddLogging(logging =>
         {
-            Debug.Assert(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+            Debug.Assert(OperatingSystem.IsWindows());
             logging.AddEventLog(x=>
             {
-                Debug.Assert(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+                Debug.Assert(OperatingSystem.IsWindows());
                 x.SourceName = serviceName;
             });
         });
