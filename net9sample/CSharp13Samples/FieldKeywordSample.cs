@@ -1,9 +1,18 @@
-﻿using System.Runtime.Versioning;
+﻿namespace CSharp13Samples;
 
-namespace CSharp13Samples;
-
-[RequiresPreviewFeatures]
 internal static class FieldKeywordSample
 {
-    // public static string Name { get; set => value = field?.Trim(); }
+    public static string Name
+    { 
+        get;
+        // set => field = value?.Trim() ?? string.Empty;
+        set;
+    } = string.Empty;
+
+    public static void MainTest()
+    {
+        Name = " Hello ";
+        Console.WriteLine(Name);
+        Console.WriteLine(Name.Length);
+    }
 }
