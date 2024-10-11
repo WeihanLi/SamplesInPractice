@@ -5,8 +5,8 @@ internal static class RefUnsafeExtensionSample
     public static async Task MainTest()
     {
         // ref in async method
-        var age = 10;
-        ref int i = age;
+        // var age = 10;
+        // ref int i = age;
         await Task.CompletedTask;
     }
 
