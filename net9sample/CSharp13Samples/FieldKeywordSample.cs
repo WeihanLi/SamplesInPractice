@@ -40,3 +40,24 @@ internal static class FieldKeywordSample
         Console.WriteLine(Description.Length);
     }
 }
+
+file sealed class PropertySample
+{
+    public string? AutoName { get; set; }
+
+    private string? _name;
+    public string? Name
+    {
+        get => _name;
+        set => _name = value;
+    }
+
+    public string? Name2
+    {
+        get => field;
+        set => field = value;
+    }
+
+    public int Num { get => field > 0 ? field : 0; set; }
+    public int Num2 { get; set => field = value > 0 ? value : 0; }
+}

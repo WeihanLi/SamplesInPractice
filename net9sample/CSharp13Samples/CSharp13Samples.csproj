@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Using Include="CSharp13Samples" />
+    <Compile Remove="FieldKeywordSample.cs" />
   </ItemGroup>
 
 </Project>
