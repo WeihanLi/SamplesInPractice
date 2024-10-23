@@ -1,21 +1,14 @@
 ﻿using System;
 using WeihanLi.Common.Helpers;
+using NPOISample;
 
-namespace NPOISample
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            // RawNPOISample.BasicTest();
-            // RawNPOISample.PrepareWorkbookTest();
-            // RawNPOISample.ImportDataTest();
+// RawNPOISample.BasicTest();
+// RawNPOISample.PrepareWorkbookTest();
+// RawNPOISample.ImportDataTest();
 
-            InvokeHelper.OnInvokeException = Console.WriteLine;
-            InvokeHelper.TryInvoke(NPOIImageSample.MainTest);
+InvokeHelper.OnInvokeException = Console.WriteLine;
+// InvokeHelper.TryInvoke(NPOIImageSample.MainTest);
+InvokeHelper.TryInvoke(MultiSheetsSample.MainTest);
 
-            Console.WriteLine("Completed!");
-            Console.ReadLine();
-        }
-    }
-}
+Console.WriteLine("Completed!");
+Console.ReadLine();
