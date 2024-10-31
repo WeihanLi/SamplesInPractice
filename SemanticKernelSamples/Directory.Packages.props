@@ -3,12 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="dotenv.net" Version="3.2.0" />
+    <PackageVersion Include="dotenv.net" Version="3.2.1" />
     <PackageVersion Include="Microsoft.ML" Version="3.0.1" />
-    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.18.2" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.MongoDB" Version="1.18.2-alpha" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.18.2-alpha" />
-    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.18.2-alpha" />
-    <PackageVersion Include="WeihanLi.Common" Version="1.0.69" />
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.25.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Connectors.MongoDB" Version="1.25.0-preview" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.25.0-alpha" />
+    <PackageVersion Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.25.0-alpha" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.71" />
   </ItemGroup>
 </Project>
