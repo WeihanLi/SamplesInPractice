@@ -11,6 +11,8 @@ public static class DotnetConfAgendaCrawler
 {
     public static async Task MainTest()
     {
+        var pstTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
         var agendaHtml = await HttpHelper.HttpClient.GetStringAsync("https://dotnetconf.com/agenda");
         var htmlParser = new HtmlParser();
         var doc = await htmlParser.ParseDocumentAsync(agendaHtml);
@@ -56,11 +58,10 @@ public static class DotnetConfAgendaCrawler
                     ArgumentNullException.ThrowIfNull(startDateString);
                     var endDateString = dateElement?.GetAttribute(dataEndAttributeName);
                     ArgumentNullException.ThrowIfNull(endDateString);
-                    var pstOffset = TimeSpan.FromHours(-8);
-                    var startDate = new DateTimeOffset(DateTime.Parse(startDateString.Replace("PST", "").Trim()),
-                        pstOffset);
-                    var endDate = new DateTimeOffset(DateTime.Parse(endDateString.Replace("PST", "").Trim()),
-                        pstOffset);
+                    var pstStartDate = DateTime.Parse(startDateString.Replace("PST", "").Trim());
+                    var startDate = new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(pstStartDate, pstTimeZoneInfo), TimeSpan.Zero);
+                    var pstEndDate = DateTime.Parse(endDateString.Replace("PST", "").Trim());
+                    var endDate = new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(pstEndDate, pstTimeZoneInfo), TimeSpan.Zero);
                     var session = new SessionModel()
                     {
                         SessionId = Convert.ToInt32(sessionElement.GetAttribute(sessionIdAttributeName)),
@@ -214,7 +215,7 @@ file sealed class TranslationHelper
 
     public TranslationHelper()
     {
-        _httpClient = new HttpClient() { BaseAddress = new Uri("https://api.cognitive.microsofttranslator.com") };
+        _httpClient = new HttpClient { BaseAddress = new Uri("https://api.cognitive.microsofttranslator.com") };
         _apiKey = Environment.GetEnvironmentVariable("AZURE_TRANSLATOR_API_KEY");
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", _apiKey);
         _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Ocp-Apim-Subscription-Region", "southeastasia");
