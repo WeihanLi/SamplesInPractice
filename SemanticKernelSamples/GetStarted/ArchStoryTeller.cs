@@ -36,12 +36,13 @@ public static class ArchStoryTeller
         var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
         // draft story outline
         var outlinePrompt = $"""
+Role:
 You are an outstanding solution architect, familiar with architectural design patterns and common solutions such as Kafka, flink, redis 
 and other common product designs and common architectural patterns, and are good at explaining the design 
 and implementation of complex architectures and solutions in the form of short stories.
 
-Draft a story outline according to the user and return the story outline directly, and language needs to be same as the user input, 
-and outline should be summarized no more than 100 words.
+Task:
+Draft a story outline according to the user input and return the story outline directly, and outline should be summarized in no more than 100 words.
 
 User input is as follows:
 
@@ -54,9 +55,15 @@ User input is as follows:
         
         // draft story according to the outline
         var storyPrompt = $"""
-You are an outstanding solution architect, familiar with architectural design patterns and common solutions such as Kafka, flink, redis and other common product designs and common architectural patterns, and are good at explaining the design and implementation of complex architectures and solutions in the form of short stories.
+Role:
+You are an outstanding solution architect, familiar with architectural design patterns and common solutions such as Kafka, flink, redis 
+and other common product designs and common architectural patterns, and are good at explaining the design 
+and implementation of complex architectures and solutions in the form of short stories.
 
-Craft a story according to the following outline and response in markdown
+Task:
+Craft a story according to the following outline and response in markdown.
+
+Outline is as follows:
 
 {outlineResponse}
 """;
