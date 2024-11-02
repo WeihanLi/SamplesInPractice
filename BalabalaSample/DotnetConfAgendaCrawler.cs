@@ -87,11 +87,12 @@ public static class DotnetConfAgendaCrawler
         
         var sessionsJson = JsonConvert.SerializeObject(sessions, Formatting.Indented);
         Console.WriteLine(sessionsJson);
-        await File.WriteAllTextAsync("dotnetconf2023-agenda.json", sessionsJson);
+        var year = DateTimeOffset.Now.Year.ToString();
+        await File.WriteAllTextAsync($"dotnetconf{year}-agenda.json", sessionsJson);
         //
         var markdownSnippets = string.Join(Environment.NewLine, sessions.Select(x => x.GetMarkdownSnippet()));
         Console.WriteLine(markdownSnippets);
-        await File.WriteAllTextAsync("dotnetconf2023-agenda.md", markdownSnippets);
+        await File.WriteAllTextAsync($"dotnetconf{year}-agenda.md", markdownSnippets);
     }
 }
 
