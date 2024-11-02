@@ -748,5 +748,185 @@
     "Title": "Next-gen SQL projects with Microsoft.Build.Sql",
     "Speaker": "Drew Skwiers-Koballa",
     "Description": "Your database objects are stored as code for development in Visual Studio or VS Code with Microsoft.Build.Sql SDK-style SQL projects, but the advantages don’t stop there. SQL code analysis and other build-time tests can validate database code quality and correctness during continuous integration of code changes. With SQL projects delivering database object updates is easier and more reliable whether you're managing one database or a fleet of databases because the deployment plan is dynamically calculated through the SqlPackage CLI. In this session we’ll learn how to develop and deploy your database alongside your app components with SQL projects from the IDE to CI/CD."
+  },
+  {
+    "SessionId": 76,
+    "BeginDateTime": "2024-11-15T08:00:00-08:00",
+    "EndDateTime": "2024-11-15T08:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T00:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T00:30:00Z",
+    "Title": "Build intelligent apps on .NET using Azure Communication Services",
+    "Speaker": "Milan Kaur",
+    "Description": "In this session, we will cover the details of building intelligent communication applications using .NET. Attendees will explore how to leverage the latest features of Azure Communication Services and Azure Open AI to create robust and scalable communication apps on .NET. We will cover how to add messaging channels such as SMS, WhatsApp and audio video capabilities into your AI apps using the latest gpt models."
+  },
+  {
+    "SessionId": 77,
+    "BeginDateTime": "2024-11-15T08:30:00-08:00",
+    "EndDateTime": "2024-11-15T09:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T00:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T01:00:00Z",
+    "Title": "Secure intelligent apps with .NET 9 on App Service",
+    "Speaker": "Jeff Martinez",
+    "Description": "Make secure calls to Azure OpenAI from a .NET 9 app hosted on App Service"
+  },
+  {
+    "SessionId": 78,
+    "BeginDateTime": "2024-11-15T09:00:00-08:00",
+    "EndDateTime": "2024-11-15T09:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T01:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T01:30:00Z",
+    "Title": "Beyond GitHub Copilot Tips and Tricks",
+    "Speaker": "April Yoho",
+    "Description": "In this session April will take you beyond simple prompts with GitHub Copilot. We will look at how to build a testing suite for your .NET code and follow the journey alongside GitHub Copilot from beginning to end. \r\nWe'll also explore the end to end capability of GitHub Copilot workspaces and how it can help with the start of an issue, through to planning and delivery. A true DevOps copilot when developing your .NET code!"
+  },
+  {
+    "SessionId": 79,
+    "BeginDateTime": "2024-11-15T09:30:00-08:00",
+    "EndDateTime": "2024-11-15T10:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T01:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T02:00:00Z",
+    "Title": "Smart UI Powered by AI 🚀",
+    "Speaker": "Sam Basu",
+    "Description": "It is the age of AI and there are some big opportunities for .NET developers - infuse apps with solutions powered by Generative AI and Large Language Models (LLMs), as well as, boost developer productivity. \r\n\r\n.NET client apps can benefit from AI-powered Smart UI Components, like AI Prompts, Smart Grid/ComboBox search with Local Embeddings and searching/manipulating PDFs with Semantic search. Enterprise workflows often require working with desktop apps and document processing - rich text editing could make users productive with AI-powered completions, while spreadsheets could perform formulations/automations. Web developers could dynamically style web UI components with AI-powered theming or get contextual assistance while writing Blazor code in a browser REPL. Towards developer productivity, GitHub Copilot could be extended with custom chat agents to preserve developer context and get deeply contextual code completions, powered by documentation RAG. Let's explore what's next for AI-powered .NET UI towards wonderful UX and optimized developer productivity tools."
+  },
+  {
+    "SessionId": 80,
+    "BeginDateTime": "2024-11-15T10:00:00-08:00",
+    "EndDateTime": "2024-11-15T10:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T02:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T02:30:00Z",
+    "Title": "Deep dive on native AOT",
+    "Speaker": "Michal Strehovský",
+    "Description": "Native AOT has been part of .NET since .NET 7. With each release we're extending the areas where it can be used. From console apps in .NET 7, through ASP.NET web APIs in .NET 8, to MAUI in .NET 9. It is your best bet if you need your .NET app to start fast and use as little memory as possible.\r\n\r\nBut how does native AOT actually work? Why does it start so fast? How can we fit an entire .NET runtime, the base class libraries, and your code in a 1 MB executable file?\r\n\r\nIn this talk we'll peek into the internal workings of native AOT compilation and look at what it does at run time."
+  },
+  {
+    "SessionId": 81,
+    "BeginDateTime": "2024-11-15T10:30:00-08:00",
+    "EndDateTime": "2024-11-15T11:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T02:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T03:00:00Z",
+    "Title": "Create great MIDI 2.0 apps using Windows MIDI Services and C#",
+    "Speaker": "Pete Brown",
+    "Description": "The open source Windows MIDI Services project (https://aka.ms/midi) is nearing its first consumer release, and is getting ready to be in-boxed in Windows. In this session, learn about what the new MIDI stack brings, and then learn how to use the developer preview bits available today to create MIDI 2.0 and MIDI 1.0 apps for Windows, including virtual devices, USB, and more, all using C#."
+  },
+  {
+    "SessionId": 82,
+    "BeginDateTime": "2024-11-15T11:00:00-08:00",
+    "EndDateTime": "2024-11-15T11:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T03:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T03:30:00Z",
+    "Title": "What’s New in .NET 9 for Data Access: From Document DBs to Vector DBs",
+    "Speaker": "Luis Quintanilla, Jiří Činčura",
+    "Description": "This session will provide an in-depth look at the new data access features in .NET 9, focusing on the seamless integration of Document DB Providers like MongoDB, and the cutting-edge capabilities of Vector Databases including Azure SQL, Qdrant, Pinecone, and many others. We’ll also cover the new vector search abstractions for advanced data queries. Learn how these updates can streamline your data workflows and enable more efficient and scalable application development."
+  },
+  {
+    "SessionId": 83,
+    "BeginDateTime": "2024-11-15T11:30:00-08:00",
+    "EndDateTime": "2024-11-15T12:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T03:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T04:00:00Z",
+    "Title": "Audit Like a Pro: Securing Your NuGet Packages",
+    "Speaker": "Jon Douglas, Andy Zivkovic",
+    "Description": "In this session, we will explore the importance of regularly auditing your NuGet dependencies to identify and address potential security vulnerabilities. You will learn how to use various tools and techniques to scan your dependencies, understand common vulnerabilities, and take proactive steps to secure your .NET projects. By the end of this session, you'll be equipped with practical strategies to ensure your code remains secure and up-to-date in an ever-evolving threat landscape."
+  },
+  {
+    "SessionId": 84,
+    "BeginDateTime": "2024-11-15T12:00:00-08:00",
+    "EndDateTime": "2024-11-15T12:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T04:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T04:30:00Z",
+    "Title": "\"Intelligenize\" your WinForms Apps for an amazing new customer experience!",
+    "Speaker": "Klaus Loeffelman",
+    "Description": "WinForms has been a cornerstone of countless mature LOB applications for nearly 30 years, encapsulating critical domain knowledge. They are the perfect candidates for retrofitting AI- and LLM support, but: modernizing such systems in a feasible way excludes starting from scratch - \"intelligenizing\" existing functionalities is the efficient way to go.\r\n\r\nLet's explore how the new .NET 9 features can support you to combine AI/LLMs into your existing LOB to achieve stunning results in minutes. Join us to discover new AI tricks for even the most mature dog and take your WinForms LOB apps to the next level!\r\n\r\nHighlights:\r\n\r\n* Combine WinForms components with Semantic Kernel\r\n* The Speak-German-in-just-2-Minutes AI-WinForms App! Seriously! Would I lie to you? 😊\r\n* Discover the next level: Intelligent Assistant UI Controls for LOB Apps\r\n* Write graphic-rich, high-performance chat-assistant controls with WinForms Blazor Hybrid"
+  },
+  {
+    "SessionId": 85,
+    "BeginDateTime": "2024-11-15T12:30:00-08:00",
+    "EndDateTime": "2024-11-15T13:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T04:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T05:00:00Z",
+    "Title": "Exploring the New Fluent UI Blazor Library: Next-Gen Web Components and Architectural Innovations",
+    "Speaker": "Vincent Baaij, Denis Voituron",
+    "Description": "Join us for an in-depth session on the upcoming new major version of the Fluent UI Blazor library, which introduces cutting-edge Web Components and significant architectural changes. This session will cover:\r\n- Overview of New Features: Discover the enhancements in the new Fluent UI Blazor library, including updated Web Components \r\n- Architectural Changes:  Learn about the major architectural shifts that improve performance, scalability, and maintainability. \r\n- Migration Guide: Yes, there will be a lot of breaking changes! But we will guide you with practical tips and best practices for migrating your existing projects to the new version\r\n- Hands-On Demos: See the new features in action with live coding demonstrations."
+  },
+  {
+    "SessionId": 86,
+    "BeginDateTime": "2024-11-15T13:00:00-08:00",
+    "EndDateTime": "2024-11-15T13:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T05:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T05:30:00Z",
+    "Title": "The force is strong in LLMs - building an open source Star Wars inspired copilot in .NET",
+    "Speaker": "Jim Bennett",
+    "Description": "In the Star Wars universe, many pilots have an astromech copilot. Luke had R2-D2 in the back of his X-Wing for example. As developers, we too have copilots. Although these are not as cool as R2, and don’t help us blow up the Death Star, they do help us with our day to day tasks like writing code.\r\n\r\nWhilst copilots can be boring, Jim thought it would be fun to create one inspired by Star Wars to help him with important tasks, such as describing his Lego collection (Star Wars Lego of course), and helping him write code, all done in the style of a Jedi.\r\n\r\nIn this session, Jim will walk you through the steps to build your own copilot, using the Pieces .NET SDK. By leveraging this SDK, your copilot can not only access an LLM of your choice from a range of cloud and on-device models such as Microsoft Phi and OpenAI GPT-4o, but you can also add assets to your chat’s context, such as code, documents, and plans for the Death Star. And just like a Jedi can sense the living force, this copilot can sense your presence and answer questions without needing additional documentation, such as summarizing your research on Wookiepedia. And best of all, reply like Yoda, it can!\r\n\r\nBy the end of this session, you will be able to complete your apprenticeship and build your own open source AI copilot."
+  },
+  {
+    "SessionId": 87,
+    "BeginDateTime": "2024-11-15T13:30:00-08:00",
+    "EndDateTime": "2024-11-15T14:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T05:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T06:00:00Z",
+    "Title": "Boosting WPF Performance - Upcoming Improvements",
+    "Speaker": "Ashish Kumar Singh",
+    "Description": "This talk will focus on performance improvements in WPF DataGrid and other areas in WPF. We will be exploring the work in progress and improvements lined up in WPF for upcoming .NET releases. Join us to learn how to take full advantage of the performance enhancements in WPF and deliver responsive, high-performing applications."
+  },
+  {
+    "SessionId": 88,
+    "BeginDateTime": "2024-11-15T14:00:00-08:00",
+    "EndDateTime": "2024-11-15T14:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T06:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T06:30:00Z",
+    "Title": "Infuse AI in your Windows apps with .NET",
+    "Speaker": "Nikola Metulev, Alexandre Zollinger Chohfi",
+    "Description": "Join us for a demo packed session where you will learn what you can do with AI on Windows and how to add AI based features to your Windows apps to delight and empower your users. With Windows Copilot Runtime, developers can leverage APIs backed by on-device models such as Phi Silica and use frameworks and tools to leverage the latest open source or proprietary models locally within their apps"
+  },
+  {
+    "SessionId": 89,
+    "BeginDateTime": "2024-11-15T14:30:00-08:00",
+    "EndDateTime": "2024-11-15T15:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T06:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T07:00:00Z",
+    "Title": "Build .NET applications from the Cloud with Microsoft Dev Box and Visual Studio",
+    "Speaker": "Sebastian Hernandez, Vedha Ranganathan",
+    "Description": "Discover how Microsoft engineers have revolutionized their .NET development with Microsoft Dev Box and Visual Studio. Learn how they have streamlined their development processes using various task-focused cloud development tools. Gain practical insights into coding, testing, and deploying applications from the cloud, and explore the latest and most advanced features of Visual Studio and Dev Box."
+  },
+  {
+    "SessionId": 90,
+    "BeginDateTime": "2024-11-15T15:00:00-08:00",
+    "EndDateTime": "2024-11-15T15:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T07:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T07:30:00Z",
+    "Title": "How Fidelity uses .NET MAUI for Cross-platform desktop",
+    "Speaker": "David Ortinau, Matthew Faust, Kevin Bieri",
+    "Description": "Kevin and Matthew join us from Fidelity to share their experiences and successes using .NET MAUI to power the next generation of their Active Trader Pro desktop client. We'll get into:\r\n\r\nOptimizing UI Dispatch for MAUI Applications\r\nWebView Pooling and Optimizations for OSX and Windows\r\nMDI multi-window desktop interfaces\r\nControlled Initialization and Shutdown sequences for MAUI\r\nDynamic Context Menus"
+  },
+  {
+    "SessionId": 91,
+    "BeginDateTime": "2024-11-15T15:30:00-08:00",
+    "EndDateTime": "2024-11-15T16:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T07:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T08:00:00Z",
+    "Title": "AI at the Edge with Meadow and .NET",
+    "Speaker": "Adrian Stevens",
+    "Description": "Explore the intersection of AI and edge computing with Meadow and .NET. This talk delves into implementing TensorFlow Lite for Microcontrollers on the Meadow F7, empowering developers to run machine learning models directly on microcontrollers. We'll also examine innovative AI sensors from companies like Useful Sensors, such as the Tiny Code Reader and Person Sensor, which offer plug-and-play AI functionalities. Join us to learn how to harness these tools to create intelligent, efficient, and responsive edge devices."
+  },
+  {
+    "SessionId": 92,
+    "BeginDateTime": "2024-11-15T16:00:00-08:00",
+    "EndDateTime": "2024-11-15T16:30:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T08:00:00Z",
+    "EndDateTimeInCST": "2024-11-16T08:30:00Z",
+    "Title": "MVVM Building Blocks for WinUI and WPF Development",
+    "Speaker": "Michael Hawker, Sergio Pedri",
+    "Description": "Embark with us on a hands-on journey to acquire the foundational elements of modern Windows app development. We'll show you how XAML, Data Binding, and MVVM come together to empower your development process, increase agility, and simplify your codebase!\r\n\r\nYou'll end up with the essential skills to start crafting applications with WinUI or WPF and empower yourself to create robust, scalable, and maintainable Windows applications."
+  },
+  {
+    "SessionId": 93,
+    "BeginDateTime": "2024-11-15T16:30:00-08:00",
+    "EndDateTime": "2024-11-15T17:00:00-08:00",
+    "BeginDateTimeInCST": "2024-11-16T08:30:00Z",
+    "EndDateTimeInCST": "2024-11-16T09:00:00Z",
+    "Title": "Easy CQRS with Data API builder and SQL Server",
+    "Speaker": "Jerry Nixon",
+    "Description": "CQRS can feel complicated, but it doesn’t have to be. In this session, we'll show you how to implement CQRS effortlessly using Data API builder and SQL Server. By separating your read and write operations, you’ll boost performance, scalability, and maintainability. You'll see how to set up a scalable, secure API with REST & GraphQL endpoints—no code required. Whether you’re working in the cloud or on-prem, we’ll help you streamline your architecture and speed up your development process."
   }
 ]

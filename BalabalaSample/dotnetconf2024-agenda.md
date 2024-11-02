@@ -692,3 +692,181 @@ Wield the power of over 25 years of C++ native libraries within .NET, using C#'s
 **Drew Skwiers-Koballa**
 
 Your database objects are stored as code for development in Visual Studio or VS Code with Microsoft.Build.Sql SDK-style SQL projects, but the advantages don’t stop there. SQL code analysis and other build-time tests can validate database code quality and correctness during continuous integration of code changes. With SQL projects delivering database object updates is easier and more reliable whether you're managing one database or a fleet of databases because the deployment plan is dynamically calculated through the SqlPackage CLI. In this session we’ll learn how to develop and deploy your database alongside your app components with SQL projects from the IDE to CI/CD.
+
+### Build intelligent apps on .NET using Azure Communication Services
+
+> 2024-11-16 00:00 -- 00:30
+
+**Milan Kaur**
+
+In this session, we will cover the details of building intelligent communication applications using .NET. Attendees will explore how to leverage the latest features of Azure Communication Services and Azure Open AI to create robust and scalable communication apps on .NET. We will cover how to add messaging channels such as SMS, WhatsApp and audio video capabilities into your AI apps using the latest gpt models.
+
+### Secure intelligent apps with .NET 9 on App Service
+
+> 2024-11-16 00:30 -- 01:00
+
+**Jeff Martinez**
+
+Make secure calls to Azure OpenAI from a .NET 9 app hosted on App Service
+
+### Beyond GitHub Copilot Tips and Tricks
+
+> 2024-11-16 01:00 -- 01:30
+
+**April Yoho**
+
+In this session April will take you beyond simple prompts with GitHub Copilot. We will look at how to build a testing suite for your .NET code and follow the journey alongside GitHub Copilot from beginning to end. 
+We'll also explore the end to end capability of GitHub Copilot workspaces and how it can help with the start of an issue, through to planning and delivery. A true DevOps copilot when developing your .NET code!
+
+### Smart UI Powered by AI 🚀
+
+> 2024-11-16 01:30 -- 02:00
+
+**Sam Basu**
+
+It is the age of AI and there are some big opportunities for .NET developers - infuse apps with solutions powered by Generative AI and Large Language Models (LLMs), as well as, boost developer productivity. 
+
+.NET client apps can benefit from AI-powered Smart UI Components, like AI Prompts, Smart Grid/ComboBox search with Local Embeddings and searching/manipulating PDFs with Semantic search. Enterprise workflows often require working with desktop apps and document processing - rich text editing could make users productive with AI-powered completions, while spreadsheets could perform formulations/automations. Web developers could dynamically style web UI components with AI-powered theming or get contextual assistance while writing Blazor code in a browser REPL. Towards developer productivity, GitHub Copilot could be extended with custom chat agents to preserve developer context and get deeply contextual code completions, powered by documentation RAG. Let's explore what's next for AI-powered .NET UI towards wonderful UX and optimized developer productivity tools.
+
+### Deep dive on native AOT
+
+> 2024-11-16 02:00 -- 02:30
+
+**Michal Strehovský**
+
+Native AOT has been part of .NET since .NET 7. With each release we're extending the areas where it can be used. From console apps in .NET 7, through ASP.NET web APIs in .NET 8, to MAUI in .NET 9. It is your best bet if you need your .NET app to start fast and use as little memory as possible.
+
+But how does native AOT actually work? Why does it start so fast? How can we fit an entire .NET runtime, the base class libraries, and your code in a 1 MB executable file?
+
+In this talk we'll peek into the internal workings of native AOT compilation and look at what it does at run time.
+
+### Create great MIDI 2.0 apps using Windows MIDI Services and C#
+
+> 2024-11-16 02:30 -- 03:00
+
+**Pete Brown**
+
+The open source Windows MIDI Services project (https://aka.ms/midi) is nearing its first consumer release, and is getting ready to be in-boxed in Windows. In this session, learn about what the new MIDI stack brings, and then learn how to use the developer preview bits available today to create MIDI 2.0 and MIDI 1.0 apps for Windows, including virtual devices, USB, and more, all using C#.
+
+### What’s New in .NET 9 for Data Access: From Document DBs to Vector DBs
+
+> 2024-11-16 03:00 -- 03:30
+
+**Luis Quintanilla, Jiří Činčura**
+
+This session will provide an in-depth look at the new data access features in .NET 9, focusing on the seamless integration of Document DB Providers like MongoDB, and the cutting-edge capabilities of Vector Databases including Azure SQL, Qdrant, Pinecone, and many others. We’ll also cover the new vector search abstractions for advanced data queries. Learn how these updates can streamline your data workflows and enable more efficient and scalable application development.
+
+### Audit Like a Pro: Securing Your NuGet Packages
+
+> 2024-11-16 03:30 -- 04:00
+
+**Jon Douglas, Andy Zivkovic**
+
+In this session, we will explore the importance of regularly auditing your NuGet dependencies to identify and address potential security vulnerabilities. You will learn how to use various tools and techniques to scan your dependencies, understand common vulnerabilities, and take proactive steps to secure your .NET projects. By the end of this session, you'll be equipped with practical strategies to ensure your code remains secure and up-to-date in an ever-evolving threat landscape.
+
+### "Intelligenize" your WinForms Apps for an amazing new customer experience!
+
+> 2024-11-16 04:00 -- 04:30
+
+**Klaus Loeffelman**
+
+WinForms has been a cornerstone of countless mature LOB applications for nearly 30 years, encapsulating critical domain knowledge. They are the perfect candidates for retrofitting AI- and LLM support, but: modernizing such systems in a feasible way excludes starting from scratch - "intelligenizing" existing functionalities is the efficient way to go.
+
+Let's explore how the new .NET 9 features can support you to combine AI/LLMs into your existing LOB to achieve stunning results in minutes. Join us to discover new AI tricks for even the most mature dog and take your WinForms LOB apps to the next level!
+
+Highlights:
+
+* Combine WinForms components with Semantic Kernel
+* The Speak-German-in-just-2-Minutes AI-WinForms App! Seriously! Would I lie to you? 😊
+* Discover the next level: Intelligent Assistant UI Controls for LOB Apps
+* Write graphic-rich, high-performance chat-assistant controls with WinForms Blazor Hybrid
+
+### Exploring the New Fluent UI Blazor Library: Next-Gen Web Components and Architectural Innovations
+
+> 2024-11-16 04:30 -- 05:00
+
+**Vincent Baaij, Denis Voituron**
+
+Join us for an in-depth session on the upcoming new major version of the Fluent UI Blazor library, which introduces cutting-edge Web Components and significant architectural changes. This session will cover:
+- Overview of New Features: Discover the enhancements in the new Fluent UI Blazor library, including updated Web Components 
+- Architectural Changes:  Learn about the major architectural shifts that improve performance, scalability, and maintainability. 
+- Migration Guide: Yes, there will be a lot of breaking changes! But we will guide you with practical tips and best practices for migrating your existing projects to the new version
+- Hands-On Demos: See the new features in action with live coding demonstrations.
+
+### The force is strong in LLMs - building an open source Star Wars inspired copilot in .NET
+
+> 2024-11-16 05:00 -- 05:30
+
+**Jim Bennett**
+
+In the Star Wars universe, many pilots have an astromech copilot. Luke had R2-D2 in the back of his X-Wing for example. As developers, we too have copilots. Although these are not as cool as R2, and don’t help us blow up the Death Star, they do help us with our day to day tasks like writing code.
+
+Whilst copilots can be boring, Jim thought it would be fun to create one inspired by Star Wars to help him with important tasks, such as describing his Lego collection (Star Wars Lego of course), and helping him write code, all done in the style of a Jedi.
+
+In this session, Jim will walk you through the steps to build your own copilot, using the Pieces .NET SDK. By leveraging this SDK, your copilot can not only access an LLM of your choice from a range of cloud and on-device models such as Microsoft Phi and OpenAI GPT-4o, but you can also add assets to your chat’s context, such as code, documents, and plans for the Death Star. And just like a Jedi can sense the living force, this copilot can sense your presence and answer questions without needing additional documentation, such as summarizing your research on Wookiepedia. And best of all, reply like Yoda, it can!
+
+By the end of this session, you will be able to complete your apprenticeship and build your own open source AI copilot.
+
+### Boosting WPF Performance - Upcoming Improvements
+
+> 2024-11-16 05:30 -- 06:00
+
+**Ashish Kumar Singh**
+
+This talk will focus on performance improvements in WPF DataGrid and other areas in WPF. We will be exploring the work in progress and improvements lined up in WPF for upcoming .NET releases. Join us to learn how to take full advantage of the performance enhancements in WPF and deliver responsive, high-performing applications.
+
+### Infuse AI in your Windows apps with .NET
+
+> 2024-11-16 06:00 -- 06:30
+
+**Nikola Metulev, Alexandre Zollinger Chohfi**
+
+Join us for a demo packed session where you will learn what you can do with AI on Windows and how to add AI based features to your Windows apps to delight and empower your users. With Windows Copilot Runtime, developers can leverage APIs backed by on-device models such as Phi Silica and use frameworks and tools to leverage the latest open source or proprietary models locally within their apps
+
+### Build .NET applications from the Cloud with Microsoft Dev Box and Visual Studio
+
+> 2024-11-16 06:30 -- 07:00
+
+**Sebastian Hernandez, Vedha Ranganathan**
+
+Discover how Microsoft engineers have revolutionized their .NET development with Microsoft Dev Box and Visual Studio. Learn how they have streamlined their development processes using various task-focused cloud development tools. Gain practical insights into coding, testing, and deploying applications from the cloud, and explore the latest and most advanced features of Visual Studio and Dev Box.
+
+### How Fidelity uses .NET MAUI for Cross-platform desktop
+
+> 2024-11-16 07:00 -- 07:30
+
+**David Ortinau, Matthew Faust, Kevin Bieri**
+
+Kevin and Matthew join us from Fidelity to share their experiences and successes using .NET MAUI to power the next generation of their Active Trader Pro desktop client. We'll get into:
+
+Optimizing UI Dispatch for MAUI Applications
+WebView Pooling and Optimizations for OSX and Windows
+MDI multi-window desktop interfaces
+Controlled Initialization and Shutdown sequences for MAUI
+Dynamic Context Menus
+
+### AI at the Edge with Meadow and .NET
+
+> 2024-11-16 07:30 -- 08:00
+
+**Adrian Stevens**
+
+Explore the intersection of AI and edge computing with Meadow and .NET. This talk delves into implementing TensorFlow Lite for Microcontrollers on the Meadow F7, empowering developers to run machine learning models directly on microcontrollers. We'll also examine innovative AI sensors from companies like Useful Sensors, such as the Tiny Code Reader and Person Sensor, which offer plug-and-play AI functionalities. Join us to learn how to harness these tools to create intelligent, efficient, and responsive edge devices.
+
+### MVVM Building Blocks for WinUI and WPF Development
+
+> 2024-11-16 08:00 -- 08:30
+
+**Michael Hawker, Sergio Pedri**
+
+Embark with us on a hands-on journey to acquire the foundational elements of modern Windows app development. We'll show you how XAML, Data Binding, and MVVM come together to empower your development process, increase agility, and simplify your codebase!
+
+You'll end up with the essential skills to start crafting applications with WinUI or WPF and empower yourself to create robust, scalable, and maintainable Windows applications.
+
+### Easy CQRS with Data API builder and SQL Server
+
+> 2024-11-16 08:30 -- 09:00
+
+**Jerry Nixon**
+
+CQRS can feel complicated, but it doesn’t have to be. In this session, we'll show you how to implement CQRS effortlessly using Data API builder and SQL Server. By separating your read and write operations, you’ll boost performance, scalability, and maintainability. You'll see how to set up a scalable, secure API with REST & GraphQL endpoints—no code required. Whether you’re working in the cloud or on-prem, we’ll help you streamline your architecture and speed up your development process.
