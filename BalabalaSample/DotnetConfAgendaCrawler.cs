@@ -148,7 +148,7 @@ file sealed class GroupModel
     }
 }
 
-file sealed class SessionModel : IComparable, IComparable<SessionModel>
+public sealed class SessionModel : IComparable, IComparable<SessionModel>
 {
     public required int SessionId { get; init; }
     public required DateTimeOffset BeginDateTime { get; init; }

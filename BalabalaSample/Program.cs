@@ -11,6 +11,7 @@ InvokeHelper.OnInvokeException = ex => ConsoleHelper.WriteLineWithColor(ex.ToStr
 
 // ParamsSample.MainTest();
 
-await InvokeHelper.TryInvokeAsync(DotnetConfAgendaCrawler.MainTest);
+// await InvokeHelper.TryInvokeAsync(DotnetConfAgendaCrawler.MainTest);
+await InvokeHelper.TryInvokeAsync(DotnetConfAgendaAnalyzer.RunAsync);
 
 ConsoleHelper.ReadKeyWithPrompt();
