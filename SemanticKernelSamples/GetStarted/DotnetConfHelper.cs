@@ -24,8 +24,8 @@ public static class DotnetConfHelper
         var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddDefaultDelegateLogger());
         var textEmbeddingService = new AzureOpenAITextEmbeddingGenerationService(embeddingDeployId, apiEndpoint, apiKey, loggerFactory: loggerFactory);
         
-        var filePath = "dotnetconf2023-agenda.json";
-        var filePathWithEmbeddings = "dotnetconf2023-agenda-with-embeddings.json";
+        var filePath = "dotnetconf2024-agenda.json";
+        var filePathWithEmbeddings = "dotnetconf2024-agenda-with-embeddings.json";
         Session[] sessions;
         if (File.Exists(filePathWithEmbeddings))
         {
@@ -109,7 +109,7 @@ public static class DotnetConfHelper
                              You are a helpful assistant who is good at finding common ground in summarize in short words, 
                              please find out what the following session topics have in common, and returns in one or two words directly,
                              `.NET`/`dotnet` should not be a valid words
-                             for example: `Blazor` etc
+                             for example: `Blazor`,`NuGet`, `MAUI` etc
                              ===== topics =====
                              {sessionCollection.Take(5).Select(x=> $"{x.Title}: {x.Description}").StringJoin($"{Environment.NewLine}==={Environment.NewLine}")}
                              """;
