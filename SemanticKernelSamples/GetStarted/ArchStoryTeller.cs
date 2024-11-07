@@ -24,11 +24,7 @@ public static class ArchStoryTeller
         var topic = ConsoleHelper.ReadLineWithPrompt("Please provide a topic") ?? "Http Server Response Compression";
 
         // generate image according to the topic and outline
-        var imagePrompt = $"""
-                           Generate a cover image according to the following story topic or outline, and the image is for technical developers
-
-                           {topic}
-                           """;
+        var imagePrompt = $"Generate a cover image according to the topic  ```{topic}```, and the image is for technical developers, be technical and interesting";
         var textToImageService = kernel.GetRequiredService<ITextToImageService>();
         var imageResponse = await textToImageService.GenerateImageAsync(imagePrompt, 1024, 1024);
         Console.WriteLine(imageResponse);
