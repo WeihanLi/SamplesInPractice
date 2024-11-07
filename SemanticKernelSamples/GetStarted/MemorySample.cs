@@ -31,18 +31,19 @@ public static class MemorySample
         var memory = memoryBuilder.Build();
         
         var collectionName = "AzureProducts";
-                
-        await using var fs = File.OpenRead("text-sample.json");
-        var list = await JsonSerializer.DeserializeAsync<Product[]>(fs);
-        Guard.NotNull(list);
-        var productFromMemory = await memory.GetAsync(collectionName, list[0].Title);
+        var title = "Azure App Service";
+
+        var productFromMemory = await memory.GetAsync(collectionName, title);
         if (productFromMemory is null)
         {
+            await using var fs = File.OpenRead("text-sample.json");
+            var list = await JsonSerializer.DeserializeAsync<Product[]>(fs);
+            Guard.NotNull(list);
             foreach (var product in list)
             {
                 await memory.SaveInformationAsync(collectionName, product.Description, product.Title, product.Description, product.Category);
                 Console.WriteLine($"[{product.Title}] saved");
-            }    
+            }
         }
 
         await ConsoleHelper.HandleInputLoopAsync(async input =>
