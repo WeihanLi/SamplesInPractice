@@ -16,7 +16,9 @@
 // CSharp13Samples.ParamsCollectionSample();
 // CSharp13Samples.RefStructPerfTest();
 // CSharp13Samples.ParamsSpanPerfTest();
-LockSample.LockObjectPerfTest();
+// LockSample.LockObjectPerfTest();
+
+await MetricsSample.RunAsync();
 
 // await RuntimeMetricsSample.RunAsync();
 
