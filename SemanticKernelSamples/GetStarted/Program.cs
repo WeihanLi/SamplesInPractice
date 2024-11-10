@@ -1,6 +1,8 @@
 ﻿using GetStarted;
 using WeihanLi.Common.Helpers;
 
+InvokeHelper.OnInvokeException = ex => ConsoleHelper.ErrorWriteLineWithColor(ex.ToString(), ConsoleColor.Red);
+
 // load .env variables
 dotenv.net.DotEnv.Load();
 
