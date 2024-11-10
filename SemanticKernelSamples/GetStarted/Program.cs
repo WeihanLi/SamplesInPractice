@@ -4,7 +4,7 @@ using WeihanLi.Common.Helpers;
 // load .env variables
 dotenv.net.DotEnv.Load();
 
-await MemorySample.MainTest();
+// await MemorySample.MainTest();
 // await InvokeHelper.TryInvokeAsync(DotnetConfHelper.MainTest);
-// await InvokeHelper.TryInvokeAsync(ArchStoryTeller.Run);
+await InvokeHelper.TryInvokeAsync(ArchStoryTeller.Run);
 ConsoleHelper.ReadLineWithPrompt();

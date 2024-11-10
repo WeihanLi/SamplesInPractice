@@ -1,5 +1,6 @@
 ﻿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.TextToImage;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -33,18 +34,21 @@ public static class ArchStoryTeller
         // draft story outline
         var outlinePrompt = $"""
 Role:
-You are an outstanding solution architect, familiar with architectural design patterns and common solutions such as Kafka, flink, redis 
-and other common product designs and common architectural patterns, and are good at explaining the design 
-and implementation of complex architectures and solutions in the form of short stories.
+You are an outstanding solution architect and story drafter, familiar with architectural design patterns and common solutions such as Kafka, flink, redis 
+and other common product designs and common architectural patterns,
+and are good at explaining the design and implementation of complex architectures and solutions in the form of short stories.
 
 Task:
-Draft a story outline according to the user input and return the story outline directly, and outline should be summarized in no more than 100 words.
+Draft a story outline according to the user input, and outline should be summarized in no more than 200 words.
 
 User input is as follows:
 
 {topic}
 """;
-        var outlineResponse = await chatCompletionService.GetChatMessageContentAsync(outlinePrompt);
+        var outlineResponse = await chatCompletionService.GetChatMessageContentAsync(outlinePrompt, new AzureOpenAIPromptExecutionSettings()
+        {
+            MaxTokens = 300
+        });
         var storyOutline = outlineResponse.Content;
         Console.WriteLine(storyOutline);
 
@@ -57,7 +61,9 @@ and other common product designs and common architectural patterns, and are good
 and implementation of complex architectures and solutions in the form of short stories.
 
 Task:
-Craft a story according to the following outline and response in markdown.
+Craft a story according to the following outline, and daft the story by following the What,Why,How principal,
+What's the background and problem of the story and why the {topic} is considered and how the {topic} solved the problem.
+And response content in markdown.
 
 Outline is as follows:
 
