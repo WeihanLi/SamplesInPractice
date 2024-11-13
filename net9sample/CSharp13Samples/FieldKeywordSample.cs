@@ -20,6 +20,7 @@ internal static class FieldKeywordSample
             Console.WriteLine(field);
             Console.WriteLine($"Before set description, {nameof(value)}: {value}");
             field = value?.Trim()!;
+            // still not working with .NET 9 GA SDK, working with latest vs preview 17.13.1 and vscode
             // CS0103: The name 'field' does not exist in the current context
             // Console.WriteLine($"After set description, {field}");
             Console.WriteLine("After set description");
