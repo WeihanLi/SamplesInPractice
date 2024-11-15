@@ -39,13 +39,13 @@ public static class DotnetConfHelper
                 sessions = Guard.NotNull(await JsonSerializer.DeserializeAsync<Session[]>(stream));
                 foreach (var session in sessions)
                 {
-                    var embeddings = await textEmbeddingService.GenerateEmbeddingsAsync(new[]
-                    {
+                    var embeddings = await textEmbeddingService.GenerateEmbeddingsAsync
+                    ([
                         $"""
-                        {session.Title}
-                        {session.Description}
-                        """
-                    }).ContinueWith(r => r.Result[0]);
+                         {session.Title}
+                         {session.Description}
+                         """
+                    ]).ContinueWith(r => r.Result[0]);
                     session.Embeddings = embeddings.ToArray();
                     Console.WriteLine($"{session.Title} embeddings generated");
                 }
@@ -106,8 +106,8 @@ public static class DotnetConfHelper
                     .ToArray();
 
                 var prompt = $"""
-                             You are a helpful assistant who is good at finding common ground in summarize in short words, 
-                             please find out what the following session topics have in common, and returns in one or two words directly,
+                             You are a helpful assistant who is good at finding common in short words, 
+                             please find out what the following session description have in common, exact common topics, and returns in one or two words directly,
                              `.NET`/`dotnet` should not be a valid words
                              for example: `Blazor`,`NuGet`, `MAUI` etc
                              ===== topics =====

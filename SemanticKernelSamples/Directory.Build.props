@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory).env" 
-        Condition="$([System.IO.File]::Exists('$(MSBuildThisFileDirectory).env')) == 'true'">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        Condition="$([System.IO.File]::Exists('$(MSBuildThisFileDirectory).env'))">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>
