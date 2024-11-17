@@ -3,6 +3,7 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.TextToImage;
+using PuppeteerSharp;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Encodings.Web;
@@ -83,7 +84,7 @@ public static class ArchStoryTeller
         AddWechatMediaResponseModel? addMediaResponse = null;
         if (!string.IsNullOrEmpty(accessToken))
         {
-            // imageStream for later usage
+            // imageStream 
             var imageStream = new MemoryStream();
             await using var imageResponseStream = await imageStreamFactory().ConfigureAwait(false);
             await imageResponseStream.CopyToAsync(imageStream);
@@ -217,18 +218,33 @@ public static class ArchStoryTeller
         Console.WriteLine("draft created");
     }
 
-    private static Task<string> RenderMarkdown(string markdown)
+    private static readonly AsyncLock BrowserLock = new();
+    private static IBrowser? _browser;
+    
+    private static async Task<string> RenderMarkdown(string markdown)
     {
-        // var browserFetcher = new BrowserFetcher();
-        // await browserFetcher.DownloadAsync();
-        // await using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
-        // await using var page = await browser.NewPageAsync();
-        // await page.GoToAsync("https://mdnice.weihanli.xyz", WaitUntilNavigation.Networkidle0);
-        //
-        // // 
-        // return markdown;
-        var html = Markdown.ToHtml(markdown);
-        return Task.FromResult($"""<section data-tool="md-spark">{html}</section>""");
+        if (_browser is null)
+        {
+            using (await BrowserLock.LockAsync())
+            {
+                if (_browser is null)
+                {
+                    // https://github.com/hardkoded/puppeteer-sharp
+                    var browserFetcher = new BrowserFetcher();
+                    await browserFetcher.DownloadAsync();
+                    _browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+                }
+            }
+        }
+        
+        await using var page = await _browser.NewPageAsync();
+        await page.GoToAsync("https://mdnice.weihanli.xyz", WaitUntilNavigation.Networkidle0);
+        var html = await page.EvaluateFunctionAsync<string>("parseMdToHtml", markdown);
+        await page.CloseAsync();
+        return html;
+
+        // var html = Markdown.ToHtml(markdown);
+        // return await Task.FromResult($"""<section data-tool="md-spark">{html}</section>""");
     }
 
     private static async Task CreateDraft(
@@ -257,9 +273,13 @@ public static class ArchStoryTeller
                 }
             }
         };
+
+        // using var addDraftResponse = await httpClient.PostAsJsonAsync(addDraftUrl, draftArticle, new JsonSerializerOptions(JsonSerializerDefaults.Web).WithUnsafeEncoder());
+        
         var body = JsonSerializer.Serialize(draftArticle, JsonHelper.UnsafeEncoderOptions);
         using var requestBodyContent = new JsonHttpContent(body);
         using var addDraftResponse = await httpClient.PostAsync(addDraftUrl, requestBodyContent);
+
         var addDraftResponseText = await addDraftResponse.Content.ReadAsStringAsync();
         Console.WriteLine($"Add draft response: {addDraftResponse.StatusCode.ToString()} {addDraftResponseText}");
         addDraftResponse.EnsureSuccessStatusCode();
@@ -363,48 +383,9 @@ sealed class CreateWeChatArticleModel
     [JsonPropertyName("content")] public required string Content { get; set; }
 
     [JsonPropertyName("author")] public string? Author { get; set; } = "WeihanLi";
-}
-
-sealed class DraftModel
-{
-    /// <summary>
-    /// 图文消息的标题
-    /// </summary>
-    public string title { get; set; }
-
-    /// <summary>
-    /// 图文消息的作者
-    /// </summary>
-    public string author { get; set; } = "WeihanLi";
-
-    /// <summary>
-    /// 图文消息的描述
-    /// </summary>222-
-    public string? digest { get; set; } = "";
-
-    /// <summary>
-    /// 图文消息页面的内容，支持HTML标签
-    /// </summary>
-    public string content { get; set; }
-
-    /// <summary>
-    /// 在图文消息页面点击“阅读原文”后的页面
-    /// </summary>
-    public string? content_source_url { get; set; }
-
-    /// <summary>
-    /// 图文消息缩略图的media_id，可以在基础支持上传多媒体文件接口中获得
-    /// </summary>
-    public string thumb_media_id { get; set; }
-
-    /// <summary>
-    /// 是否打开评论，0不打开，1打开
-    /// </summary>
-    public int need_open_comment { get; set; } = 1;
-    /// <summary>
-    /// 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
-    /// </summary>
-    public int only_fans_can_comment { get; set; }
+    
+    [JsonPropertyName("need_open_comment")]
+    public int EnableComment { get; set; } = 1;
 }
 
 public sealed class DingBotTextRequestModel
