@@ -6,14 +6,14 @@ using System.Text.Json;
 using TypedSignalR.Client;
 
 await using var connection = new HubConnectionBuilder()
-    .WithUrl("http://localhost:5001/hub/hello", options =>
+    .WithUrl("https://localhost:5002/hub/hello", options =>
     {
-        options.SkipNegotiation = true;
+        // options.SkipNegotiation = true;
         options.Transports = HttpTransportType.WebSockets;
         options.WebSocketConfiguration = clientWebSocketOptions =>
         {
             clientWebSocketOptions.HttpVersion = HttpVersion.Version20;
-            clientWebSocketOptions.HttpVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+            clientWebSocketOptions.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
         };
     })
     .Build();
@@ -27,7 +27,7 @@ connection.Reconnected += c =>
 await connection.StartAsync();
 connection.Register<IHelloClient>(new HubClient());
 var hub = connection.CreateHubProxy<IHelloServer>();
-await hub.Hello(new HelloModel() { Name = "test-client", Message = "Hello SignalR" });
+await hub.Hello(new HelloModel { Name = "test-client", Message = "Hello SignalR" });
 Console.Read();
 
 public sealed class HubClient : IHelloClient

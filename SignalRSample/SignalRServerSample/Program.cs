@@ -1,6 +1,7 @@
 using SignalRServerSample;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.WebHost.UseKestrelHttpsConfiguration();
 
 builder.Services.AddSignalR(options =>
 {
