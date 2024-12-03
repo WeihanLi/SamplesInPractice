@@ -1,12 +1,21 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using SignalRSample;
+using System.Net;
 using System.Text.Json;
 using TypedSignalR.Client;
 
 await using var connection = new HubConnectionBuilder()
-    .WithUrl("http://localhost:5069/hub/hello")
+    .WithUrl("http://localhost:5001/hub/hello", options =>
+    {
+        options.SkipNegotiation = true;
+        options.Transports = HttpTransportType.WebSockets;
+        options.WebSocketConfiguration = clientWebSocketOptions =>
+        {
+            clientWebSocketOptions.HttpVersion = HttpVersion.Version20;
+            clientWebSocketOptions.HttpVersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+        };
+    })
     .Build();
 
 connection.Reconnected += c =>
