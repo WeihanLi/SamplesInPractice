@@ -10,9 +10,9 @@ nuget 定义了一套关于 nuget server 的规范，使得用户可以自己实
 
 也正是这些规范，使得我们可以根据这些规范来实现 nuget server 的包管理的功能，今天主要介绍一下，根据 nuget server 的 api 规范使用原始的 HTTP 请求来实现 nuget 包的搜索和使用 nuget 提供的客户端 SDK 来实现 nuget 包的搜索和下载
 
-## Nuget Server Api
+## NuGet Server Api
 
-### Nuget 协议介绍
+### NuGet 协议介绍
 
 nuget 的协议有好几个版本，目前主要用的是 v3，开源的 nuget server Baget 也实现了基于 nuget protocal v3 的规范
 
@@ -22,16 +22,13 @@ nuget 的协议有好几个版本，目前主要用的是 v3，开源的 nuget s
 
 ![](https://img2020.cnblogs.com/blog/489462/202006/489462-20200627111811819-279166472.png)
 
-
-Nuget.org 提供了两种搜索的方式，
+NuGet.org 提供了两种搜索的方式，
 
 一个是 SearchQuery，会根据包名称、 tag、description 等信息去匹配关键词，
 
 一个是 SearchAutocomplete 根据包名称的前缀去匹配包的名称
 
 获取某个 nuget 包的版本信息，可以使用 PackageBaseAddress 来获取
-
-
 
 `ServiceIndex` 返回的信息示例如下：
 
@@ -75,7 +72,7 @@ Nuget.org 提供了两种搜索的方式，
 ``` csharp
 using var httpClient = new HttpClient(new NoProxyHttpClientHandler());
 // loadServiceIndex
-var serviceIndexResponse = await httpClient.GetStringAsync(NugetServiceIndex);
+var serviceIndexResponse = await httpClient.GetStringAsync(NuGetServiceIndex);
 var serviceIndexObject = JObject.Parse(serviceIndexResponse);
 
 var keyword = "weihanli";
@@ -120,7 +117,7 @@ Autocomplete 返回结果
 using (var httpClient = new HttpClient(new NoProxyHttpClientHandler()))
 {
     // loadServiceIndex
-    var serviceIndexResponse = await httpClient.GetStringAsync(NugetServiceIndex);
+    var serviceIndexResponse = await httpClient.GetStringAsync(NuGetServiceIndex);
     var serviceIndexObject = JObject.Parse(serviceIndexResponse);
 
     // https://docs.microsoft.com/en-us/nuget/api/package-base-address-resource
@@ -142,7 +139,7 @@ output 示例：
 
 > 注：api 地址中的 packageId 要转小写
 
-## Nuget Client SDK
+## NuGet Client SDK
 
 除了上面的根据 api 自己调用，我们还可以使用 nuget 提供的客户端 sdk 实现上述功能，这里就不详细介绍了，有需要可能查阅官方文档：<https://docs.microsoft.com/en-us/nuget/reference/nuget-client-sdk>
 
@@ -233,7 +230,7 @@ var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.js
 
     if (string.IsNullOrEmpty(packagesFolder))
     {
-        // Nuget globalPackagesFolder resolve
+        // NuGet globalPackagesFolder resolve
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var defaultConfigFilePath =
@@ -303,8 +300,8 @@ var repository = Repository.Factory.GetCoreV3("https://api.nuget.org/v3/index.js
 
 ## Reference
 
-- <https://github.com/WeihanLi/SamplesInPractice/blob/master/NugetSample/RawApiSample.cs>
-- <https://github.com/WeihanLi/SamplesInPractice/blob/master/NugetSample/NugetClientSdkSample.cs>
+- <https://github.com/WeihanLi/SamplesInPractice/blob/master/NuGetSample/RawApiSample.cs>
+- <https://github.com/WeihanLi/SamplesInPractice/blob/master/NuGetSample/NuGetClientSdkSample.cs>
 - <https://docs.microsoft.com/en-us/nuget/reference/nuget-client-sdk>
 - <https://docs.microsoft.com/en-us/nuget/create-packages/set-package-type>
 - <https://docs.microsoft.com/en-us/nuget/api/overview>
