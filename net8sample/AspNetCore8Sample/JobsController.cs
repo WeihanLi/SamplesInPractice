@@ -15,6 +15,17 @@ public class JobsController : ControllerBase
         }
     }
     
+    [HttpGet("falseAsync")]
+    public async IAsyncEnumerable<Jobs> JobsFalseAsync()
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            Thread.Sleep(500);
+            await Task.CompletedTask;
+            yield return new Jobs() { Id = i + 1, Title = $"job_{i} --- {DateTimeOffset.Now}" };
+        }
+    }
+    
     [HttpGet]
     public async IAsyncEnumerable<Jobs> Jobs()
     {

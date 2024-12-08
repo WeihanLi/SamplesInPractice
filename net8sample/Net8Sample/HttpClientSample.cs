@@ -21,15 +21,19 @@ public static class HttpClientSample
     public static async Task HttpClientGetFromJsonAsAsyncEnumerableSample()
     {
         using var httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri("http://localhost:5297");
+        httpClient.BaseAddress = new Uri("http://localhost:5297/");
         // using var response = await httpClient.GetAsync("api/Jobs", HttpCompletionOption.ResponseHeadersRead);
         // ArgumentNullException.ThrowIfNull(response.Content);
         // var stream = response.Content.ReadFromJsonAsAsyncEnumerable<Job>();
 
         // var jsonTypeInfo = GetJsonTypeInfo<Job>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
         // var stream = httpClient.GetFromJsonAsAsyncEnumerable("api/Jobs", jsonTypeInfo);
-                
-        var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>("api/Jobs");
+
+        // var api = "api/Jobs/sync";
+        var api = "api/Jobs";
+        // var api = "api/Jobs/falseAsync";
+
+        var stream = httpClient.GetFromJsonAsAsyncEnumerable<Job>(api);
                 
         await foreach (var job in stream)
         {
