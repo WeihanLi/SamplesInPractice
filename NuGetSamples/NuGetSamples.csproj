@@ -7,9 +7,14 @@
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>high</NuGetAuditLevel>
+    <GenerateSBOM>true</GenerateSBOM>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Sbom.Targets" Version="3.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <Using Include="NuGetSamples" />
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6qmf-mmc7-6c2p" />
     <PackageReference Include="Nuget.Protocol" Version="5.6.0" />
