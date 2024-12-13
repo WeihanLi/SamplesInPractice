@@ -17,7 +17,7 @@
     </PackageReference>
     <Using Include="NuGetSamples" />
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-6qmf-mmc7-6c2p" />
-    <PackageReference Include="Nuget.Protocol" Version="5.6.0" />
+    <PackageReference Include="NuGet.Protocol" Version="5.6.0" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.72" />
   </ItemGroup>
 
