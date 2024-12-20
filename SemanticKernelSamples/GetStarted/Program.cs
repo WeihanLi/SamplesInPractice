@@ -10,4 +10,6 @@ dotenv.net.DotEnv.Load();
 // await InvokeHelper.TryInvokeAsync(DotnetConfHelper.MainTest);
 await InvokeHelper.TryInvokeAsync(ArchStoryTeller.Run);
 // await InvokeHelper.TryInvokeAsync(ArchStoryTeller.CreateDraftTest);
+// await InvokeHelper.TryInvokeAsync(ArchStoryTeller.JsonContentTest);
+
 ConsoleHelper.ReadLineWithPrompt();

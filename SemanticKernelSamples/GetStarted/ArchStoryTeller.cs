@@ -1,14 +1,10 @@
-﻿using Markdig;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Microsoft.SemanticKernel.TextToImage;
 using PuppeteerSharp;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -186,27 +182,30 @@ public static class ArchStoryTeller
                                 ![]({imageResponse})
 
                                 {storyText}
-
-                                [amazingbot]
                                 """;
         var translatedStoryText = $"""
                                    ![]({imageResponse})
 
                                    {translatedStoryResponse.Content}
-
-                                   [amazingbot]
                                    """;
 
         var dingTalkNotificationUrl = EnvHelper.Val("DINGTALK_NOTIFICATION_URL");
-
+        var dingBotSignature = "[amazingbot]";
+        
         {
             using var enResponse = await httpClient.PostAsJsonAsync(dingTalkNotificationUrl,
-                new DingBotTextRequestModel { Text = new() { Content = englishStoryText } });
+                new DingBotTextRequestModel { Text = new()
+                {
+                    Content = $"{englishStoryText}\n{dingBotSignature}"
+                } });
             enResponse.EnsureSuccessStatusCode();
         }
         {
             using var chineseResponse = await httpClient.PostAsJsonAsync(dingTalkNotificationUrl,
-                new DingBotTextRequestModel { Text = new() { Content = translatedStoryText } });
+                new DingBotTextRequestModel { Text = new()
+                {
+                    Content = $"{translatedStoryText}\n{dingBotSignature}"
+                } });
             chineseResponse.EnsureSuccessStatusCode();
         }
 
@@ -245,9 +244,6 @@ public static class ArchStoryTeller
         var html = await page.EvaluateFunctionAsync<string>("parseMdToHtml", markdown);
         await page.CloseAsync();
         return html;
-
-        // var html = Markdown.ToHtml(markdown);
-        // return await Task.FromResult($"""<section data-tool="md-spark">{html}</section>""");
     }
 
     private static async Task CreateDraft(

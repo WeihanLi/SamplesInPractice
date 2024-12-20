@@ -4,13 +4,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="dotenv.net" Version="3.2.1" />
-    <PackageVersion Include="Markdig" Version="0.38.0" />
-    <PackageVersion Include="Microsoft.ML" Version="3.0.1" />
-    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.25.0" />
+    <PackageVersion Include="Microsoft.ML" Version="4.0.0" />
+    <PackageVersion Include="Microsoft.SemanticKernel" Version="1.32.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Connectors.MongoDB" Version="1.25.0-preview" />
     <PackageVersion Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.25.0-alpha" />
     <PackageVersion Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.25.0-alpha" />
     <PackageVersion Include="PuppeteerSharp" Version="20.0.5" />
-    <PackageVersion Include="WeihanLi.Common" Version="1.0.72" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.73" />
   </ItemGroup>
 </Project>

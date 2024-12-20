@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="dotenv.net" />
-    <PackageReference Include="Markdig" />
     <PackageReference Include="Microsoft.ML" />
     <PackageReference Include="Microsoft.SemanticKernel" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.MongoDB" />
