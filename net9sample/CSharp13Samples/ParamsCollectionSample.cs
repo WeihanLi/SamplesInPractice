@@ -239,7 +239,7 @@ internal sealed class CustomNumberCollection : IEnumerable<int>
     }
 }
 
-file static class CustomCollectionBuilder
+internal static class CustomCollectionBuilder
 {
     public static CustomNumberCollection CreateNumber(ReadOnlySpan<int> elements)
     {
