@@ -35,7 +35,7 @@
     <Using Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Extensions.Hosting" Version="1.0.69" />
+    <PackageReference Include="WeihanLi.Extensions.Hosting" Version="1.0.74" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
