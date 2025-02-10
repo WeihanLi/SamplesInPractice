@@ -18,8 +18,10 @@
 // CSharp13Samples.ParamsSpanPerfTest();
 // LockSample.LockObjectPerfTest();
 
-await MetricsSample.RunAsync();
+// await MetricsSample.RunAsync();
 
 // await RuntimeMetricsSample.RunAsync();
+
+await HttpClientSample.KeyedHttpClientSample();
 
 // Console.WriteLine("Hello World");
