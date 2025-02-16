@@ -276,23 +276,26 @@ public static class ArchStoryTeller
         HttpResponseMessage? addDraftResponse = null;
         try
         {
-            try
-            {
-                // bug
-                addDraftResponse = await httpClient.PostAsJsonAsync(addDraftUrl, draftArticle,
-                    JsonHelper.UnsafeEncoderOptions
-                );
-                addDraftResponse.EnsureSuccessStatusCode();
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-                addDraftResponse?.Dispose();
-
-                var body = JsonSerializer.Serialize(draftArticle, JsonHelper.UnsafeEncoderOptions);
-                using var requestBodyContent = new JsonHttpContent(body);
-                addDraftResponse = await httpClient.PostAsync(addDraftUrl, requestBodyContent);
-            }
+            var body = JsonSerializer.Serialize(draftArticle, JsonHelper.UnsafeEncoderOptions);
+            using var requestBodyContent = new JsonHttpContent(body);
+            addDraftResponse = await httpClient.PostAsync(addDraftUrl, requestBodyContent);
+            // try
+            // {
+            //     // bug
+            //     addDraftResponse = await httpClient.PostAsJsonAsync(addDraftUrl, draftArticle,
+            //         JsonHelper.UnsafeEncoderOptions
+            //     );
+            //     addDraftResponse.EnsureSuccessStatusCode();
+            // }
+            // catch(Exception ex)
+            // {
+            //     Console.WriteLine(ex);
+            //     addDraftResponse?.Dispose();
+            //
+            //     var body = JsonSerializer.Serialize(draftArticle, JsonHelper.UnsafeEncoderOptions);
+            //     using var requestBodyContent = new JsonHttpContent(body);
+            //     addDraftResponse = await httpClient.PostAsync(addDraftUrl, requestBodyContent);
+            // }
 
             var addDraftResponseText = await addDraftResponse.Content.ReadAsStringAsync();
             Console.WriteLine($"Add draft response: {addDraftResponse.StatusCode.ToString()} {addDraftResponseText}");
@@ -354,7 +357,7 @@ public static class ArchStoryTeller
 
         using var httpClientHandler = new HttpClientHandler();
         using var httpLoggingHandler = new HttpLoggingHandler(httpClientHandler);
-        using var httpClient = new HttpClient(httpClientHandler);
+        using var httpClient = new HttpClient(httpLoggingHandler);
         await CreateDraft(mediaId, accessToken ?? "", "Raft Consensus Algorithm", content, content2, httpClient);
     }
 
@@ -438,7 +441,7 @@ public static class ArchStoryTeller
     {
         try
         {
-            _ = JsonNode.Parse(jsonContent);
+            _ = JsonSerializer.Deserialize<JsonObject>(jsonContent);
             Console.WriteLine("Valid Json Content");
         }
         catch
@@ -467,7 +470,7 @@ file sealed class HttpLoggingHandler : DelegatingHandler
                 .Select(x=> new { x.Key, x.Value })
                 .ToArray();
             var requestBody = await request.Content.ReadAsStringAsync(cancellationToken);
-            Console.WriteLine($"Headers: {requestHeaders.ToJson()}, requestBody: {requestBody}");
+            // Console.WriteLine($"Headers: {requestHeaders.ToJson()}, requestBody: {requestBody}");
             ArchStoryTeller.IsValidJson(requestBody);
         }
 
