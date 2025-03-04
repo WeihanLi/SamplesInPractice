@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using WeihanLi.Extensions;
+using WeihanLi.Npoi;
+using WeihanLi.Npoi.Attributes;
 
 namespace BalabalaSample;
 
@@ -18,6 +20,9 @@ public class BlogProductSample
         const string newArticlesJsonPath = @"/Users/weihan.li/repositories/ConsoleTestApp/ConsoleTestApp/bin/Debug/net8.0/articles.new.json";
         const string productCategoriesJsonPath = @"/Users/weihan.li/repositories/ConsoleTestApp/ConsoleTestApp/bin/Debug/net8.0/All_category_for_demo.txt";
         const string categoryMatchedPropName = "CategoryMatched";
+
+        const string categoryUrlPrefix = "https://www.iherb.com/c/";
+        const string productUrlSuffix = "https://www.iherb.com/pr/";
 
         JArray articles;
         if (File.Exists(newArticlesJsonPath))
@@ -91,7 +96,7 @@ public class BlogProductSample
 
         //
         var blogArticles = articles
-            .Where(x => x["CategoryMatched"]?.Value<bool>() is true)
+            .Where(x => x[categoryMatchedPropName]?.Value<bool>() is true)
             .SelectMany(a =>
             {
                 var products = a["RecommendProducts"]!.Select(p => new BlogProduct
@@ -120,29 +125,39 @@ public class BlogProductSample
                 {
                     article.TextContent = doc.Body?.TextContent ?? string.Empty;
                 }
-                if (article.TextContent.IsNullOrEmpty())
+                if (article.HtmlContent.IsNullOrEmpty())
                     return resultList;
-                Debug.Assert(article.TextContent is not null);
                 
                 var h2Nodes = doc.QuerySelectorAll("h2");
-                var chunkedContentList = new List<string>();
-                var lastIndex = article.TextContent.IndexOf(h2Nodes[0].TextContent, StringComparison.OrdinalIgnoreCase);;
+                if (h2Nodes is not { Length: > 0 })
+                    return resultList;
+                
+                Debug.Assert(doc.Body?.InnerHtml is not null);
+                var chunkedContentList = new List<ChunkArticleModel>();
+                
+                var lastHtmlIdx = doc.Body.InnerHtml.IndexOf(h2Nodes[0].OuterHtml, StringComparison.Ordinal);
+                
                 for (var i = 1; i < h2Nodes.Length; i++)
                 {
-                    var nextTitle = h2Nodes[i].TextContent;
-                    var idx = article.TextContent.IndexOf(nextTitle, StringComparison.OrdinalIgnoreCase);
-                    if (idx > lastIndex)
-                    {
-                        var chunk = article.TextContent!.Substring(lastIndex, idx - lastIndex);
-                        chunkedContentList.Add(chunk);
-                    }
+                    var htmlIdx = doc.Body.InnerHtml.IndexOf(h2Nodes[i].OuterHtml, StringComparison.Ordinal);
+                    if (htmlIdx <= lastHtmlIdx) continue;
+                    
+                    var htmlChunk = doc.Body.InnerHtml.Substring(lastHtmlIdx, htmlIdx - lastHtmlIdx);
+                    var chunk = ExtractChunk(htmlChunk);
+                    if (chunk is null) break;
+                    
+                    chunkedContentList.Add(chunk);
 
-                    lastIndex = idx;
+                    lastHtmlIdx = htmlIdx;
                 }
 
-                if (lastIndex < article.TextContent.Length)
+                if (lastHtmlIdx < article.TextContent.Length)
                 {
-                    chunkedContentList.Add(article.TextContent.Substring(lastIndex));
+                    var chunk = ExtractChunk(doc.Body.InnerHtml.Substring(lastHtmlIdx));
+                    if (chunk is not null)
+                    {
+                        chunkedContentList.Add(chunk);
+                    }
                 }
 
                 foreach (var category in categories)
@@ -157,9 +172,9 @@ public class BlogProductSample
                             Title = article.Title,
                             Subtitle = article.Subtitle,
                             TextContent = article.TextContent,
-                            ChunkContent = chunk,
+                            ChunkContent = chunk.ChunkText,
                             ProductIds = products.Where(p => p.Categories.Contains(category))
-                                .Select(p => p.Id).ToJson(),
+                                .Select(p => p.Id).ToArray(),
                             AdditionalInfo = new
                             {
                                 content_id = article.ArticleId.ToString(),
@@ -172,6 +187,8 @@ public class BlogProductSample
                                 article_path = article.ArticlePath,
                                 title = article.Title,
                                 subtitle = article.Subtitle,
+                                in_blog_prd = chunk.ProductLinks,
+                                in_blog_cat = chunk.CategoryLinks
                             }.ToJson()
                         };
                         resultList.Add(model);
@@ -185,8 +202,134 @@ public class BlogProductSample
         await File.WriteAllTextAsync(articlesJsonPath.Replace(".json", ".result.json"), blogArticlesJsonText);
 
         blogArticles[0].TextContent = "test";
+        blogArticles[0].ChunkContent = "test";
         await File.WriteAllTextAsync(articlesJsonPath.Replace(".json", ".result-sample.json"), blogArticles[0].ToIndentedJson());
+        Console.WriteLine("Completed");
+        
+        
+        static ChunkArticleModel? ExtractChunk(string? htmlChunk)
+        {
+            if(htmlChunk.IsNullOrWhiteSpace()) return null;
+            
+            var htmlChunkDoc = HtmlParser.ParseDocument(htmlChunk);
+            if (htmlChunkDoc?.Body?.TextContent is null) return null;
+                    
+            var links = htmlChunkDoc.QuerySelectorAll("a")
+                .Select(link => link.GetAttribute("href"))
+                .WhereNotNull()
+                .Where(href => !string.IsNullOrEmpty(href) 
+                               && (
+                                   href.StartsWith(categoryUrlPrefix) ||
+                                   href.StartsWith(productUrlSuffix)
+                               )
+                )
+                .ToArray();
+            var chunk = new ChunkArticleModel()
+            {
+                ChunkText = htmlChunkDoc.Body?.TextContent!,
+                CategoryLinks = links.Where(x=> x.StartsWith(categoryUrlPrefix)).ToArray(),
+                ProductLinks = links.Where(x => x.StartsWith(productUrlSuffix)).ToArray()
+            };
+
+            if (links.Length > 0)
+            {
+                chunk.ChunkText = $"{chunk.ChunkText}  {string.Join("  ", links)}";
+            }
+            
+            return chunk;
+        }
     }
+
+    public static async Task AnalyzeProducts()
+    {
+        const string newArticlesJsonPath = @"/Users/weihan.li/repositories/ConsoleTestApp/ConsoleTestApp/bin/Debug/net8.0/articles.result.json";
+        if (!File.Exists(newArticlesJsonPath)) throw new InvalidOperationException("");
+        
+        var articlesText = await File.ReadAllTextAsync(newArticlesJsonPath);
+        var articles = JsonConvert.DeserializeObject<ResultModel[]>(articlesText);
+       ArgumentNullException.ThrowIfNull(articles);
+        var productIds = articles
+                .SelectMany(x => x.ProductIds ?? [])
+                .ToHashSet()
+            ;
+        var productIdsJson = productIds.ToJson();
+        Console.WriteLine(productIdsJson);
+    }
+
+    public static async Task ExternalArticlesProcessing()
+    {
+        const string articlesJsonPath = @"/Users/weihan.li/repositories/ConsoleTestApp/ConsoleTestApp/bin/Debug/net8.0/articles.external.json";
+        const string ExternalArticlePath = "/Users/weihan.li/Downloads/ExternalArticles.xlsx";
+        var articles = ExcelHelper.ToEntities<BlogArticle>(ExternalArticlePath, 1)
+            .Where(a => a is { ArticleId: > 0 })
+            .ToArray()
+            ;
+        ArgumentNullException.ThrowIfNull(articles);
+
+        
+        var resultList = new List<ResultModel>();
+        
+        foreach (var article in articles)
+        {
+            Debug.Assert(article?.Products is not null);
+            var products = article.Products.JsonToObject<BlogProduct[]>();
+            var categories = products.SelectMany(p => p.Categories).ToHashSet();
+
+            Debug.Assert(article.TextContent is not null);
+            var chunks = article.TextContent.Split("###", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            
+            foreach (var category in categories)
+            {
+                foreach (var chunk in chunks)
+                {
+                    var resultModel = new ResultModel
+                    {
+                        ChunkType = "external",
+                        Label = category,
+                        ArticleId = article.ArticleId,
+                        ArticlePath = article.ArticlePath,
+                        Title = article.Title,
+                        Subtitle = article.Subtitle,
+                        TextContent = article.TextContent,
+                        ChunkContent = chunk,
+                        ProductIds = products.Where(p => p.Categories.Contains(category))
+                            .Select(p => p.Id).ToArray(),
+                        AdditionalInfo = new
+                        {
+                            content_id = article.ArticleId.ToString(),
+                            content_type = "external",
+                            products_info = products.Select(p => new { product_id = p.Id, product_name = p.Name }),
+                            article_path = article.ArticlePath,
+                            title = article.Title,
+                            subtitle = article.Subtitle,
+                        }.ToJson()
+                    };
+                    resultList.Add(resultModel);
+                }
+            }
+        }
+        
+        var blogArticlesJsonText = JsonConvert.SerializeObject(resultList);
+        await File.WriteAllTextAsync(articlesJsonPath, blogArticlesJsonText);
+
+        resultList[0].TextContent = "test";
+        await File.WriteAllTextAsync(articlesJsonPath.Replace(".json", ".sample.json"), resultList[0].ToIndentedJson());
+    }
+
+    private static readonly HtmlParser HtmlParser = new();
+    
+}
+
+file sealed class ExternalArticles
+{
+    
+}
+
+sealed class ChunkArticleModel
+{
+    public string ChunkText { get; set; }
+    public string[] ProductLinks { get; set; }
+    public string[] CategoryLinks { get; set; }
 }
 
 sealed class BlogProduct
@@ -199,10 +342,11 @@ sealed class BlogProduct
 sealed record BlogArticle
 {
     public int ArticleId { get; set; }
-    public required string ArticlePath { get; set; }
+    public string ArticlePath { get; set; }
     public string? Title { get; set; }
     public string? Subtitle { get; set; }
     [JsonIgnore]
+    [Column(IsIgnored = true)]
     public string? HtmlContent { get; set; }
     public string? TextContent { get; set; }
     public string? Products { get; set; }
@@ -220,7 +364,7 @@ sealed class ResultModel
     public required string Label { get; set; }
 
     [JsonProperty("product_ids")]
-    public required string ProductIds { get; set; }
+    public required int[] ProductIds { get; set; }
     [JsonIgnore]
     public int ArticleId { get; set; }
     [JsonIgnore]
