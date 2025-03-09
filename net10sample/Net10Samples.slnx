@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CSharp14Samples/CSharp14Samples.csproj" />
+  <Project Path="Net10Samples/Net10Samples.csproj" />
+</Solution>
