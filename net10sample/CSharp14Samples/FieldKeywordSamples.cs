@@ -65,7 +65,7 @@ file sealed class PropertySample
         get => field;
         set
         {
-            var field = 123;
+            var @field = 123;
             Console.WriteLine(field);
             Console.WriteLine(@field);
             field = value;
@@ -76,6 +76,6 @@ file sealed class PropertySample
     public string? Field
     {
         get => this.field;
-        set => field = value;
+        set => @field = value;
     }
 }
