@@ -10,6 +10,11 @@ public static class JsonSamples
         var user1 = new User(1, "Mike");
         var user2 = new User2(1, "Mike");
         var user3 = new User3(1, "Mike", "Michael");
+        var p1 = new Person
+        {
+            Id = 1,
+            Name = "Jane"
+        };
         
         {
             Console.WriteLine("JsonIgnoreWhenReadWriteSample");
@@ -31,7 +36,14 @@ public static class JsonSamples
             Console.WriteLine(json3);
             var user3Deserialized = JsonSerializer.Deserialize<User3>(json3);
             Console.WriteLine(user3Deserialized);
+
+            Console.WriteLine("Person1");
+            var jsonP1 = JsonSerializer.Serialize(p1);
+            Console.WriteLine(jsonP1);
+            var p1Deserialized = JsonSerializer.Deserialize<Person>(jsonP1);
+            Console.WriteLine(p1Deserialized);
         }
+        Console.ReadLine();
         Console.WriteLine();
         {
             Console.WriteLine("JsonIgnoreWhenReadWriteSample with generator");
@@ -57,6 +69,17 @@ public static class JsonSamples
     }
 }
 
+sealed class Person
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenReading)]
+    public int Id { get; init; }
+    public required string Name { get; init; }
+
+    public override string ToString()
+    {
+        return $"{Id}-{Name}";
+    }
+}
 
 sealed record User(int UserId, string UserName);
 
