@@ -4,5 +4,6 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0-preview.1.25081.1" />
   </ItemGroup>
 </Project>

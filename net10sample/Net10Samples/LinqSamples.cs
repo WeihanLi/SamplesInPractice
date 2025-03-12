@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 
 namespace Net10Samples;
 
@@ -61,12 +63,45 @@ public class LinqSamples
             e.Id,
             e.Name,
             e.JobId,
-            JobName = j?.Name ?? "Unnamed"
+            JobName = j?.Name ?? "Unknown"
         }))
         {
             Console.WriteLine(JsonSerializer.Serialize(item));
         }
+    }
 
+    public static async Task EFLeftJoinSample()
+    {
+        var services = new ServiceCollection();
+        services.AddSqlite<TestDbContext>("Data Source=test.db", optionsAction: options =>
+        {
+            options.LogTo(Console.WriteLine);
+        });
+        await using var serviceProvider = services.BuildServiceProvider();
+        
+        using var scope = serviceProvider.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.EnsureCreatedAsync();
+        
+        dbContext.Jobs.Add(new Job() { Id = 1, Name = "test" });
+        dbContext.Employees.Add(new Employee() { Id = 1, JobId = 1, Name = "Alice" });
+        dbContext.Employees.Add(new Employee() { Id = 2, JobId = 2, Name = "Jane" });
+        await dbContext.SaveChangesAsync();
+
+        var result = await dbContext.Employees.AsNoTracking()
+            .LeftJoin(dbContext.Jobs.AsNoTracking(), e => e.JobId, j => j.Id, (e, j) => new
+            {
+                e.Id,
+                e.Name,
+                e.JobId,
+                JobName =  j == null ? "Unknown" : j.Name
+            })
+            .ToArrayAsync();
+        foreach (var item in result)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(item));
+        }
     }
 
     public static void ShuffleSamples()
@@ -74,4 +109,23 @@ public class LinqSamples
         var source = Enumerable.Range(1, 5);
         // source.Shuffle();
     }
+}
+
+class Job
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+}
+
+class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public int JobId { get; set; }
+}
+
+class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
+{
+    public virtual DbSet<Job> Jobs { get; set; } = null!;
+    public virtual DbSet<Employee> Employees { get; set; } = null!;
 }

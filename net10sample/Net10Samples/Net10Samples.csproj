@@ -10,5 +10,9 @@
   <ItemGroup>
     <Using Include="Net10Samples" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+  </ItemGroup>
 
 </Project>
