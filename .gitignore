@@ -331,3 +331,4 @@ ASALocalRun/
 .env
 
 .DS_Store
+*.db
