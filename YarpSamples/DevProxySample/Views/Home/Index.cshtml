@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <div>
+        <button id="btnApiTest" class="btn btn-primary">api test</button> &nbsp;
+        <button id="btnReservationApiTest" class="btn btn-primary">Reservation api test</button> &nbsp;
+        <div>
+            <pre id="result"></pre>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#btnApiTest").click(()=>{
+            $.ajax({
+                url: '/api/notice', // API 端点
+                type: 'GET', // 请求方法
+                dataType: 'json', // 期望的响应数据类型
+                success: function(response) {
+                    console.log('请求成功:', response); // 打印响应内容
+                    $('#result').html(`api: ${JSON.stringify(response)}`);
+                },
+                error: function(xhr, status, error) {
+                    console.error('请求失败:', status, error); // 打印错误信息
+                }
+            });
+        });
+        $("#btnReservationApiTest").click(()=>{
+            $.ajax({
+                url: '/reservation-api/api/notice', // API 端点
+                type: 'GET', // 请求方法
+                dataType: 'json', // 期望的响应数据类型
+                success: function(response) {
+                    console.log('请求成功:', response); // 打印响应内容
+                    $('#result').html(`reservation-api: ${JSON.stringify(response)}`);
+                },
+                error: function(xhr, status, error) {
+                    console.error('请求失败:', status, error); // 打印错误信息
+                }
+            });
+        });
+    </script>
+}
