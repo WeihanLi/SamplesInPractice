@@ -90,6 +90,7 @@ public class LinqSamples
         await dbContext.SaveChangesAsync();
 
         var result = await dbContext.Employees.AsNoTracking()
+            // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall
             .LeftJoin(dbContext.Jobs.AsNoTracking(), e => e.JobId, j => j.Id, (e, j) => new
             {
                 e.Id,
