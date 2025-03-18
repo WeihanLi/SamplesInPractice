@@ -1,5 +1,5 @@
 ﻿// await LinqSamples.AsyncSamples();
 // LinqSamples.LeftRightJoinSample();
 // await LinqSamples.EFLeftJoinSample();
-// JsonSamples.JsonIgnoreWhenReadWriteSample();
+JsonSamples.JsonIgnoreWhenReadWriteSample();
 JsonSamples.JsonIgnoreWithGeneratorTest();

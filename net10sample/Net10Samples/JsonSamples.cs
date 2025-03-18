@@ -66,7 +66,8 @@ public static class JsonSamples
         var p1 = new Person
         {
             Id = 1,
-            Name = "Jane"
+            Name = "Jane",
+            Description = "Jane J"
         };
         
         Console.WriteLine("JsonIgnoreWhenReadWriteSample with generator");
@@ -110,13 +111,13 @@ public static class JsonSamples
 
 sealed class Person
 {
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenReading)]
-    public int Id { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]
+    public int Id { get; set; }
     
-    public required string Name { get; init; }
+    public required string Name { get; set; }
 
     
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenReading)]
     public string? Description { get; set; }
 
     public override string ToString()
@@ -129,7 +130,11 @@ sealed record User(int UserId, string UserName);
 
 sealed record User2([property:JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]int UserId, string UserName);
 
-sealed record User3([property:JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]int UserId, string UserName, [property:JsonIgnore(Condition = JsonIgnoreCondition.WhenReading)]string? Description);
+sealed record User3(
+    [property:JsonIgnore(Condition = JsonIgnoreCondition.WhenWriting)]int UserId, 
+    string UserName, 
+    [property:JsonIgnore(Condition = JsonIgnoreCondition.WhenReading)]string? Description
+    );
 
 sealed record User4
 {
