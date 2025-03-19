@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
+using System.Threading.Channels;
 
 namespace Net10Samples;
 
@@ -103,12 +104,30 @@ public class LinqSamples
         {
             Console.WriteLine(JsonSerializer.Serialize(item));
         }
+        
+        result = await dbContext.Jobs.AsNoTracking()
+            // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall
+            .RightJoin(dbContext.Employees.AsNoTracking(), j => j.Id, e => e.JobId, (j, e) => new
+            {
+                e.Id,
+                e.Name,
+                e.JobId,
+                JobName =  j == null ? "Unknown" : j.Name
+            })
+            .ToArrayAsync();
+        foreach (var item in result)
+        {
+            Console.WriteLine(JsonSerializer.Serialize(item));
+        }
     }
 
     public static void ShuffleSamples()
     {
-        var source = Enumerable.Range(1, 5);
-        // source.Shuffle();
+        var source = Enumerable.Range(1, 5).ToArray();
+        Console.WriteLine(string.Join(",", source));
+        source.Shuffle();
+        Console.WriteLine(string.Join(",", source));
+        Console.WriteLine(string.Join(",", source.Shuffle()));
     }
 }
 
