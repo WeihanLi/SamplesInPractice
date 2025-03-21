@@ -71,7 +71,7 @@ public class LinqSamples
         }
     }
 
-    public static async Task EFLeftJoinSample()
+    public static async Task EFLeftRightJoinSample()
     {
         var services = new ServiceCollection();
         services.AddSqlite<TestDbContext>("Data Source=test.db", optionsAction: options =>
@@ -121,13 +121,34 @@ public class LinqSamples
         }
     }
 
+    // https://github.com/dotnet/runtime/issues/111221
+    // https://github.com/dotnet/runtime/pull/112173
     public static void ShuffleSamples()
     {
         var source = Enumerable.Range(1, 5).ToArray();
+        
         Console.WriteLine(string.Join(",", source));
         source.Shuffle();
         Console.WriteLine(string.Join(",", source));
+        
         Console.WriteLine(string.Join(",", source.Shuffle()));
+
+        Console.WriteLine(string.Join(",", source.Shuffle().Take(3)));
+        Console.WriteLine(string.Join(",", source.Shuffle().Take(3)));
+        
+        Console.WriteLine(string.Join(",", source.Shuffle().Take(6)));
+        
+        
+        var shuffled = source.Shuffle();
+        Console.WriteLine(string.Join(",", shuffled));
+        Console.WriteLine(string.Join(",", shuffled));
+
+        Console.WriteLine();
+        Console.WriteLine("Random.Shared.Shuffle(array) sample");
+        var array = Enumerable.Range(1, 10).ToArray();
+        Console.WriteLine(string.Join(",", array));
+        Random.Shared.Shuffle(array);
+        Console.WriteLine(string.Join(",", array));
     }
 }
 
