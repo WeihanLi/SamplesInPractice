@@ -71,6 +71,11 @@ public class LinqSamples
         }
     }
 
+    // https://github.com/dotnet/efcore/pull/35462
+    // https://github.com/dotnet/efcore/pull/35451
+    // https://github.com/dotnet/efcore/issues/35367
+    // https://github.com/dotnet/efcore/issues/35379
+    // https://github.com/dotnet/efcore/issues/12793
     public static async Task EFLeftRightJoinSample()
     {
         var services = new ServiceCollection();

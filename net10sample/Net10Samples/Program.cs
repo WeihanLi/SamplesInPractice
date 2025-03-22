@@ -1,8 +1,8 @@
 ﻿// await LinqSamples.AsyncSamples();
 // LinqSamples.LeftRightJoinSample();
-// await LinqSamples.EFLeftJoinSample();
+await LinqSamples.EFLeftRightJoinSample();
 // JsonSamples.JsonIgnoreWhenReadWriteSample();
 // JsonSamples.JsonIgnoreWithGeneratorTest();
 // IPAddressSample.IsValid();
 // StringComparerSample.MainTest();
-LinqSamples.ShuffleSamples();
+// LinqSamples.ShuffleSamples();
