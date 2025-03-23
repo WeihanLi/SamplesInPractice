@@ -8,6 +8,7 @@ using WeihanLi.Common;
 // var builder = Host.CreateApplicationBuilder(args);
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
 builder.Logging.AddDefaultDelegateLogger();
 
 builder.Services.AddSingleton(new ChatCompletionsClient(
@@ -19,8 +20,10 @@ builder.Services.AddChatClient(sp => sp.GetRequiredService<ChatCompletionsClient
     )
     .UseLogging();
 
-builder.Services.AddMcpServer()
-    .WithStdioServerTransport()
+builder.Services
+    .AddMcpServer()
+    // .WithStdioServerTransport()
+    // .WithHttpListenerSseServerTransport()
     .WithTools()
     ;
 
@@ -28,7 +31,7 @@ var app = builder.Build();
 DependencyResolver.SetDependencyResolver(app.Services);
 
 // web application only
-app.Map("/", () => "Hello McpServer");
+app.MapGet("/", () => "Hello McpServer");
 app.MapMcpSse();
 
 await app.RunAsync();
