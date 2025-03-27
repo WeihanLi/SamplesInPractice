@@ -5,17 +5,17 @@ using WeihanLi.Common;
 
 namespace McpSample.Tools;
 
-[McpToolType]
+[McpServerToolType]
 public class TranslationTool
 {
-    [McpTool("translation"), Description("Translate English to Simplified Chinese")]
+    [McpServerTool("translation"), Description("Translate English to Simplified Chinese")]
     public static async Task<string> TranslationEnZh(
         [Description("The source english text needs to be translated to Simplified Chinese")] 
         string sourceText,
+        IChatClient chatClient,
         CancellationToken cancellationToken
         )
     {
-        var chatClient = DependencyResolver.ResolveRequiredService<IChatClient>();
         var response = await chatClient.GetResponseAsync(
 
         [

@@ -4,10 +4,10 @@ using WeihanLi.Common.Helpers;
 
 namespace McpSample.Tools;
 
-[McpToolType]
+[McpServerToolType]
 public static class CSharpEvalTool
 {
-    [McpTool(), Description("Execute CSharp Code")]
+    [McpServerTool, Description("Execute CSharp Code")]
     public static async Task<string> ExecCSharpCode(string code, CancellationToken cancellationToken)
     {
         var result = await CommandExecutor.ExecuteCommandAndCaptureAsync($"dotnet-exec {code}", cancellationToken: cancellationToken);

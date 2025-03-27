@@ -3,7 +3,6 @@ using Azure.AI.Inference;
 using McpSample;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol;
-using WeihanLi.Common;
 
 // var builder = Host.CreateApplicationBuilder(args);
 
@@ -24,11 +23,10 @@ builder.Services
     .AddMcpServer()
     // .WithStdioServerTransport()
     // .WithHttpListenerSseServerTransport()
-    .WithTools()
+    .WithToolsFromAssembly()
     ;
 
 var app = builder.Build();
-DependencyResolver.SetDependencyResolver(app.Services);
 
 // web application only
 app.MapGet("/", () => "Hello McpServer");
