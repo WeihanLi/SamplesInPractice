@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
-using Xunit.Sdk;
+using Xunit.v3;
 
 namespace XunitSample
 {
@@ -61,8 +61,7 @@ namespace XunitSample
         /// <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" />
         /// and replaces them with the new cultures defined in the constructor.
         /// </summary>
-        /// <param name="methodUnderTest">The method under test</param>
-        public override void Before(MethodInfo methodUnderTest)
+        public override void Before(MethodInfo methodUnderTest, IXunitTest test)
         {
             _originalCulture = Thread.CurrentThread.CurrentCulture;
             _originalUiCulture = Thread.CurrentThread.CurrentUICulture;
@@ -78,8 +77,7 @@ namespace XunitSample
         /// Restores the original <see cref="CultureInfo.CurrentCulture" /> and
         /// <see cref="CultureInfo.CurrentUICulture" /> to <see cref="Thread.CurrentPrincipal" />
         /// </summary>
-        /// <param name="methodUnderTest">The method under test</param>
-        public override void After(MethodInfo methodUnderTest)
+        public override void After(MethodInfo methodUnderTest, IXunitTest test)
         {
             Thread.CurrentThread.CurrentCulture = _originalCulture;
             Thread.CurrentThread.CurrentUICulture = _originalUiCulture;

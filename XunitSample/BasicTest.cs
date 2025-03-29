@@ -41,7 +41,7 @@ namespace XunitSample
         public async Task ConcurrencyTest()
         {
             Assert.False(Helper.Ready);
-            await Task.Run(Helper.MarkReady);
+            await Task.Run(Helper.MarkReady, TestContext.Current.CancellationToken);
             Parallel.For(1, 1_000_000, i =>
             {
                 Assert.True(Helper.Ready);

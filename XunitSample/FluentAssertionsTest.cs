@@ -6,6 +6,7 @@ using Xunit;
 
 namespace XunitSample;
 
+//     <PackageReference Include="FluentAssertions" Version="6.12.0" />
 public class FluentAssertionsTest
 {
     [Fact]

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Xunit;
-using Xunit.Sdk;
 
 namespace XunitSample
 {
@@ -24,10 +22,10 @@ namespace XunitSample
             Assert.True(num > 0);
         }
 
-        public static IEnumerable<object[]> TestMemberData =>
+        public static IEnumerable<TheoryDataRow<int>> TestMemberData =>
             Enumerable.Range(1, 10)
-                .Select(x => new object[] { x })
-                .ToArray();
+                .Select(i => new TheoryDataRow<int>(i))
+            ;
 
         [Theory]
         [MemberData(nameof(TestMemberDataField))]
@@ -36,7 +34,8 @@ namespace XunitSample
             Assert.True(num > 0);
         }
 
-        public static readonly IList<object[]> TestMemberDataField = Enumerable.Range(1, 10).Select(x => new object[] { x }).ToArray();
+        public static readonly IList<TheoryDataRow<int>> TestMemberDataField = 
+            Enumerable.Range(1, 10).Select(x => new TheoryDataRow<int>(x)).ToArray();
 
         [Theory]
         [MemberData(nameof(TestMemberDataMethod), 10)]
@@ -45,25 +44,25 @@ namespace XunitSample
             Assert.True(num > 0);
         }
 
-        public static IEnumerable<object[]> TestMemberDataMethod(int count)
+        public static IEnumerable<TheoryDataRow<int>> TestMemberDataMethod(int count)
         {
-            return Enumerable.Range(1, count).Select(i => new object[] { i });
+            return Enumerable.Range(1, count).Select(i => new TheoryDataRow<int>(i));
         }
 
         [Theory]
-        [NullOrEmptyStringData]
+        [ClassData(typeof(NullOrEmptyStringDataAttribute))]
         public void CustomDataAttributeTest(string value)
         {
             Assert.True(string.IsNullOrEmpty(value));
         }
     }
 
-    public class NullOrEmptyStringDataAttribute : DataAttribute
+    public class NullOrEmptyStringDataAttribute : TheoryData<string>
     {
-        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+        public NullOrEmptyStringDataAttribute()
         {
-            yield return new object[] { null };
-            yield return new object[] { string.Empty };
+            Add((string)null);
+            Add(string.Empty);
         }
     }
 }
