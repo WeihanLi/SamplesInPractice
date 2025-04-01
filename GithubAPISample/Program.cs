@@ -7,7 +7,7 @@ using WeihanLi.Npoi;
 
 const int pageCount = 30;
 const string userName = "weihanli";
-const string urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E=2023-04-01";
+const string urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E=2024-04-01";
 
 var prList = new List<GithubPRModel>();
 var itemsCount = 0;

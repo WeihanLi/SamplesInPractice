@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WeihanLi.Common" Version="1.0.63" />
-    <PackageReference Include="WeihanLi.Npoi" Version="2.4.2" />
+    <PackageReference Include="WeihanLi.Common" Version="1.0.76" />
+    <PackageReference Include="WeihanLi.Npoi" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
