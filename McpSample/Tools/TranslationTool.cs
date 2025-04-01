@@ -8,7 +8,7 @@ namespace McpSample.Tools;
 [McpServerToolType]
 public class TranslationTool
 {
-    [McpServerTool("translation"), Description("Translate English to Simplified Chinese")]
+    [McpServerTool(Name = "translation"), Description("Translate English to Simplified Chinese")]
     public static async Task<string> TranslationEnZh(
         [Description("The source english text needs to be translated to Simplified Chinese")] 
         string sourceText,

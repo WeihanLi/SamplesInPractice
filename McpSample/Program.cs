@@ -3,6 +3,7 @@ using Azure.AI.Inference;
 using McpSample;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol;
+using ModelContextProtocol.AspNetCore;
 
 // var builder = Host.CreateApplicationBuilder(args);
 
@@ -30,6 +31,6 @@ var app = builder.Build();
 
 // web application only
 app.MapGet("/", () => "Hello McpServer");
-app.MapMcpSse();
+app.MapMcp();
 
 await app.RunAsync();

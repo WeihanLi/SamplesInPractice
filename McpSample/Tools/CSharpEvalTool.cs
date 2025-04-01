@@ -13,4 +13,11 @@ public static class CSharpEvalTool
         var result = await CommandExecutor.ExecuteCommandAndCaptureAsync($"dotnet-exec {code}", cancellationToken: cancellationToken);
         return result.StandardOut;
     }
+    
+    [McpServerTool, Description("Execute XUnit Test Code")]
+    public static async Task<string> ExecXunitTestCode(string code, CancellationToken cancellationToken)
+    {
+        var result = await CommandExecutor.ExecuteCommandAndCaptureAsync($"dotnet-exec test {code}", cancellationToken: cancellationToken);
+        return result.StandardOut;
+    }
 }
