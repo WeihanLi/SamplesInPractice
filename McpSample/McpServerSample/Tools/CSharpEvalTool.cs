@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using WeihanLi.Common.Helpers;
 
-namespace McpSample.Tools;
+namespace McpServerSample.Tools;
 
 [McpServerToolType]
 public static class CSharpEvalTool
@@ -14,10 +14,10 @@ public static class CSharpEvalTool
         return result.StandardOut;
     }
     
-    [McpServerTool, Description("Execute XUnit Test Code")]
-    public static async Task<string> ExecXunitTestCode(string code, CancellationToken cancellationToken)
-    {
-        var result = await CommandExecutor.ExecuteCommandAndCaptureAsync($"dotnet-exec test {code}", cancellationToken: cancellationToken);
-        return result.StandardOut;
-    }
+    // [McpServerTool, Description("Execute XUnit Test Code")]
+    // public static async Task<string> ExecXunitTestCode(string code, CancellationToken cancellationToken)
+    // {
+    //     var result = await CommandExecutor.ExecuteCommandAndCaptureAsync($"dotnet-exec test {code}", cancellationToken: cancellationToken);
+    //     return result.StandardOut;
+    // }
 }

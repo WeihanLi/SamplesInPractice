@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.AI.AzureAIInference" Version="9.3.0-preview.1.25161.3" />
+    <PackageVersion Include="ModelContextProtocol" Version="0.1.0-preview.4" />
+    <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="0.1.0-preview.4" />
+    <PackageVersion Include="WeihanLi.Common" Version="1.0.76" />
+  </ItemGroup>
+</Project>

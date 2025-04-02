@@ -1,7 +1,7 @@
 ﻿using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace McpSample.Tools;
+namespace McpServerSample.Tools;
 
 [McpServerToolType]
 public static class EchoTool

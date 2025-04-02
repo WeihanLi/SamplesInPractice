@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.AI;
 using ModelContextProtocol.Server;
 using System.ComponentModel;
-using WeihanLi.Common;
 
-namespace McpSample.Tools;
+namespace McpServerSample.Tools;
 
 [McpServerToolType]
 public class TranslationTool

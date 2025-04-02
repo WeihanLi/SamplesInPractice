@@ -1,6 +1,5 @@
 ﻿using Azure;
 using Azure.AI.Inference;
-using McpSample;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol;
 using ModelContextProtocol.AspNetCore;
@@ -23,7 +22,6 @@ builder.Services.AddChatClient(sp => sp.GetRequiredService<ChatCompletionsClient
 builder.Services
     .AddMcpServer()
     // .WithStdioServerTransport()
-    // .WithHttpListenerSseServerTransport()
     .WithToolsFromAssembly()
     ;
 
