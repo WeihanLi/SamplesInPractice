@@ -11,6 +11,7 @@ public class NullConditionalAssignmentSample
         {
             p1.Age = 10;
         }
+        Console.WriteLine(p1);
         
         var p2 = new Person("Bob", 2);
         p2?.Age = 20;
@@ -23,4 +24,6 @@ file class Person(string name, int age)
 {
     public string Name { get; set; } = name;
     public int Age { get; set; } = age;
+
+    public override string ToString() => $"{Name} is {Age} years old.";
 }

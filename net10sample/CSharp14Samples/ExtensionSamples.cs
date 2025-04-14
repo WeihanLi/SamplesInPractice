@@ -14,8 +14,10 @@ public class ExtensionSamples
 
         var list = List<int>.New();
 
-        ICollection<int> numCollection = nums.ToArray().AsReadOnly();
-        Console.WriteLine(numCollection[Random.Shared.Next(0, numCollection.Count)]);
+        // extension indexer not supported yet
+        // https://github.com/dotnet/csharplang/discussions/8696#discussioncomment-12814338
+        // ICollection<int> numCollection = nums.ToArray().AsReadOnly();
+        // Console.WriteLine(numCollection[Random.Shared.Next(0, numCollection.Count)]);
     }
 }
 
@@ -40,18 +42,18 @@ file static class Extensions
     {
         public static List<T> New() => [];
     }
-
-    // https://github.com/dotnet/csharplang/discussions/8696#discussioncomment-12814338
-    // extension<T>(ICollection<T> source)
-    // {
-    //     public T this[int index]
-    //     {
-    //         get
-    //         {
-    //             ArgumentOutOfRangeException.ThrowIfNegative(index);
-    //             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, source.Count);
-    //             return source.ElementAt(index);
-    //         }
-    //     }
-    // }
+    
+    extension<T>(ICollection<T> source)
+    {
+        // https://github.com/dotnet/csharplang/discussions/8696#discussioncomment-12814338
+        public T this[int index]
+        {
+            get
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, source.Count);
+                return source.ElementAt(index);
+            }
+        }
+    }
 }
