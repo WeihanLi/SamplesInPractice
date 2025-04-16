@@ -10,20 +10,23 @@ public class NullConditionalAssignmentSample
 {
     public static void Run()
     {
-        var p1 = new Person("Alice", 3);
+        var p1 = GetPerson("Alice", 3);
         if (p1 is not null)
         {
             p1.Age = 10;
         }
         Console.WriteLine(p1);
         
-        var p2 = new Person("Bob", 2);
+        var p2 = GetPerson("Bob", 2);
         p2?.Age = 20;
         Console.WriteLine(p2);
 
         p2?.OnAgeChanged += p => Console.WriteLine(p.ToString());
 
         p2?.Tags?[1] = "test";
+        
+        
+        static Person? GetPerson(string name, int age) => string.IsNullOrEmpty(name) ? null : new Person(name, age);
     }
 }
 
