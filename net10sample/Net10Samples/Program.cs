@@ -6,4 +6,5 @@
 // IPAddressSample.IsValid();
 // StringComparerSample.MainTest();
 // LinqSamples.ShuffleSamples();
-StringComparerSample.MainTest();
+// StringComparerSample.MainTest();
+RandomSample.RunBenchmark();
