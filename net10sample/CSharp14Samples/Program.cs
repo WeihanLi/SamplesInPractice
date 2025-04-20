@@ -1,1 +1,1 @@
-﻿ExtensionSamples.Run();
+﻿PartialMemberSample.Run();
