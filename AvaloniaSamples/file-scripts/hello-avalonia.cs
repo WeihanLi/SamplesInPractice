@@ -13,10 +13,6 @@ AppBuilder.Configure<App>()
 
 class App : Application
 {
-    public override void Initialize()
-    {
-    }
-
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
