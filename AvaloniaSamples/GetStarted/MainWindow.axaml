@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100"
         x:Class="GetStarted.MainWindow"
-        Title="GetStarted">
+        Title="Hello Avalonia">
     <StackPanel>
         <TextBlock>Welcome to Avalonia!</TextBlock>
         <TextBox Name="textBox"> Hello Avalonia </TextBox>
