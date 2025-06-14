@@ -67,14 +67,14 @@ file static class Extensions
     extension<T>(ICollection<T> source)
     {
         // https://github.com/dotnet/csharplang/discussions/8696#discussioncomment-12814338
-        public T this[int index]
-        {
-            get
-            {
-                ArgumentOutOfRangeException.ThrowIfNegative(index);
-                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, source.Count);
-                return source.ElementAt(index);
-            }
-        }
+        // public T this[int index]
+        // {
+        //     get
+        //     {
+        //         ArgumentOutOfRangeException.ThrowIfNegative(index);
+        //         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, source.Count);
+        //         return source.ElementAt(index);
+        //     }
+        // }
     }
 }
