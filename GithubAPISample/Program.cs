@@ -49,6 +49,7 @@ do
     pageNum++;
 } while (itemsCount == pageCount);
 
+var year = DateTimeOffset.Now.Year;
 var totalCount = prList.Count;
 prList.RemoveAll(x => userName.Equals(x.UserName, StringComparison.OrdinalIgnoreCase));
 var excludedCount = prList.Count;
@@ -57,7 +58,7 @@ Console.WriteLine($"Total PR: {totalCount}, externalContributionCount: {excluded
 
 prList.OrderBy(x => x.RepoName)
     .ThenBy(x => x.CreatedAt)
-    .ToCsvFile(Path.Combine(Directory.GetCurrentDirectory(), "pr-list.csv"));
+    .ToCsvFile(Path.Combine(Directory.GetCurrentDirectory(), $"pr-list-{year}.csv"));
 
 // var result = prList.GroupBy(x => x.RepoName)
 //     .Select(g => $@"{g.Key}
@@ -75,7 +76,7 @@ var mdContent = prList.GroupBy(g => new
 ")
 .StringJoin(Environment.NewLine);
 
-await File.WriteAllTextAsync("result.md", mdContent);
+await File.WriteAllTextAsync($"result-{year}.md", mdContent);
 Console.WriteLine("Completed");
 Console.ReadLine();
 
