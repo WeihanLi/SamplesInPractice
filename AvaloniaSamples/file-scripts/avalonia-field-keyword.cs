@@ -76,11 +76,12 @@ class MainWindow : Window
         };
         var panel = new StackPanel
         {
-            Margin = new Thickness(20)
+            Children =
+            {
+                textBox,
+                textBlock
+            }
         };
-        panel.Children.Add(textBox);
-        panel.Children.Add(textBlock);
-
         Content = panel;
     }
 }
