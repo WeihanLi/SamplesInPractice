@@ -34,7 +34,7 @@ class App : Application
 
 class MainWindow : Window
 {
-     private string? Input
+    private string? Input
     {
         get;
         set => field = value?.Trim();
@@ -65,7 +65,6 @@ class MainWindow : Window
         };
 
         Input = textBox.Text;
-        textBlock.Text = $"[{Input}]";
         textBox.TextChanged += (sender, args) =>
         {
             if (sender is TextBox inputTextBox)
@@ -74,7 +73,7 @@ class MainWindow : Window
                 textBlock.Text = $"[{Input}]";
             }
         };
-        var panel = new StackPanel
+        Content = new StackPanel
         {
             Children =
             {
@@ -82,6 +81,5 @@ class MainWindow : Window
                 textBlock
             }
         };
-        Content = panel;
     }
 }
