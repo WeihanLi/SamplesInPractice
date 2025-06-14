@@ -1,5 +1,4 @@
-﻿using Yarp.ReverseProxy.Transforms;
-using YarpDiagnosticSample;
+﻿using YarpDiagnosticSample;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 builder.Services.AddHttpLogging();
