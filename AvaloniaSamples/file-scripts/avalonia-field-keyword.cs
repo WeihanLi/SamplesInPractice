@@ -7,7 +7,10 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data;
 using Avalonia.Themes.Fluent;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 AppBuilder.Configure<App>()
     .UsePlatformDetect()
@@ -31,14 +34,33 @@ class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 }
+   
+sealed class MainViewModel : INotifyPropertyChanged
+{
+    public string? Input
+    {
+        get => $"[{field}]";
+        set
+        {
+            field = value?.Trim();
+            OnPropertyChanged();
+        }
+    }
+
+    public void TextChanged(object? sender, TextChangedEventArgs? textChangedEventArgs)
+    {
+        if (textChangedEventArgs?.Source is TextBox inputTextBox)
+            Input = inputTextBox.Text;
+    }
+    
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
 class MainWindow : Window
 {
-    private string? Input
-    {
-        get;
-        set => field = value?.Trim();
-    }
+    private readonly MainViewModel ViewModel = new();
 
     public MainWindow()
     {
@@ -57,21 +79,10 @@ class MainWindow : Window
         var textBlock = new TextBlock
         {
             Name = "OutputTextBlock",
-            Text = "Hello, Avalonia!",
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
             FontSize = 24,
             Height = 80
-        };
-
-        Input = textBox.Text;
-        textBox.TextChanged += (sender, args) =>
-        {
-            if (sender is TextBox inputTextBox)
-            {
-                Input = inputTextBox.Text;
-                textBlock.Text = $"[{Input}]";
-            }
         };
         Content = new StackPanel
         {
@@ -81,5 +92,8 @@ class MainWindow : Window
                 textBlock
             }
         };
+        DataContext = ViewModel;
+        textBox.TextChanged += ViewModel.TextChanged;
+        textBlock.Bind(TextBlock.TextProperty, new Binding(nameof(MainViewModel.Input)));
     }
 }
