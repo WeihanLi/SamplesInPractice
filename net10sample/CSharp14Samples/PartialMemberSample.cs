@@ -41,8 +41,5 @@ public partial class PartialMemberSample
         remove => _updateHandler -= value;
     }
 
-    public void Updated()
-    {
-        _updateHandler?.Invoke();
-    }
+    public void Updated() => _updateHandler.Invoke();
 }

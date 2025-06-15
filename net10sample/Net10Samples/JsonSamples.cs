@@ -77,7 +77,7 @@ public static class JsonSamples
         var jsonP1 = JsonSerializer.Serialize(p1, CustomJsonSerializerContext.Default.Person);
         Console.WriteLine(jsonP1);
         var p1Deserialized = JsonSerializer.Deserialize<Person>(jsonP1, CustomJsonSerializerContext.Default.Person);
-        Console.WriteLine(p1Deserialized.ToJson());
+        Console.WriteLine(p1Deserialized);
 
         Console.WriteLine("User1");
         Console.WriteLine(user1.ToJson());
