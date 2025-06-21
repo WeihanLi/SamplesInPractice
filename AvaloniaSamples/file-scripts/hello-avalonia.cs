@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using System.Runtime.InteropServices;
 
 AppBuilder.Configure<App>()
     .UsePlatformDetect()
@@ -33,7 +34,7 @@ class MainWindow : Window
         Height = 300;
         Content = new TextBlock
         {
-            Text = "Hello, Avalonia!",
+            Text = $"Hello Avalonia on {RuntimeInformation.OSDescription}!",
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
             FontSize = 24
