@@ -10,5 +10,8 @@ builder.Services.AddReverseProxy()
     ;
 var app = builder.Build();
 app.UseHttpLogging();
-app.MapReverseProxy();
+app.MapReverseProxy(proxyApp =>
+{
+    proxyApp.UseMiddleware<ConditionalProxyMiddleware>();
+});
 app.Run();
