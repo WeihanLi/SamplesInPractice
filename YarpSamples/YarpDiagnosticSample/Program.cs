@@ -12,6 +12,7 @@ var app = builder.Build();
 app.UseHttpLogging();
 app.MapReverseProxy(proxyApp =>
 {
+    proxyApp.UseMiddleware<ResponseTextReplacementMiddleware>();
     proxyApp.UseMiddleware<ConditionalProxyMiddleware>();
 });
 app.Run();
