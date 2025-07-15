@@ -2,9 +2,10 @@
 // LinqSamples.LeftRightJoinSample();
 // await LinqSamples.EFLeftRightJoinSample();
 // JsonSamples.JsonIgnoreWhenReadWriteSample();
-JsonSamples.JsonIgnoreWithGeneratorTest();
+// JsonSamples.JsonIgnoreWithGeneratorTest();
 // IPAddressSample.IsValid();
 // StringComparerSample.MainTest();
 // LinqSamples.ShuffleSamples();
 // StringComparerSample.MainTest();
 // RandomSample.RunBenchmark();
+await AspNetCoreSample.MinimalApiValidation();
