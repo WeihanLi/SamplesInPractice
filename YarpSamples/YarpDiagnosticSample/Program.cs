@@ -14,5 +14,7 @@ app.MapReverseProxy(proxyApp =>
 {
     proxyApp.UseMiddleware<ResponseTextReplacementMiddleware>();
     proxyApp.UseMiddleware<ConditionalProxyMiddleware>();
+    proxyApp.UseMiddleware<RateLimitedRetryMiddleware>();
+    proxyApp.UsePassiveHealthChecks();
 });
 app.Run();
