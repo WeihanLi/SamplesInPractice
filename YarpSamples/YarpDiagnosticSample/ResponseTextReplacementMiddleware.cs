@@ -36,7 +36,7 @@ public class ResponseTextReplacementMiddleware(RequestDelegate next)
         }
     }
 
-    private static bool WhetherToRelace(HttpContext context)
+    private static bool WhetherToRelace(HttpContext _)
     {
         // feature flag integration
         return true;
