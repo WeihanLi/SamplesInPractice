@@ -15,11 +15,11 @@ foreach (var tool in await client.ListToolsAsync())
     Console.WriteLine($"{tool.Name} ({tool.Description})");
 }
 
-// Execute a tool (this would normally be driven by LLM tool invocations).
 var result = await client.CallToolAsync(
     "Echo",
-    new Dictionary<string, object?> { ["message"] = "Hello MCP!" },
-    CancellationToken.None);
+    new Dictionary<string, object?> { ["message"] = "MCP!" },
+    CancellationToken.None
+    );
 
 // echo always returns one and only one text content object
 Console.WriteLine(result.Content.First(c => c.Type == "text").Text);
