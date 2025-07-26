@@ -6,14 +6,16 @@ using System.Text.Json;
 using TypedSignalR.Client;
 
 await using var connection = new HubConnectionBuilder()
-    .WithUrl("https://localhost:5002/hub/hello", options =>
+    // .WithUrl("https://localhost:5002/hub/hello", options =>
+    .WithUrl("http://localhost:5000/hub/hello", options =>
     {
-        // options.SkipNegotiation = true;
+        options.SkipNegotiation = true;
         options.Transports = HttpTransportType.WebSockets;
         options.WebSocketConfiguration = clientWebSocketOptions =>
         {
-            clientWebSocketOptions.HttpVersion = HttpVersion.Version20;
-            clientWebSocketOptions.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
+            // clientWebSocketOptions.Proxy = new WebProxy("http://localhost:8000");
+            // clientWebSocketOptions.HttpVersion = HttpVersion.Version20;
+            // clientWebSocketOptions.HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact;
         };
     })
     .Build();
