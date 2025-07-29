@@ -64,7 +64,7 @@ public static class InterceptorDISample
     }
 }
 
-file sealed class BlogPostContext(DbContextOptions<BlogPostContext> options): DbContext(options)
+internal sealed class BlogPostContext(DbContextOptions<BlogPostContext> options): DbContext(options)
 {
     public DbSet<BlogPost> Posts { get; set; } = default!;
 }
