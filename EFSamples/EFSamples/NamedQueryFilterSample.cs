@@ -11,7 +11,7 @@ public class NamedQueryFilterSample
         const string connString = "DataSource=QueryFilterSample.db";
         await using var services = new ServiceCollection()
                 .AddLogging(lb => lb.AddDefaultDelegateLogger())
-                .AddDbContext<BlogPostContext>((provider, options) =>
+                .AddDbContext<QueryFilterContext>((provider, options) =>
                 {
                     options.UseSqlite(connString);
                 })
@@ -20,7 +20,8 @@ public class NamedQueryFilterSample
 
         {
             using var scope = services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<BlogPostContext>();
+            var context = scope.ServiceProvider.GetRequiredService<QueryFilterContext>();
+            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
             {
                 context.Posts.Add(new BlogPost
@@ -67,14 +68,14 @@ public class NamedQueryFilterSample
     }
 }
 
-file sealed class QueryFilterContext : DbContext
+file sealed class QueryFilterContext(DbContextOptions<QueryFilterContext> options) : DbContext(options)
 {
     public DbSet<BlogPost> Posts { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BlogPost>()
-            .HasQueryFilter(p => !p.Title.StartsWith("[Deleted]")) 
+            .HasQueryFilter("non-deleted", p => !p.Title.StartsWith("[Deleted]")) 
             .HasQueryFilter("non-disabled", p => !p.Title.StartsWith("[Disabled]"))
             ;
         base.OnModelCreating(modelBuilder);
