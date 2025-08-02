@@ -46,18 +46,18 @@ public class NamedQueryFilterSample
             }
 
             {
+                var posts = await context.Posts.AsNoTracking().ToArrayAsync();
+                Console.WriteLine(posts.Length);
+                Console.WriteLine();
+            }
+
+            {
                 var posts = await context.Posts.AsNoTracking()
                     .IgnoreQueryFilters().ToArrayAsync();
                 Console.WriteLine(posts.Length);
                 Console.WriteLine();
             }
 
-            {
-                var posts = await context.Posts.AsNoTracking().ToArrayAsync();
-                Console.WriteLine(posts.Length);
-                Console.WriteLine();
-            }
-            
             {
                 var posts = await context.Posts.AsNoTracking()
                     .IgnoreQueryFilters(["non-deleted"]).ToArrayAsync();
