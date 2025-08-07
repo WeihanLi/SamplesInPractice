@@ -1,7 +1,7 @@
 #:sdk Microsoft.Net.Sdk.Web
 #:property ManagePackageVersionsCentrally=false
 #:property PublishAot=false
-#:package WeihanLi.Web.Extensions@*-*
+#:package WeihanLi.Web.Extensions@2.1.0
 using WeihanLi.Web.Extensions;
 
 var app = WebApplication.Create(args);
