@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+</Project>
