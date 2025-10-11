@@ -36,8 +36,9 @@ class MainWindow : Window
         Content = new TextBlock
         {
             Text = $"""
-                    Hello Avalonia on {RuntimeInformation.OSDescription}({RuntimeInformation.RuntimeIdentifier})
-                          {RuntimeInformation.FrameworkDescription}
+                    Hello Avalonia
+                    {RuntimeInformation.OSDescription}({RuntimeInformation.RuntimeIdentifier})
+                    {RuntimeInformation.FrameworkDescription}
                     """,
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
