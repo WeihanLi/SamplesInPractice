@@ -1,7 +1,7 @@
 #: property LangVersion preview
-#: package Avalonia@11.3.1
-#: package Avalonia.Desktop@11.3.1
-#: package Avalonia.Themes.Fluent@11.3.1
+#: package Avalonia@11.3.7
+#: package Avalonia.Desktop@11.3.7
+#: package Avalonia.Themes.Fluent@11.3.7
 
 using Avalonia;
 using Avalonia.Collections;
