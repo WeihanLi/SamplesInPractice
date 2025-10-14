@@ -1,34 +1,29 @@
 using Avalonia.Controls;
-using Avalonia.Data;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace GetStarted;
 
-public sealed class MainViewModel : INotifyPropertyChanged
+public sealed class MainViewModel : ObservableObject
 {
     public string? Input
     {
-        get => $"[{field}]";
+        get => $"【{field}】";
         set
         {
             field = value?.Trim();
             OnPropertyChanged();
         }
     }
-
-    public void TextChanged(object? sender, TextChangedEventArgs? textChangedEventArgs)
-    {
-        if (textChangedEventArgs?.Source is TextBox inputTextBox)
-        {
-            Input = inputTextBox.Text;
-        }
-    }
     
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public RelayCommand<string> TextChangedCommand { get; }
+
+    public MainViewModel()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        TextChangedCommand = new RelayCommand<string>(text =>
+        {
+            Input = text;
+        });
     }
 }
 
@@ -38,9 +33,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        Model.Input = textBox.Text;
-        textBox.TextChanged += Model.TextChanged;
+        Model.Input = TextBox.Text = "Hello Avalonia";
         DataContext = Model;
-        textBlock.Bind(TextBox.TextProperty, new Binding(nameof(Model.Input)));
     }
 }

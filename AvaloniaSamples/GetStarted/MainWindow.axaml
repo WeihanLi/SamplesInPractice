@@ -2,12 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:root="clr-namespace:GetStarted"
         mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="100"
         x:Class="GetStarted.MainWindow"
+        x:DataType="root:MainViewModel"
         Title="Hello Avalonia">
     <StackPanel>
         <TextBlock>Welcome to Avalonia!</TextBlock>
-        <TextBox Name="textBox"> Hello Avalonia </TextBox>
-        <TextBlock Name="textBlock"></TextBlock>
+        <TextBox Name="TextBox" />
+        <Button Width="80" Height="30" Command="{Binding Path=TextChangedCommand}" CommandParameter="{Binding #TextBox.Text}">Update</Button>
+        <TextBlock Text="{Binding Path=Input, Mode=OneWay}"></TextBlock>
     </StackPanel>
 </Window>
