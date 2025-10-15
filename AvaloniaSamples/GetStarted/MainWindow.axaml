@@ -10,7 +10,7 @@
     <StackPanel>
         <TextBlock>Welcome to Avalonia!</TextBlock>
         <TextBox Name="TextBox" />
-        <Button Width="80" Height="30" Command="{Binding Path=TextChangedCommand}" CommandParameter="{Binding #TextBox.Text}">Update</Button>
+        <Button Width="80" Height="30" Command="{Binding Path=TextUpdateCommand}" CommandParameter="{Binding #TextBox.Text}">Update</Button>
         <TextBlock Text="{Binding Path=Input, Mode=OneWay}"></TextBlock>
     </StackPanel>
 </Window>

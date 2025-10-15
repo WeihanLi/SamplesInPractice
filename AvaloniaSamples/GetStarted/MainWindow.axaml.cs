@@ -16,11 +16,11 @@ public sealed class MainViewModel : ObservableObject
         }
     }
     
-    public RelayCommand<string> TextChangedCommand { get; }
+    public RelayCommand<string> TextUpdateCommand { get; }
 
     public MainViewModel()
     {
-        TextChangedCommand = new RelayCommand<string>(text =>
+        TextUpdateCommand = new RelayCommand<string>(text =>
         {
             Input = text;
         });
