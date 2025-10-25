@@ -8,4 +8,4 @@
 // LinqSamples.ShuffleSamples();
 // StringComparerSample.MainTest();
 // RandomSample.RunBenchmark();
-await AspNetCoreSample.MinimalApiValidation();
+await AspNetCoreSample.ServerSentEventSample();
