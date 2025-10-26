@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
+using System.Net.ServerSentEvents;
+using System.Runtime.CompilerServices;
 using AspIPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 using IPNetwork = System.Net.IPNetwork;
 
@@ -11,7 +13,9 @@ public class AspNetCoreSample
 {
     public static async Task MainTest()
     {
+#pragma warning disable ASPDEPR005
         Console.WriteLine(AspIPNetwork.TryParse("127.0.0.1/8", out _));
+#pragma warning restore ASPDEPR005
         Console.WriteLine(IPNetwork.TryParse("127.0.0.1/8", out _));
     }
 
@@ -67,6 +71,9 @@ public class AspNetCoreSample
                                   font-size: 0.8rem;
                                   float: right;
                                 }
+                                .heartbeat {
+                                  color: blue;
+                                }
                               </style>
                             </head>
                             <body>
@@ -80,7 +87,7 @@ public class AspNetCoreSample
                                 let evtSource;
                             
                                 function connect() {
-                                  evtSource = new EventSource('/sse');
+                                  evtSource = new EventSource('/sse2');
                             
                                   evtSource.onopen = () => {
                                     statusEl.textContent = '✅ Connected to /sse';
@@ -91,7 +98,7 @@ public class AspNetCoreSample
                                     const msgEl = document.createElement('div');
                                     msgEl.className = 'msg';
                                     const time = new Date().toLocaleTimeString();
-                                    msgEl.innerHTML = `<span>${event.data}</span><span class="timestamp">${time}</span>`;
+                                    msgEl.innerHTML = `<span>Message: ${event.data}</span><span class="timestamp">${time}</span>`;
                                     messagesEl.appendChild(msgEl);
                                     messagesEl.scrollTop = messagesEl.scrollHeight;
                                   };
@@ -101,6 +108,15 @@ public class AspNetCoreSample
                                     statusEl.style.color = 'red';
                                     // Automatic reconnection is built-in, but we can handle custom logic too
                                   };
+                                  
+                                  evtSource.addEventListener("heartbeat", (event) => {
+                                        const msgEl = document.createElement('div');
+                                        msgEl.className = 'heartbeat';
+                                        const time = new Date().toLocaleTimeString();
+                                        msgEl.innerHTML = `<span>Heartbeat: ${event.data}</span><span class="timestamp">${time}</span>`;
+                                        messagesEl.appendChild(msgEl);
+                                        messagesEl.scrollTop = messagesEl.scrollHeight;
+                                  });
                                 }
                             
                                 connect();
@@ -108,17 +124,40 @@ public class AspNetCoreSample
                             </body>
                             </html>
                             """, "text/html"));
+
         app.MapGet("/sse", (CancellationToken cancellationToken) => 
             Results.ServerSentEvents(GetSseData(cancellationToken)));
+        app.MapGet("/sse1", (CancellationToken cancellationToken) => 
+            Results.ServerSentEvents(GetSseData(cancellationToken), "heartbeat"));
+        app.MapGet("/sse2", (CancellationToken cancellationToken) => 
+            Results.ServerSentEvents(GetSseItem(cancellationToken), "heartbeat"));
+
         await app.RunAsync();
 
-
-        static async IAsyncEnumerable<DateTimeOffset> GetSseData(CancellationToken cancellationToken)
+        
+        static async IAsyncEnumerable<DateTimeOffset> GetSseData(
+            [EnumeratorCancellation]CancellationToken cancellationToken
+            )
         {
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(1000, cancellationToken);
                 yield return DateTimeOffset.Now;
+            }
+        }
+        
+        static async IAsyncEnumerable<SseItem<DateTimeOffset>> GetSseItem(
+            [EnumeratorCancellation]CancellationToken cancellationToken
+        )
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, cancellationToken);
+                yield return new SseItem<DateTimeOffset>(DateTimeOffset.Now)
+                {
+                    EventId = Guid.CreateVersion7().ToString("N"),
+                    // ReconnectionInterval = TimeSpan.FromSeconds(10)
+                };
             }
         }
     }
