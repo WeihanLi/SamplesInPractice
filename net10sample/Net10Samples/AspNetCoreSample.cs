@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Net.ServerSentEvents;
@@ -29,8 +30,8 @@ public class AspNetCoreSample
     public static async Task ServerSentEventSample()
     {
         var app = WebApplication.Create();
-        app.MapGet("/", () => 
-            Results.Content("""
+        app.MapGet("/", (string? eventSource) => 
+            Results.Content($$"""
                             <!DOCTYPE html>
                             <html lang="en">
                             <head>
@@ -87,10 +88,10 @@ public class AspNetCoreSample
                                 let evtSource;
                             
                                 function connect() {
-                                  evtSource = new EventSource('/sse2');
+                                  evtSource = new EventSource('/{{eventSource ?? "sse"}}');
                             
                                   evtSource.onopen = () => {
-                                    statusEl.textContent = '✅ Connected to /sse';
+                                    statusEl.textContent = '✅ Connected to /{{eventSource ?? "sse"}}';
                                     statusEl.style.color = 'green';
                                   };
                             
@@ -128,21 +129,32 @@ public class AspNetCoreSample
         app.MapGet("/sse", (CancellationToken cancellationToken) => 
             Results.ServerSentEvents(GetSseData(cancellationToken)));
         app.MapGet("/sse1", (CancellationToken cancellationToken) => 
-            Results.ServerSentEvents(GetSseData(cancellationToken), "heartbeat"));
+            Results.ServerSentEvents(GetSseTypedData(cancellationToken), "heartbeat"));
         app.MapGet("/sse2", (CancellationToken cancellationToken) => 
             Results.ServerSentEvents(GetSseItem(cancellationToken), "heartbeat"));
 
         await app.RunAsync();
 
         
-        static async IAsyncEnumerable<DateTimeOffset> GetSseData(
+        static async IAsyncEnumerable<string> GetSseData(
             [EnumeratorCancellation]CancellationToken cancellationToken
             )
         {
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(1000, cancellationToken);
-                yield return DateTimeOffset.Now;
+                yield return $"date: {DateTimeOffset.Now}";
+            }
+        }
+        
+        static async IAsyncEnumerable<EchoDataModel> GetSseTypedData(
+            [EnumeratorCancellation]CancellationToken cancellationToken
+        )
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, cancellationToken);
+                yield return new EchoDataModel("test", DateTimeOffset.Now);
             }
         }
         
@@ -174,6 +186,8 @@ public class AspNetCoreSample
     }
 }
 
+public record EchoDataModel(string Data, DateTimeOffset Date);
+
 public class Student
 {
     [Required]
@@ -188,5 +202,25 @@ public record Teacher([Required]string Name, int Grade, int? ClassNo = null) : I
         {
             yield return new ValidationResult("Grade must be greater than or equal to 0 when classNo exists.", [nameof(Grade)]);
         }
+    }
+}
+
+[Route("api/[controller]")]
+public class TestController : ControllerBase
+{
+    public IResult Sse()
+    {
+        static async IAsyncEnumerable<string> GetSseData(
+            [EnumeratorCancellation]CancellationToken cancellationToken
+        )
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, cancellationToken);
+                yield return $"date: {DateTimeOffset.Now}";
+            }
+        }
+        
+        return TypedResults.ServerSentEvents(GetSseData(CancellationToken.None));
     }
 }
