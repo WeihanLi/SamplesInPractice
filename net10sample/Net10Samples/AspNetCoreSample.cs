@@ -131,7 +131,9 @@ public class AspNetCoreSample
         app.MapGet("/sse1", (CancellationToken cancellationToken) => 
             Results.ServerSentEvents(GetSseTypedData(cancellationToken), "heartbeat"));
         app.MapGet("/sse2", (CancellationToken cancellationToken) => 
-            Results.ServerSentEvents(GetSseItem(cancellationToken), "heartbeat"));
+            Results.ServerSentEvents(GetSseItem(cancellationToken)));
+        app.MapGet("/sse3", (CancellationToken cancellationToken) => 
+            Results.ServerSentEvents(GetSseTypedItem(cancellationToken)));
 
         await app.RunAsync();
 
@@ -166,6 +168,21 @@ public class AspNetCoreSample
             {
                 await Task.Delay(1000, cancellationToken);
                 yield return new SseItem<DateTimeOffset>(DateTimeOffset.Now)
+                {
+                    EventId = Guid.CreateVersion7().ToString("N"),
+                    ReconnectionInterval = TimeSpan.FromSeconds(0.3)
+                };
+            }
+        }
+        
+        static async IAsyncEnumerable<SseItem<EchoDataModel>> GetSseTypedItem(
+            [EnumeratorCancellation]CancellationToken cancellationToken
+        )
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, cancellationToken);
+                yield return new SseItem<EchoDataModel>(new EchoDataModel("test", DateTimeOffset.Now), "heartbeat")
                 {
                     EventId = Guid.CreateVersion7().ToString("N"),
                     // ReconnectionInterval = TimeSpan.FromSeconds(10)
