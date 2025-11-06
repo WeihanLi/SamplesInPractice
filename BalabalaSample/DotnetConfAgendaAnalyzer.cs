@@ -8,7 +8,7 @@ public class DotnetConfAgendaAnalyzer
 {
     public static async Task RunAsync()
     {
-        await using var fs = File.OpenRead("dotnetconf2024-agenda.json");
+        await using var fs = File.OpenRead("dotnetconf2025-agenda.json");
         var sessions = JsonSerializer.Deserialize<SessionModel[]>(fs);
         ArgumentNullException.ThrowIfNull(sessions);
         var personNames = sessions.SelectMany(s=> s.Speaker.Split([' ', ','], StringSplitOptions.RemoveEmptyEntries)).ToHashSet();
@@ -23,17 +23,21 @@ public class DotnetConfAgendaAnalyzer
                 StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries ))
             .Where(x=> !personNames.Contains(x) && !excludeWords.Contains(x))
             .GroupBy(x => x.Trim().ToLowerInvariant())
-            .Select(x => new WordScore(x.Key, x.Count()))
+            .Select(x => new WordScore(
+                x.Key.Length <=3 ? x.Key.ToUpper() : x.Key, 
+                x.Count()))
             .OrderByDescending(x=> x.Score)
-            .Where(x => x.Score > 3)
+            .Where(x => x.Score > 4)
             .ToArray();
         
-        var wordCloudOptions = new WordCloudOptions(900, 900, scores)
+        var wordCloudOptions = new WordCloudOptions(1024, 1024, scores)
         {
             FontManager = new FontManager([SKTypeface.FromFamilyName("JetBrains Mono")])
         };
         var wordCloud = WordCloud.Create(wordCloudOptions);
-        var pngBytes = wordCloud.ToSKBitmap().Encode(SKEncodedImageFormat.Png, 100).AsSpan().ToArray();
+        var pngBytes = wordCloud.ToSKBitmap()
+            .Encode(SKEncodedImageFormat.Jpeg, 100)
+            .AsSpan().ToArray();
         await File.WriteAllBytesAsync("dotnetconf-wordcloud2.png", pngBytes);
     }
 }
