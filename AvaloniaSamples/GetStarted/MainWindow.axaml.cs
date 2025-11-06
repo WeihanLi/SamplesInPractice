@@ -8,10 +8,10 @@ public sealed class MainViewModel : ObservableObject
 {
     public string? Input
     {
-        get => $"【{field}】";
+        get => $"[{field}]";
         set
         {
-            field = value?.Trim();
+            field = value?.Trim().Replace("Avalonia", "World") ?? string.Empty;
             OnPropertyChanged();
         }
     }

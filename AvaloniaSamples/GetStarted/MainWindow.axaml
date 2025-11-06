@@ -8,9 +8,12 @@
         x:DataType="root:MainViewModel"
         Title="Hello Avalonia">
     <StackPanel>
-        <TextBlock>Welcome to Avalonia!</TextBlock>
         <TextBox Name="TextBox" />
-        <Button Width="80" Height="30" Command="{Binding Path=TextUpdateCommand}" CommandParameter="{Binding #TextBox.Text}">Update</Button>
-        <TextBlock Text="{Binding Path=Input, Mode=OneWay}"></TextBlock>
+        <Button Width="80" Height="30" 
+                Command="{Binding Path=TextUpdateCommand}"
+                CommandParameter="{Binding #TextBox.Text}">
+            Update
+        </Button>
+        <TextBlock Text="{Binding Path=Input}"></TextBlock>
     </StackPanel>
 </Window>
