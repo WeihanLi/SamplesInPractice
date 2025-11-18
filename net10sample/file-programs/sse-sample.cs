@@ -1,4 +1,4 @@
-#:sdk Microsoft.Net.Sdk.Web
+﻿#:sdk Microsoft.Net.Sdk.Web
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

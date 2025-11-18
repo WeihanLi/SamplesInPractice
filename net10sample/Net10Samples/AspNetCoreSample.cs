@@ -169,8 +169,7 @@ public class AspNetCoreSample
                 await Task.Delay(1000, cancellationToken);
                 yield return new SseItem<DateTimeOffset>(DateTimeOffset.Now)
                 {
-                    EventId = Guid.CreateVersion7().ToString("N"),
-                    ReconnectionInterval = TimeSpan.FromSeconds(0.3)
+                    EventId = Guid.CreateVersion7().ToString("N")
                 };
             }
         }
@@ -185,7 +184,7 @@ public class AspNetCoreSample
                 yield return new SseItem<EchoDataModel>(new EchoDataModel("test", DateTimeOffset.Now), "heartbeat")
                 {
                     EventId = Guid.CreateVersion7().ToString("N"),
-                    // ReconnectionInterval = TimeSpan.FromSeconds(10)
+                    ReconnectionInterval = TimeSpan.FromSeconds(5)
                 };
             }
         }

@@ -6,5 +6,5 @@ using WeihanLi.Web.Extensions;
 
 var app = WebApplication.Create(args);
 app.MapGet("/", () => "Hello World!");
-app.MapRuntimeInfo();
+app.MapRuntimeInfo().ShortCircuit();
 app.Run();
