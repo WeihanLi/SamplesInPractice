@@ -1,2 +1,2 @@
 #!/usr/bin/env dotnet
-Console.WriteLine("Hello .NET!");
+Console.WriteLine("Hello .NET 10!");

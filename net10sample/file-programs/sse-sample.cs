@@ -1,8 +1,5 @@
 ﻿#:sdk Microsoft.Net.Sdk.Web
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
