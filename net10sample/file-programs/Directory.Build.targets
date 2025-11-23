@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup Condition="'$(Imports)' != ''">
+    <_ImportedFiles Include="$(Imports.Split(';'))" />
+    <Compile Include="@(_ImportedFiles)" />
+  </ItemGroup>
+</Project>
