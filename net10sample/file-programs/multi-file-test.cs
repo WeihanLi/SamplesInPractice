@@ -2,4 +2,6 @@
 
 using static Test.TestHelper;
 
-PrintMessage("Hello from multi-file test!");
+PrintMessage(
+    "Hello from multi-file test!"
+);
