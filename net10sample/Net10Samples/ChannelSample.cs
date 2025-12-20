@@ -13,7 +13,7 @@ public static class ChannelSample
             var channel = Channel.CreateBounded<WorkItem>(0);
             var producer = Task.Run(async () =>
             {
-                for (var i = 0; i < 3; i++)
+                for (var i = 0; i < 5; i++)
                 {
                     Console.WriteLine($"[Producer]准备生产项目 {i} {DateTimeOffset.Now}");
                     await channel.Writer.WriteAsync(new WorkItem(i));
@@ -34,6 +34,16 @@ public static class ChannelSample
             });
 
             await Task.WhenAll(producer, consumer);
+            ConsoleHelper.ReadLineWithPrompt();
+        }
+
+        {
+            var channel = Channel.CreateBounded<int>(0);
+            var write1 = channel.Writer.WriteAsync(1); // 阻塞
+            var write2 = channel.Writer.WriteAsync(2); // 阻塞
+
+            Console.WriteLine(channel.Reader.Count); // 输出:  0
+
             ConsoleHelper.ReadLineWithPrompt();
         }
 
