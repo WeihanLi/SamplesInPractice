@@ -76,21 +76,17 @@ public static class ChannelSample
         }
 
         {
-            var options = new BoundedChannelOptions(0) { FullMode = BoundedChannelFullMode.DropWrite };
-            var channel = Channel.CreateBounded<string>(options);
-            _ = Task.Run(async () =>
+            var options = new BoundedChannelOptions(0)
             {
-                await foreach (var message in channel.Reader.ReadAllAsync())
-                {
-                    Console.WriteLine($"Received message: {message} at [{DateTimeOffset.Now}]");
-                }
-            });
-            
+                FullMode = BoundedChannelFullMode.DropWrite
+            };
+            var channel = Channel.CreateBounded<string>(options, item => Console.WriteLine($"item dropped: {item}"));
             var consumer = Task.Run(async () =>
             {
                 await foreach (var message in channel.Reader.ReadAllAsync())
                 {
                     Console.WriteLine($"Received message: {message} at [{DateTimeOffset.Now}]");
+                    await Task.Delay(100);
                 }
             });
             var producer = Task.Run(async () =>
@@ -98,7 +94,7 @@ public static class ChannelSample
                 for (var i = 0; i < 5; i++)
                 {
                     await channel.Writer.WriteAsync($"Hello World! {DateTimeOffset.Now}");
-                    await Task.Delay(100);
+                    await Task.Delay(1000);
                 }
 
                 channel.Writer.Complete();
