@@ -8,4 +8,5 @@
 // LinqSamples.ShuffleSamples();
 // StringComparerSample.MainTest();
 // RandomSample.RunBenchmark();
-await AspNetCoreSample.ServerSentEventSample();
+// await AspNetCoreSample.ServerSentEventSample();
+await ChannelSample.UnbufferedChannelSample();
