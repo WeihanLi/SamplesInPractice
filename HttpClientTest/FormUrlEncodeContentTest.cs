@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using WeihanLi.Common.Http;
+﻿using WeihanLi.Common.Http;
 using WeihanLi.Extensions;
 
 namespace HttpClientTest

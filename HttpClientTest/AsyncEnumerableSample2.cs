@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Hosting;
-using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net;
 using WeihanLi.Common.Helpers;
 
 namespace HttpClientTest;
