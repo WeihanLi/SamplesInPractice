@@ -7,7 +7,10 @@ using WeihanLi.Npoi;
 
 const int pageCount = 30;
 const string userName = "weihanli";
-const string urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E=2024-04-01";
+
+var year = DateTimeOffset.Now.Year;
+var date = $"{year-1}-04-01";
+var urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E={date}";
 
 var prList = new List<GithubPRModel>();
 var itemsCount = 0;
@@ -49,7 +52,6 @@ do
     pageNum++;
 } while (itemsCount == pageCount);
 
-var year = DateTimeOffset.Now.Year;
 var totalCount = prList.Count;
 prList.RemoveAll(x => userName.Equals(x.UserName, StringComparison.OrdinalIgnoreCase));
 var excludedCount = prList.Count;
