@@ -10,7 +10,7 @@ const string userName = "weihanli";
 
 var year = DateTimeOffset.Now.Year;
 var beginDate = $"{year-1}-04-01";
-var endDate = $"{year}-04-01";
+var endDate = $"{year}-03-31";
 var urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:{beginDate}..{endDate}";
 
 var prList = new List<GithubPRModel>();
@@ -64,7 +64,16 @@ prList.OrderBy(x => x.RepoName)
 // {g.OrderBy(x => x.CreatedAt).Select(x => $"\t{x.Title}\t{x.CreatedAt}\t{x.ClosedAt}").StringJoin(Environment.NewLine)}
 // ").StringJoin(Environment.NewLine);
 
-var mdContent = prList.GroupBy(g => new
+var mdContent = $"""
+# {year-1} - {year} PR Contributions
+
+## Intro
+
+{beginDate} - {endDate}（按 PR 合并的时间），共 {totalCount} 个 PR，其中 {excludedCount} 个外部贡献，涉及 {repoCount} 个仓库。
+
+## All PRs
+
+{prList.GroupBy(g => new
 {
   g.RepoName,
   g.RepoUrl
@@ -73,7 +82,14 @@ var mdContent = prList.GroupBy(g => new
 .Select(g => $@"- [{g.Key.RepoName}]({g.Key.RepoUrl})
 {g.OrderBy(x => x.CreatedAt).Select(x => $"  - {x.Title}({x.ClosedAt:yyyy-MM-dd}) <{x.Url}>").StringJoin(Environment.NewLine)}
 ")
-.StringJoin(Environment.NewLine);
+.StringJoin(Environment.NewLine)}
+
+## More
+
+以上列表通过 Github 的 Rest API 获取，具体源代码在 Github 上，可以参考：
+<https://github.com/WeihanLi/SamplesInPractice/blob/main/GithubAPISample/Program.cs>
+
+""";
 
 await File.WriteAllTextAsync($"result-{year}.md", mdContent);
 Console.WriteLine("Completed");

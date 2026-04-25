@@ -1,3 +1,11 @@
+# 2025 - 2026 PR Contributions
+
+## Intro
+
+2025-04-01 - 2026-03-31（按 PR 合并的时间），共 133 个 PR，其中 52 个外部贡献，涉及 22 个仓库。
+
+## All PRs
+
 - [AIDotNet/MakingMcp](https://github.com/AIDotNet/MakingMcp)
   - Update package references to stable versions(2025-11-18) <https://github.com/AIDotNet/MakingMcp/pull/1>
 
@@ -93,3 +101,8 @@
   - use InternalsVisibleTo MSBuild item(2025-06-05) <https://github.com/ZiggyCreatures/FusionCache/pull/488>
   - use slnx solution file(2025-06-13) <https://github.com/ZiggyCreatures/FusionCache/pull/490>
   - docs: add a link for the nuget badge to the nuget package(2025-06-09) <https://github.com/ZiggyCreatures/FusionCache/pull/491>
+
+## More
+
+以上列表通过 Github 的 Rest API 获取，具体源代码在 Github 上，可以参考：
+<https://github.com/WeihanLi/SamplesInPractice/blob/main/GithubAPISample/Program.cs>
