@@ -17,7 +17,6 @@
 - [dotnet/core](https://github.com/dotnet/core)
   - update 10.0.5 release date(2026-03-13) <https://github.com/dotnet/core/pull/10315>
   - docs: update version in 11.0.0-preview.2.md(2026-03-17) <https://github.com/dotnet/core/pull/10317>
-  - docs: update .NET 11 preview README release info(2026-04-15) <https://github.com/dotnet/core/pull/10372>
 
 - [dotnet/docs](https://github.com/dotnet/docs)
   - update bash multi tag script sample(2025-04-25) <https://github.com/dotnet/docs/pull/45920>
@@ -63,9 +62,6 @@
 
 - [JusterZhu/AvaloniaCypher](https://github.com/JusterZhu/AvaloniaCypher)
   - add AvaloniaFieldKeyword(2025-10-18) <https://github.com/JusterZhu/AvaloniaCypher/pull/8>
-
-- [kkokosa/dotLLM](https://github.com/kkokosa/dotLLM)
-  - refactor: fix a nullable code warning(2026-04-21) <https://github.com/kkokosa/dotLLM/pull/138>
 
 - [microsoft/aspire](https://github.com/microsoft/aspire)
   - support ClaimActions configure for dashboard(2025-10-09) <https://github.com/microsoft/aspire/pull/8396>

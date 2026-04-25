@@ -9,8 +9,9 @@ const int pageCount = 30;
 const string userName = "weihanli";
 
 var year = DateTimeOffset.Now.Year;
-var date = $"{year-1}-04-01";
-var urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:%3E={date}";
+var beginDate = $"{year-1}-04-01";
+var endDate = $"{year}-04-01";
+var urlFormat = $"search/issues?page={{0}}&q=author%3A{userName}+type%3Apr+is:merged+merged:{beginDate}..{endDate}";
 
 var prList = new List<GithubPRModel>();
 var itemsCount = 0;
@@ -27,10 +28,6 @@ httpClient.DefaultRequestHeaders
 do
 {
     var url = urlFormat.FormatWith(pageNum.ToString());
-    //using var response = await httpClient.GetAsync(url);
-    //var responseText = await response.Content.ReadAsStringAsync();
-    //var responseObj = JsonNode.Parse(responseText);
-
     var responseObj = await httpClient.GetFromJsonAsync<JsonObject>(url);
     ArgumentNullException.ThrowIfNull(responseObj);
     var items = responseObj["items"]?.AsArray();
