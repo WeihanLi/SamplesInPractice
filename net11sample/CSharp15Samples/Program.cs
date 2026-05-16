@@ -2,3 +2,4 @@
 
 Console.WriteLine("Hello C# 15!");
 CollectionExpressionArguments.Run();
+UnionSample.Run();
