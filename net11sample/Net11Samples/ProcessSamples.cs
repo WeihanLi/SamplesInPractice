@@ -9,6 +9,7 @@ internal static class ProcessSamples
     public static async Task MainTest()
     {
         {
+            // Run
             var result = Process.Run("dotnet", ["--version"]);
             ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
             result = await Process.RunAsync("dotnet", ["--info"]);
@@ -23,19 +24,15 @@ internal static class ProcessSamples
             ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
         }
 
-        {
-            var result = Process.RunAndCaptureText("dotnet", ["--version"]);
-            ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
-            result = await Process.RunAndCaptureTextAsync("dotnet", ["--info"]);
-            ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
-        }
 
         {
+            // StartAndForget
             var processId = Process.StartAndForget("dotnet", ["--version"]);
             Console.WriteLine($"ProcessId: {processId}");
         }
 
         {
+            // ReadAllText
             using var process = Process.Start(new ProcessStartInfo("dotnet", "--info")
             {
                 RedirectStandardOutput = true,
@@ -48,6 +45,20 @@ internal static class ProcessSamples
         }
 
         {
+            // ReadAllBytesAsync
+            using var process = Process.Start(new ProcessStartInfo("dotnet", "--info")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            });
+            Debug.Assert(process is not null);
+            var output = await process.ReadAllBytesAsync();
+            ConsoleHelper.WriteLineWithColor(output.StandardOutput.Length.ToString(), ConsoleColor.Green);
+            ConsoleHelper.WriteLineWithColor(output.StandardError.Length.ToString(), ConsoleColor.Red);
+        }
+
+        {
+            // ReadAllLinesAsync
             using var process = Process.Start(new ProcessStartInfo("dotnet", "--info")
             {
                 RedirectStandardOutput = true,
@@ -58,6 +69,14 @@ internal static class ProcessSamples
             {
                 ConsoleHelper.WriteLineWithColor(line.Content, line.StandardError ? ConsoleColor.Red : ConsoleColor.Green);
             }
+        }
+
+        {
+            // RunAndCaptureText
+            var result = Process.RunAndCaptureText("dotnet", ["--version"]);
+            ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
+            result = await Process.RunAndCaptureTextAsync("dotnet", ["--info"]);
+            ConsoleHelper.WriteLineWithColor(JsonSerializer.Serialize(result), ConsoleColor.Green);
         }
     }
 }
