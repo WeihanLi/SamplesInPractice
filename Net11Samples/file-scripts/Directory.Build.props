@@ -2,6 +2,7 @@
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
   <PropertyGroup>
     <ExperimentalFileBasedProgramEnableIncludeDirective>true</ExperimentalFileBasedProgramEnableIncludeDirective>
+    <ExperimentalFileBasedProgramEnableRefDirective>true</ExperimentalFileBasedProgramEnableRefDirective>
     <ExperimentalFileBasedProgramEnableTransitiveDirectives>true</ExperimentalFileBasedProgramEnableTransitiveDirectives>
   </PropertyGroup>
 </Project>

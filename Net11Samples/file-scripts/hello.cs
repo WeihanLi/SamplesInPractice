@@ -1,4 +1,5 @@
 ﻿#!/usr/bin/env dotnet
+// #:ref helper.cs
 #:include helper.cs
 
 Helper.WriteToConsole("Hello, World!");
