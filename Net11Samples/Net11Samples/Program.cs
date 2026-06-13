@@ -1,3 +1,5 @@
-﻿using Net11Samples;
+﻿using WeihanLi.Common.Helpers;
 
-await ProcessSamples.MainTest();
+// await ProcessSamples.MainTest();
+await JsonSamples.Run();
+ConsoleHelper.ReadLineWithPrompt();
