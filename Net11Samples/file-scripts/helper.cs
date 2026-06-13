@@ -1,4 +1,4 @@
-﻿#:package WeihanLi.Common@1.0.88
+﻿#:package WeihanLi.Core@1.0.90
 using static WeihanLi.Common.Helpers.ConsoleHelper;
 
 public static class Helper
