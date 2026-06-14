@@ -73,6 +73,7 @@ internal static class JsonSamples
                 return Results.JsonLines(logs);
             });
             app.Urls.Add("http://localhost:5100");
+            // await app.RunAsync();
             await app.StartAsync();
             cts.Token.Register(() => app.StopAsync().Wait());
         }
