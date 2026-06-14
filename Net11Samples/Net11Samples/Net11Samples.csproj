@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Using Include="Net11Samples" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="WeihanLi.Common" Version="1.0.90" />
   </ItemGroup>
 

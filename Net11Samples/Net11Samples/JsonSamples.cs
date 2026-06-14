@@ -1,4 +1,9 @@
-﻿using System.IO.Pipelines;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.IO.Pipelines;
 using System.Text;
 using System.Text.Json;
 
@@ -13,17 +18,14 @@ internal static class JsonSamples
             var logs = GetLogsAsync();
             using var ms = new MemoryStream();
             await JsonSerializer.SerializeAsyncEnumerable(ms, logs, true);
-            ms.Position = 0;
+            ms.Seek(0, SeekOrigin.Begin);
             using var reader = new StreamReader(ms);
-            while (!reader.EndOfStream)
-            {
-                var line = await reader.ReadLineAsync();
-                Console.WriteLine($"[{DateTimeOffset.Now}]: {line}");
-            }
+            var output = await reader.ReadToEndAsync();
+            Console.WriteLine(output);
         }
 
         {
-            // Serialize an IAsyncEnumerable<T> to a stream as JSON lines
+            // Serialize an IAsyncEnumerable<T> to a PipeWriter as JSON lines
             var logs = GetLogsAsync();
             var pipe = new Pipe();
             var writerTask = JsonSerializer.SerializeAsyncEnumerable(pipe.Writer, logs, true)
@@ -51,26 +53,63 @@ internal static class JsonSamples
                     // Stop if the writer called Complete()
                     if (result.IsCompleted)
                     {
+                        await reader.CompleteAsync();
                         break;
                     }
                 }
             }
-
         }
+    }
 
-        async IAsyncEnumerable<LogEntry> GetLogsAsync()
+    public static async Task JsonLinesApiSample()
+    {
+        var builder = WebApplication.CreateSlimBuilder();
+        var app = builder.Build();
+        app.MapGet("/logs", (HttpContext context) =>
         {
-            yield return new("xxx begin");
-            await Task.Delay(1000);
-            yield return new("xxx processing");
-            await Task.Delay(2000);
-            yield return new("xxx end");
-        }
+            var logs = GetLogsAsync();
+            return Results.JsonLines(logs);
+        });
+        await app.RunAsync("http://localhost:5100");
+    }
+
+    private static async IAsyncEnumerable<LogEntry> GetLogsAsync()
+    {
+        yield return new("xxx begin");
+        await Task.Delay(2000);
+        yield return new("xxx processing");
+        await Task.Delay(2000);
+        yield return new("xxx end");
     }
 }
 
-
-file record LogEntry(string Message)
+internal record LogEntry(string Message)
 {
     public DateTimeOffset Time { get; init; } = DateTimeOffset.Now;
+}
+
+internal sealed class JsonLinesResult<TValue>(IAsyncEnumerable<TValue> result) : IResult
+{
+    private const string ContentType = "application/jsonl;charset=utf-8";
+    private readonly IAsyncEnumerable<TValue> _result = result;
+
+    public async Task ExecuteAsync(HttpContext httpContext)
+    {
+        httpContext.Response.Headers.ContentType = ContentType;
+        var jsonOptions = httpContext.RequestServices
+            .GetRequiredService<IOptions<JsonOptions>>().Value;
+        await JsonSerializer.SerializeAsyncEnumerable(httpContext.Response.BodyWriter, _result,
+            true, jsonOptions.SerializerOptions, httpContext.RequestAborted);
+    }
+}
+
+public static class JsonLinesExtension
+{
+    extension(Results)
+    {
+        public static IResult JsonLines<TValue>(IAsyncEnumerable<TValue> result)
+        {
+            return new JsonLinesResult<TValue>(result);
+        }
+    }
 }
