@@ -63,14 +63,33 @@ internal static class JsonSamples
 
     public static async Task JsonLinesApiSample()
     {
-        var builder = WebApplication.CreateSlimBuilder();
-        var app = builder.Build();
-        app.MapGet("/logs", (HttpContext context) =>
+        var cts = new CancellationTokenSource();
         {
-            var logs = GetLogsAsync();
-            return Results.JsonLines(logs);
-        });
-        await app.RunAsync("http://localhost:5100");
+            var builder = WebApplication.CreateSlimBuilder();
+            var app = builder.Build();
+            app.MapGet("/logs", (HttpContext context) =>
+            {
+                var logs = GetLogsAsync();
+                return Results.JsonLines(logs);
+            });
+            app.Urls.Add("http://localhost:5100");
+            await app.StartAsync();
+            cts.Token.Register(() => app.StopAsync().Wait());
+        }
+        {
+            using var httpClient = new HttpClient();
+            using var response = await httpClient.GetAsync(
+                "http://localhost:5100/logs", HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            response.EnsureSuccessStatusCode();
+            var responseStream = await response.Content.ReadAsStreamAsync(cts.Token);
+            var logEntries = JsonSerializer.DeserializeAsyncEnumerable<LogEntry>(
+                responseStream, true, JsonSerializerOptions.Web, cts.Token);
+            await foreach (var logEntry in logEntries.WithCancellation(cts.Token))
+            {
+                Console.WriteLine($"[{DateTimeOffset.Now}]: {JsonSerializer.Serialize(logEntry)}");
+            }
+            cts.Cancel();
+        }
     }
 
     private static async IAsyncEnumerable<LogEntry> GetLogsAsync()
