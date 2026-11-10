@@ -69,7 +69,7 @@ public static class DotnetConfAgendaCrawler
                         EndDateTime = endDate,
                         Title = sessionElement.QuerySelector(".agenda-title")?.TextContent.Trim() ?? string.Empty,
                         Speaker =
-                            sessionElement.QuerySelector(".agenda-speaker-name")?.TextContent.Trim() ?? string.Empty,
+                            sessionElement.QuerySelector(".agenda-speaker-name")?.TextContent.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).StringJoin(", ") ?? string.Empty,
                         Description = sessionElement.QuerySelector(".agenda-description")?.TextContent.Trim() ??
                                       string.Empty,
                     };
